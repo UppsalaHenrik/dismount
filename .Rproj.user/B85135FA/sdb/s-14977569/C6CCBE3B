@@ -1,0 +1,16 @@
+{
+    "contents" : "#\n\ngetUserSlurmQ <- function(){\n  \n  # Get user name\n  userName <- system('echo \"$USER\"', intern=TRUE)\n  \n  # Get the slurm queue for the active user\n  slurmQ <- system(paste(\"squeue\", \"-u\", userName), intern=TRUE)\n  \n  return(slurmQ)\n}\n\n",
+    "created" : 1438953269436.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "434632044",
+    "id" : "C6CCBE3B",
+    "lastKnownWriteTime" : 1438879147,
+    "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/dismount/R/getUserSlurmQ.R",
+    "project_path" : "R/getUserSlurmQ.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

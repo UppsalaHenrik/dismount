@@ -66,7 +66,7 @@ saddleModelFiles <- unlist(lapply(saddleRetries, function(x){
 dismountDirs <- sapply(saddleModelFiles, runDismount)
 
 # Wait for the queue to be empty
-waitForSlurmQ()
+waitForSlurmQ(targetLength = 1)
 
 print("done... so far")
   # parse isestimable files

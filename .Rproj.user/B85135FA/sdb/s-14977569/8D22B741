@@ -1,0 +1,16 @@
+{
+    "contents" : "\n# A function that waits for the SLURM queue to be smaller than a \n# target number of runs. Used either for \n\nwaitForSlurmQ <- function(targetLength=0, secsToWait=30, maxWaits=20){\n  \n  keepWaiting <- TRUE\n  \n  i <- 1\n  \n  while(keepWaiting & i <= maxWaits){\n    \n    # Get the slurm queue and check its length\n    slurmQ <- getUserSlurmQ()\n    qLength <- length(slurmQ)\n    \n    # if it has no jobs in it end the while loop\n    if(qLength - 1 <= targetLength){\n      keepWaiting <- FALSE\n      qTargetMessage <- paste0(\"Queue has \", qLength - 1, \" jobs (<=\", targetLength, \") - ending wait.\")\n      print(qTargetMessage)\n      break\n    }\n    \n    # Print a message about the wait\n    qWaitMessage <- paste(\"Waiting for\", secsToWait, \"seconds (nr\", \n                          i, \"out of max\", maxWaits, \"waits) - \", \n                          qLength-1, \"jobs in queue\")\n    print(qWaitMessage)\n    \n    # Wait for specified number of seconds \n    Sys.sleep(secsToWait)\n    \n    # Grow i \n    i <- i + 1\n    \n    if(i > maxWaits){\n      qMaxWaitsMessage <- paste(\"Wait limit reached. Waited for\", secsToWait*i, \"seconds\" )\n      print(qMaxWaitsMessage)\n    }\n  }  \n  \n}\n",
+    "created" : 1438953271586.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3881883824",
+    "id" : "8D22B741",
+    "lastKnownWriteTime" : 1438879147,
+    "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/dismount/R/waitForSlurmQ.R",
+    "project_path" : "R/waitForSlurmQ.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
