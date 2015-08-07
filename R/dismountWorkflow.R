@@ -1,9 +1,6 @@
-#
-# I don't think I'd be the most suitable to pilot this, but I might give in to pier pressure and ship in with some puns. To lighten up any stern faces I mean.
-#
-# I'm sure this project will see some hardship, and go through many oar deals...
 
-dismountWorkflow <- function(modFileName = "run83.mod", retries = 9){
+
+dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
 
 
 print("Run para retries")

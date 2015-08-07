@@ -1,6 +1,6 @@
 Package: dismount
 Title: What the package does (one line)
-Version: 0.1
+Version: 0.1.1
 Authors@R: "Henrik Bjugård Nyberg <henrik.b.nyberg@farmbio.uu.se> [aut, cre]"
 Description: What the package does (one paragraph)
 Depends: R (>= 3.0)

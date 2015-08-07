@@ -1,16 +1,16 @@
 {
-    "contents" : "\n# A function that waits for the SLURM queue to be smaller than a \n# target number of runs. Used either for \n\nwaitForSlurmQ <- function(targetLength=0, secsToWait=30, maxWaits=20){\n  \n  keepWaiting <- TRUE\n  \n  i <- 1\n  \n  while(keepWaiting & i <= maxWaits){\n    \n    # Get the slurm queue and check its length\n    slurmQ <- getUserSlurmQ()\n    qLength <- length(slurmQ)\n    \n    # if it has no jobs in it end the while loop\n    if(qLength - 1 <= targetLength){\n      keepWaiting <- FALSE\n      qTargetMessage <- paste0(\"Queue has \", qLength - 1, \" jobs (<=\", targetLength, \") - ending wait.\")\n      print(qTargetMessage)\n      break\n    }\n    \n    # Print a message about the wait\n    qWaitMessage <- paste(\"Waiting for\", secsToWait, \"seconds (nr\", \n                          i, \"out of max\", maxWaits, \"waits) - \", \n                          qLength-1, \"jobs in queue\")\n    print(qWaitMessage)\n    \n    # Wait for specified number of seconds \n    Sys.sleep(secsToWait)\n    \n    # Grow i \n    i <- i + 1\n    \n    if(i > maxWaits){\n      qMaxWaitsMessage <- paste(\"Wait limit reached. Waited for\", secsToWait*i, \"seconds\" )\n      print(qMaxWaitsMessage)\n    }\n  }  \n  \n}\n",
+    "contents" : "#' Wait for the SLURM queue to empty\n#'\n#' A function that waits for the SLURM queue to be smaller than a\n#' target number of runs. Typically used to wait for a run that your\n#' code has kicked off before parsing results. Will print messages\n#' with how many runs it waits for and for how long.\n#'\n#' @param targetLength How many runs to leave in the queue.\n#' @param secsToWait How many seconds to wait between parsing the queue.\n#' @param maxWaits Maximum number of times the wait should happen before timing out.\n#' waitForSlurmQ()\n\nwaitForSlurmQ <- function(targetLength=0, secsToWait=30, maxWaits=20){\n\n  keepWaiting <- TRUE\n\n  i <- 1\n\n  while(keepWaiting & i <= maxWaits){\n\n    # Get the slurm queue and check its length\n    slurmQ <- getUserSlurmQ()\n    qLength <- length(slurmQ)\n\n    # if it has no jobs in it end the while loop\n    if(qLength - 1 <= targetLength){\n      keepWaiting <- FALSE\n      qTargetMessage <- paste0(\"Queue has \", qLength - 1, \" jobs (<=\", targetLength, \") - ending wait.\")\n      print(qTargetMessage)\n      break\n    }\n\n    # Print a message about the wait\n    qWaitMessage <- paste(\"Waiting for\", secsToWait, \"seconds (nr\",\n                          i, \"out of max\", maxWaits, \"waits) - \",\n                          qLength-1, \"jobs in queue\")\n    print(qWaitMessage)\n\n    # Wait for specified number of seconds\n    Sys.sleep(secsToWait)\n\n    # Grow i\n    i <- i + 1\n\n    if(i > maxWaits){\n      qMaxWaitsMessage <- paste(\"Wait limit reached. Waited for\", secsToWait*i, \"seconds\" )\n      print(qMaxWaitsMessage)\n    }\n  }\n\n}\n",
     "created" : 1438953271586.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3881883824",
+    "hash" : "2017434535",
     "id" : "8D22B741",
-    "lastKnownWriteTime" : 1438879147,
+    "lastKnownWriteTime" : 1438957440,
     "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/dismount/R/waitForSlurmQ.R",
     "project_path" : "R/waitForSlurmQ.R",
     "properties" : {
     },
-    "source_on_save" : false,
+    "source_on_save" : true,
     "type" : "r_source"
 }

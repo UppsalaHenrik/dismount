@@ -1,12 +1,12 @@
 {
-    "contents" : "#' Get SLURM queue for active user\n#'\n#' Gets the slurm queue for the user that is currently logged in.\n#' No options available. Returns a character string with the rows\n#' of the queue, including the header.\n#'\n\ngetUserSlurmQ <- function(){\n\n  # Get user name\n  userName <- system('echo \"$USER\"', intern=TRUE)\n\n  # Get the slurm queue for the active user\n  slurmQ <- system(paste(\"squeue\", \"-u\", userName), intern=TRUE)\n\n  return(slurmQ)\n}\n\n",
+    "contents" : "#' Get SLURM queue for active user\n#'\n#' Gets the slurm queue for the user that is currently logged in.\n#' No options available. Returns a character string with the rows\n#' of the queue, including the header. No options.\n#'getUserSlurmQ()\n\ngetUserSlurmQ <- function(){\n\n  # Get user name\n  userName <- system('echo \"$USER\"', intern=TRUE)\n\n  # Get the slurm queue for the active user\n  slurmQ <- system(paste(\"squeue\", \"-u\", userName), intern=TRUE)\n\n  return(slurmQ)\n}\n\n",
     "created" : 1438953269436.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2285004472",
+    "hash" : "1791310465",
     "id" : "C6CCBE3B",
-    "lastKnownWriteTime" : 1438954710,
+    "lastKnownWriteTime" : 1438957368,
     "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/dismount/R/getUserSlurmQ.R",
     "project_path" : "R/getUserSlurmQ.R",
     "properties" : {
