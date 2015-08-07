@@ -27,6 +27,7 @@ rawresNoNA <- cbind(retry, rawresNoNA)
 
 # Categorize retries, pick out runs with min success, cov fail and an ofv higher than minimum
 # These are potential saddle points
+minOfv <- min(rawresNoNA$ofv)
 covFailOverMLERawres <- subset(rawresNoNA, minimization_successful == 1 &
                                covariance_step_successful == 0 &
                                ofv > minOfv + 1)
