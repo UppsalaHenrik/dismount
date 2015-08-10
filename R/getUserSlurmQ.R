@@ -2,7 +2,7 @@
 #'
 #' Gets the slurm queue for the user that is currently logged in.
 #' No options available. Returns a character string with the rows
-#' of the queue, including the header. No options.
+#' of the queue, including the header.
 #'getUserSlurmQ()
 
 getUserSlurmQ <- function(){

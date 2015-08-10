@@ -3,19 +3,21 @@
 #' A function that waits for the SLURM queue to be smaller than a
 #' target number of runs. Typically used to wait for a run that your
 #' code has kicked off before parsing results. Will print messages
-#' with how many runs it waits for and for how long.
+#' with how many runs it waits for and for how long. The wait will
+#' time out after ( secsToWait * maxWaits ) seconds.
 #'
-#' @param targetLength How many runs to leave in the queue.
-#' @param secsToWait How many seconds to wait between parsing the queue.
-#' @param maxWaits Maximum number of times the wait should happen before timing out.
+#' @param targetLength How many runs to leave in the queue.Default is 0.
+#' @param secsToWait How many seconds to wait between parsing the queue. Default is 30.
+#' @param maxWaits Maximum number of times the wait should happen before timing out. Default is 20.
 #' waitForSlurmQ()
 
-waitForSlurmQ <- function(targetLength=0, secsToWait=30, maxWaits=20){
+waitForSlurmQ <- function(targetLength = 0, secsToWait = 30, maxWaits = 20){
 
+  # Set initial state
   keepWaiting <- TRUE
-
   i <- 1
 
+  # While loop until the targetLength or the maxWaits is reached
   while(keepWaiting & i <= maxWaits){
 
     # Get the slurm queue and check its length
