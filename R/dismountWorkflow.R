@@ -1,4 +1,13 @@
-
+#' Full workflow with parallel retries, result categorization and dismount/precond run
+#'
+#'
+#'
+#' @param modFileName The model file to use. Default is "run83.mod".
+#' @param retries The number of retries to run as part of the initial parallel retries.
+#'
+#' @author Henrik Bjugård Nyberg
+#'
+#'
 
 dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
 
@@ -75,6 +84,9 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
   # Build new rawres with all the runs (hopefully they are now all at MLE)
 
 
+  # Set back the working directory
+
+  setwd("..")
 
 }
 
@@ -86,7 +98,7 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
 
 
 
-
+# Below is some ancient code that was the starting point for the above. Please disregard
 
 
 
@@ -121,4 +133,4 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
 #
 # rMatEigenDecompList <- lapply(rMatListNoZero, eigen)
 #
-# lapply(rMatEigenDecompList, '[', "values")
+# lapply(rMatEigenDecompList, '[', "values").
