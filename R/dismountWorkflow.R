@@ -11,15 +11,18 @@
 
 dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
 
+  #Set up a folder for the workflow
+  modFileNameNoExt <- fileSysSetup(modFileName, "massDismount")
 
-  print("Run para retries")
-  # Run initial para retries (wait = TRUE)
-  dirName <- runParaRetries(modFileName, min_retries = retries, degree = 0.99,
-                            slurm_partition = "standard", local = FALSE, nm_output = "rmt",
-                            seed = 20150806)
 
   # Move into that directory
   setwd(dirName)
+
+  print("Run para retries")
+  # Run initial para retries (wait = TRUE)
+  paraRetriesDirName <- runParaRetries(modFileName, min_retries = retries, degree = 0.99,
+                            slurm_partition = "standard", local = FALSE, nm_output = "rmt",
+                            seed = 20150806)
 
   # Find rawres file and parse it. Just in case there is more than one matched I take the first one.
   rawresPath <- findRawres(".")
@@ -44,35 +47,20 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
                               ofv < minOfv + 1)
 
 
-  # parse relevant lst files for saddle point covariance step error messages
-  saddleRetriesList <- lapply(covFailOverMLERawres$retry, function(x){
 
-    lstFileName <- list.files(pattern = paste0("retry", x, ".lst"))
+  # Run dismount of all the models.
 
-    covMessages <- parseCovMessages(lstFileName)
+  # list the model files
+  retryModFileNames <- list.files(pattern = paste0("retry.+\\.mod"))
 
-    # Look for the saddle point message and, if found, return x, the retry number
-    if(grepl("R MATRIX ALGORITHMICALLY NON-POSITIVE-SEMIDEFINITE BUT NONSINGULAR", covMessages)){
-      return(x)
-    }
-
-  # If the saddle point message isn't found, return NULL
-  return(NULL)
-  })
-
-  saddleRetries <- unlist(saddleRetriesList)
-
-  # Find the model files that correspond to the saddle point retries
-  saddleModelFiles <- unlist(lapply(saddleRetries, function(x){
-    list.files(pattern = paste0("retry", x, ".mod"))
-  }))
-
-  # Run isestimable (dismount) on them
-
-  dismountDirs <- sapply(saddleModelFiles, runDismount)
+  # run dismount on them
+  dismountDirs <- sapply(retryModFileNames, runDismount)
 
   # Wait for the queue to be empty
   waitForSlurmQ(targetLength = 1)
+
+
+
 
   print("done... so far")
     # parse isestimable files
@@ -100,6 +88,43 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
 
 # Below is some ancient code that was the starting point for the above. Please disregard
 
+
+
+
+
+
+
+
+
+
+# The below block of code was there for catego
+#
+#   # parse relevant lst files for saddle point covariance step error messages
+#   saddleRetriesList <- lapply(covFailOverMLERawres$retry, function(x){
+#
+#     lstFileName <- list.files(pattern = paste0("retry", x, ".lst"))
+#
+#     covMessages <- parseCovMessages(lstFileName)
+#
+#     # Look for the saddle point message and, if found, return x, the retry number
+#     if(grepl("R MATRIX ALGORITHMICALLY NON-POSITIVE-SEMIDEFINITE BUT NONSINGULAR", covMessages)){
+#       return(x)
+#     }
+#
+#   # If the saddle point message isn't found, return NULL
+#   return(NULL)
+#   })
+#
+#   saddleRetries <- unlist(saddleRetriesList)
+#
+#   # Find the model files that correspond to the saddle point retries
+#   saddleModelFiles <- unlist(lapply(saddleRetries, function(x){
+#     list.files(pattern = paste0("retry", x, ".mod"))
+#   }))
+#
+#   # Run isestimable (dismount) on them
+#
+#   dismountDirs <- sapply(saddleModelFiles, runDismount)
 
 
 

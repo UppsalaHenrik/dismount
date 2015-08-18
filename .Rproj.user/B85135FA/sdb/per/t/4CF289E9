@@ -1,0 +1,16 @@
+{
+    "contents" : "\nfileSysSetup <- function(modFilePath, runType = \"\", subDirs = c()){\n\n  # Get the mod file name without extension for various uses\n  modFileNameNoExt <- sub(\"\\\\.[[:alnum:]]+$\", \"\", basename(as.character(modFileName)))\n\n  # Create a directory to do everything in\n  dirName <- paste0(modFileNameNoExt, \"_\", runType, \"_\", format(Sys.time(), \"%y%m%d_%H%M%S\"))\n  dir.create(dirName)\n\n  # Parse the data file name from the mod.\n  dataFileName <- parseNMDataFileName(modFilePath)\n\n  # Put together a vector of file names to copy\n  filePattern <- paste0(modFileNameNoExt, \"\\\\.\")\n  filesToCopy <- list.files(pattern = eval(filePattern))\n  filesToCopy <- c(filesToCopy, dataFileName)\n\n  #Copy all the relevant files to the new dir\n  file.copy(filesToCopy, dirName)\n\n  # Set working directory to the new folder\n  setwd(dirName)\n\n  # Create all the requested subfolders\n  sapply(subDirs, dir.create)\n\n  return(modFileNameNoExt)\n}\n",
+    "created" : 1439560561930.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3009794540",
+    "id" : "4CF289E9",
+    "lastKnownWriteTime" : 1439563215,
+    "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/dismount/R/fileSysSetup.R",
+    "project_path" : "R/fileSysSetup.R",
+    "properties" : {
+    },
+    "source_on_save" : true,
+    "type" : "r_source"
+}

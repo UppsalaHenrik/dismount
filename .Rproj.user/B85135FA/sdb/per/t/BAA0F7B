@@ -1,0 +1,16 @@
+{
+    "contents" : "\n\n\nrunPrecond <- function(modelFileName, modelFileNameNoExt, pertSize, precondScriptPath, \n                       runNum, illCondFileName, pertSeed){\n  \n  # Wait for the SLURM queue to have less than 100 runs in it\n  waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)\n  \n  # Create a dir name to use\n  dirName <- paste0(\"./illCondRuns/\", gsub(\".csv$\", \"\", basename(illCondFileName)))\n  \n  # Create the command\n  cmd <- paste0(\"srun perl \", precondScriptPath, \" \", modelFileName, \" -dir=\", dirName,\n                \" -pre=\", illCondFileName, \" -cholesky -pertSize=\", pertSize,\n                \" -clean=2 -seedForPert=\", pertSeed)\n  \n  print(cmd)\n  \n  # Run the command\n  system(cmd, intern=FALSE, wait=FALSE)\n  \n  return(dirName)\n}\n\n\n\n\n\n\n",
+    "created" : 1439556869482.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3614322158",
+    "id" : "BAA0F7B",
+    "lastKnownWriteTime" : 1430245869,
+    "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/Illconditioning/runPrecond.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

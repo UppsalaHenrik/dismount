@@ -1,0 +1,17 @@
+{
+    "contents" : "\n\nparseNMDataFileName <- function(modFilePath){\n\n  # Parse the data file name from the model file\n  modelFile <- readLines(modFilePath)\n\n  # Find the data row\n  dataRowNum <- grep('^\\\\$DATA', modelFile)\n\n  # Pick out that line and remove the $DATA and any space after it\n  dataRow <- modelFile[dataRowNum]\n  cutDataRow <- gsub(\"^\\\\$DATA+\\\\s+\", \"\", dataRow)\n\n  # This is maybe a bit dangerous... picks the first\n  # word (after $DATA is removed above) as the file name\n  dataFileName <- strsplit(cutDataRow, \" \")[[1]][1]\n\n\n  return(dataFileName)\n\n}\n",
+    "created" : 1439561131586.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1772891343",
+    "id" : "6CC2E3D1",
+    "lastKnownWriteTime" : 1439561267,
+    "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/dismount/R/parseNMDataFileName.R",
+    "project_path" : "R/parseNMDataFileName.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

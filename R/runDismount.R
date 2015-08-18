@@ -18,6 +18,11 @@
 
 runDismount <- function(modelFileName, wait = FALSE){
 
+  # Wait for the SLURM queue to have less than 100 runs in it
+  waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
+
+
+
   modelFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modelFileName)))
 
   dir <- paste("dismount", modelFileNameNoExt, format(Sys.time(), "%y%m%d_%H%M%S"), sep = "_")
