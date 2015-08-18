@@ -45,7 +45,7 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
   setwd(dismountRunsDir)
 
   # Run dismount on the models
-  dismountDirList <- sapply(retryModFileNames, runDismount)
+  dismountDirList <- sapply(retryModFilePaths, runDismount)
 
   # Parse the rawres files and put them together
 }
