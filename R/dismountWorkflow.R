@@ -39,7 +39,7 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
   retryModFilePaths <- list.files(path = paraRetriesDirName, pattern = "retry.+mod$")
 
   # Copy those files into the dismount runs directory
-  file.copy(paste0(paraRetriesDirName, "/", retryModFileNames), dismountRunsDir)
+  file.copy(paste0(paraRetriesDirName, "/", retryModFilePaths), dismountRunsDir)
 
   # Set the dismount runs directory as WD
   setwd(dismountRunsDir)
