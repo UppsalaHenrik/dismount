@@ -11,21 +11,22 @@
 
 dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
 
-  #Set up a folder for the workflow
-  modFileNameNoExt <- fileSysSetup(modFileName, "massDismount")
+  userWD <- getwd()
 
+  #Set up folders for the workflow
+  dismountRunsDir <- "dismountRuns"
+  modFileNameNoExt <- fileSysSetup(modFileName, "massDismount", c(dismountRunsDir))
 
-  # Move into that directory
-  setwd(dirName)
+  workflowWD <- getwd()
 
-  print("Run para retries")
   # Run initial para retries (wait = TRUE)
+  print("Running parallel retries")
   paraRetriesDirName <- runParaRetries(modFileName, min_retries = retries, degree = 0.99,
                             slurm_partition = "standard", local = FALSE, nm_output = "rmt",
                             seed = 20150806)
 
   # Find rawres file and parse it. Just in case there is more than one matched I take the first one.
-  rawresPath <- findRawres(".")
+  rawresPath <- findRawres(paraRetriesDirName)
   rawres <- parseRawres(rawresPath)
 
   rawresNoNA <- subset(rawres, ofv != 'NA')
@@ -34,48 +35,19 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
   retry <- rawresNoNA$model - 1
   rawresNoNA <- cbind(retry, rawresNoNA)
 
-  # Categorize retries, pick out runs with min success, cov fail and an ofv higher than minimum
-  # These are potential saddle points
-  minOfv <- min(rawresNoNA$ofv)
-  covFailOverMLERawres <- subset(rawresNoNA, minimization_successful == 1 &
-                                 covariance_step_successful == 0 &
-                                 ofv > minOfv + 1)
+  # List the Retry model files for dismount runs
+  retryModFilePaths <- list.files(path = paraRetriesDirName, pattern = "retry.+mod$")
 
-  # Pick out runs at minimum with min success and cov fail, These can probably be bettered with precond
-  covFailAtMLERawres <-subset(rawresNoNA, minimization_successful == 1 &
-                              covariance_step_successful == 0 &
-                              ofv < minOfv + 1)
+  # Copy those files into the dismount runs directory
+  file.copy(paste0(paraRetriesDirName, "/", retryModFileNames), dismountRunsDir)
 
+  # Set the dismount runs directory as WD
+  setwd(dismountRunsDir)
 
+  # Run dismount on the models
+  dismountDirList <- sapply(retryModFileNames, runDismount)
 
-  # Run dismount of all the models.
-
-  # list the model files
-  retryModFileNames <- list.files(pattern = paste0("retry.+\\.mod"))
-
-  # run dismount on them
-  dismountDirs <- sapply(retryModFileNames, runDismount)
-
-  # Wait for the queue to be empty
-  waitForSlurmQ(targetLength = 1)
-
-
-
-
-  print("done... so far")
-    # parse isestimable files
-
-  # If certain situation (error messages?), run precond
-
-    # parse precond rawres file
-
-  # Build new rawres with all the runs (hopefully they are now all at MLE)
-
-
-  # Set back the working directory
-
-  setwd("..")
-
+  # Parse the rawres files and put them together
 }
 
 
@@ -97,7 +69,50 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
 
 
 
-# The below block of code was there for catego
+# The below block of code was there for categorization, which I am now skipping.
+
+
+
+# Categorize retries, pick out runs with min success, cov fail and an ofv higher than minimum
+# These are potential saddle points
+#   minOfv <- min(rawresNoNA$ofv)
+#   covFailOverMLERawres <- subset(rawresNoNA, minimization_successful == 1 &
+#                                  covariance_step_successful == 0 &
+#                                  ofv > minOfv + 1)
+#
+#   # Pick out runs at minimum with min success and cov fail, These can probably be bettered with precond
+#   covFailAtMLERawres <-subset(rawresNoNA, minimization_successful == 1 &
+#                               covariance_step_successful == 0 &
+#                               ofv < minOfv + 1)
+#
+#
+#
+#   # Run dismount of all the models.
+#
+#   # list the model files
+#   retryModFileNames <- list.files(pattern = paste0("retry.+\\.mod"))
+#
+#   # run dismount on them
+#   dismountDirs <- sapply(retryModFileNames, runDismount)
+#
+#   # Wait for the queue to be empty
+#   waitForSlurmQ(targetLength = 1)
+#
+#
+#
+#
+#   print("done... so far")
+# parse isestimable files
+
+# If certain situation (error messages?), run precond
+
+# parse precond rawres file
+
+# Build new rawres with all the runs (hopefully they are now all at MLE)
+
+
+# Set back the working directory
+
 #
 #   # parse relevant lst files for saddle point covariance step error messages
 #   saddleRetriesList <- lapply(covFailOverMLERawres$retry, function(x){

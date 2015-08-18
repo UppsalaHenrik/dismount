@@ -1,0 +1,16 @@
+{
+    "contents" : "#' Parse a PsN raw results file\n#'\n#'\n#' @param rawresPath The file path for the rawres file to parse. No default.\n#'\n#'\n#' parseRawres()\n\n\nparseRawres <- function(rawresPath){\n\n  print(paste(\"Parsing\", rawresPath))\n\n  # Check wether the relevant folder and files exist\n  rawresExists <- file.exists(rawresPath)\n\n  # If the raw results file cannot be found, return NULL\n  if(rawresExists == FALSE){\n    rawresMessage <- paste(\"Could not find raw results file\", rawresPath)\n    print(rawresMessage)\n    return(NULL)\n  }\n\n  # Parse rawres into data frame and return it\n  rawres <- read.csv(rawresPath)\n\n  return(rawres)\n}\n",
+    "created" : 1439910440723.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2313229473",
+    "id" : "71A5B263",
+    "lastKnownWriteTime" : 1439910560,
+    "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/dismount/R/parseRawres.R",
+    "project_path" : "R/parseRawres.R",
+    "properties" : {
+    },
+    "source_on_save" : true,
+    "type" : "r_source"
+}

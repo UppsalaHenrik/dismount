@@ -1,8 +1,15 @@
+#' Set up directories for a set of executions
+#'
+#' @param modFilePath The model file Path. No default.
+#' @param runType The type of run to be executed. This string is used
+#'        in the folder name cerated. Default is an empty string.
+#' @param subDirs additional subdirectories to create under the main one.
+#'        Default is an empty vector.
 
 fileSysSetup <- function(modFilePath, runType = "", subDirs = c()){
 
   # Get the mod file name without extension for various uses
-  modFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modFileName)))
+  modFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modFilePath)))
 
   # Create a directory to do everything in
   dirName <- paste0(modFileNameNoExt, "_", runType, "_", format(Sys.time(), "%y%m%d_%H%M%S"))
@@ -22,8 +29,12 @@ fileSysSetup <- function(modFilePath, runType = "", subDirs = c()){
   # Set working directory to the new folder
   setwd(dirName)
 
-  # Create all the requested subfolders
-  sapply(subDirs, dir.create)
+  # Create all the requested subfolders and
+  # copy into the subdirectories as well
+  sapply(subDirs, function(x){
+    dir.create(x)
+    file.copy(filesToCopy, x)
+  })
 
   return(modFileNameNoExt)
 }

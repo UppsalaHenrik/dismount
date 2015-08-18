@@ -1,6 +1,21 @@
-
+#' Parse the data file name from a NONMEM model
+#'
+#' Reads the data file name from a NONMEM control file.
+#'
+#' @param modFilePath The model file Path.
+#'
+#'
+#' parseNMDataFileName()
 
 parseNMDataFileName <- function(modFilePath){
+
+  # Make sure the model file exists
+  if(file.exists(modFilePath) != TRUE){
+
+    print(paste("The NONMEM control file", modFilePath, "was not found."))
+
+    return(NULL)
+  }
 
   # Parse the data file name from the model file
   modelFile <- readLines(modFilePath)
@@ -18,5 +33,4 @@ parseNMDataFileName <- function(modFilePath){
 
 
   return(dataFileName)
-
 }
