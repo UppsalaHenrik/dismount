@@ -1,12 +1,12 @@
 {
-    "contents" : "#' Run dismount (isestimable)\n#'\n#' Runs dismount (aka isestimable). Currently limited to slurm queue submission.\n#' This function is in need of some TLC.\n#'\n#'\n#' @param modelFileName The name of the model file. No default\n#' @param wait Wraps the wait option in system(), which specifies whether to\n#' wait for the system call to complete before continuing in R (TRUE) or not\n#' wait after submission (FALSE). Default is FALSE\n#'\n#'\n#' runDismount()\n\n\n\n# I should rewrite this better... para retries run function would be the example to look at\n\nrunDismount <- function(modelFileName, wait = FALSE){\n\n  # Wait for the SLURM queue to have less than 100 runs in it\n  waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)\n\n\n\n  modelFileNameNoExt <- sub(\"\\\\.[[:alnum:]]+$\", \"\", basename(as.character(modelFileName)))\n\n  dir <- paste(\"dismount\", modelFileNameNoExt, format(Sys.time(), \"%y%m%d_%H%M%S\"), sep = \"_\")\n\n  cmd <- paste0(\"srun perl /blue/home/USER/yasao745/PsN4_4_ver_YA/isestimable \",\n                basename(as.character(modelFileName)), \" -dir=\", dir, \" -run_on_slurm > \",\n                dir, \"_log.txt 2>&1\")\n\n  # Print the command to command line\n  print(cmd)\n\n  # Run the command\n  system(cmd, intern = FALSE, wait = wait)\n\n  return(dir)\n}\n",
+    "contents" : "#' Run dismount (isestimable)\n#'\n#' Runs dismount (aka isestimable). Currently limited to slurm queue submission.\n#' This function is in need of some TLC.\n#'\n#'\n#' @param modelFileName The name of the model file. No default\n#' @param wait Wraps the wait option in system(), which specifies whether to\n#' wait for the system call to complete before continuing in R (TRUE) or not\n#' wait after submission (FALSE). Default is FALSE\n#'\n#'\n#' runDismount()\n\n\n\n# I should rewrite this better... para retries run function would be the example to look at\n\nrunDismount <- function(modelFileName, wait = FALSE){\n\n  # Wait for the SLURM queue to have less than 100 runs in it\n  waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)\n\n\n\n  modelFileNameNoExt <- sub(\"\\\\.[[:alnum:]]+$\", \"\", basename(as.character(modelFileName)))\n\n  dir <- paste(\"dismount\", modelFileNameNoExt, format(Sys.time(), \"%y%m%d_%H%M%S\"), sep = \"_\")\n\n  cmd <- paste0(\"srun perl /blue/home/USER/yasao745/PsN4_4_ver_YA/bin/isestimable \",\n                basename(as.character(modelFileName)), \" -dir=\", dir, \" -run_on_slurm > \",\n                dir, \"_log.txt 2>&1\")\n\n  # Print the command to command line\n  print(cmd)\n\n  # Run the command\n  system(cmd, intern = FALSE, wait = wait)\n\n  return(dir)\n}\n",
     "created" : 1439555452966.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "548034000",
+    "hash" : "76857857",
     "id" : "5684F811",
-    "lastKnownWriteTime" : 1439916504,
+    "lastKnownWriteTime" : 1439985144,
     "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/dismount/R/runDismount.R",
     "project_path" : "R/runDismount.R",
     "properties" : {

@@ -27,7 +27,7 @@ runDismount <- function(modelFileName, wait = FALSE){
 
   dir <- paste("dismount", modelFileNameNoExt, format(Sys.time(), "%y%m%d_%H%M%S"), sep = "_")
 
-  cmd <- paste0("srun perl /blue/home/USER/yasao745/PsN4_4_ver_YA/isestimable ",
+  cmd <- paste0("srun perl /blue/home/USER/yasao745/PsN4_4_ver_YA/bin/isestimable ",
                 basename(as.character(modelFileName)), " -dir=", dir, " -run_on_slurm > ",
                 dir, "_log.txt 2>&1")
 
