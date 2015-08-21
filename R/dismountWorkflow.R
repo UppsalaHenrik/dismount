@@ -74,7 +74,7 @@ dismountWorkflow <- function(modFileName, retries = 9){
   # I bind in the retry number as well
   # This is a little dangerous as it assumes the order is the same...
   # I could do this within the apply above instead, and parse the actual number...
-  dismountRawres <- cbind(retry, dismountRawres)
+  dismountRawres <- cbind(retry[-1], dismountRawres)
 
   # Pick out the
   overMinOfvDismountRetries <- subset(dismountRawres, ofv > minOfv + 1)
