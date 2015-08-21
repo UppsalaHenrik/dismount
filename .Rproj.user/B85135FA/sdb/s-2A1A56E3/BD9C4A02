@@ -1,0 +1,16 @@
+{
+    "contents" : "\n########## Source the functions\n\n# File system setup function\nsource(\"./../Rfunctions/fileSysSetup.R\", echo=FALSE)\n\n# illconditioning setup function\nsource(\"./../Rfunctions/illCondSetup.R\", echo=FALSE)\n\n# Precond run function\nsource(\"./../Rfunctions/runPrecond.R\", echo=FALSE)\n\n# Workflow wrapper function\nsource(\"./../Rfunctions/workflowRand.R\", echo=FALSE)\n\n# Results parsing function\nsource(\"./../Rfunctions/parseIllcond.R\", echo=FALSE)\n\n# Reporting function\nsource(\"./../Rfunctions/reportIllcond.R\", echo=FALSE)\n\n# Util functions\nsource(\"./../Rfunctions/utils.R\", echo=FALSE)\n\n########## Set off commands\n\nrawres <- runMassPrecond(\"run1.mod\", maxMag=15, reps=10, pertSize=0, \n                         precondScriptPath=\"./../../_hackedPsN/PsN4_3/bin/precond_numStab\")\n",
+    "created" : 1440161543992.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3187819144",
+    "id" : "BD9C4A02",
+    "lastKnownWriteTime" : 1430242143,
+    "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/Illconditioning/clusterScript5.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

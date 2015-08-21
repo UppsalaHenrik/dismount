@@ -60,6 +60,8 @@ dismountWorkflow <- function(modFileName, retries = 9){
 
   # Run dismount on the models
   dismountDirList <- sapply(retryModFilePaths, runDismount)
+  # I've had issues with the runs not strting before I start the wait below, so here is a little initial wait
+  Sys.sleep(10)
 
   # Wait for the queue to have only the master job left
   waitForSlurmQ(targetLength = 1)
