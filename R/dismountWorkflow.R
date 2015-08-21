@@ -9,7 +9,7 @@
 #'
 #'
 
-dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
+dismountWorkflow <- function(modFileName, retries = 9){
 
   userWD <- getwd()
 
@@ -24,6 +24,9 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
   paraRetriesDirName <- runParaRetries(modFileName, min_retries = retries, degree = 0.99,
                             slurm_partition = "standard", local = FALSE, nm_output = "rmt",
                             seed = 20150806)
+
+  # Wait for the queue to have only the master job left
+  waitForSlurmQ(targetLength = 1)
 
   # Find rawres file and parse it. Just in case there is more than one matched I take the first one.
   rawresPath <- findRawres(paraRetriesDirName)

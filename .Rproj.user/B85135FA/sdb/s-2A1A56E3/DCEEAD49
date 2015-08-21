@@ -1,0 +1,16 @@
+{
+    "contents" : "#' Run parallel retries\n#'\n#' This is a wrapper function for parallel_retries in PsN\n#' @param modFileName The model to run parallel retries on. Only one permitted.\n#' @param dir The directory to run in. Defaults to \"para_retries_<date>_<time>\".\n#' @param clean The post-run clean-up level. Exactly wrapping the PsN option. Defaults to 2.\n#' @param threads The number of threads to use. Exactly wrapping the PsN option. Defaults to 100.\n#' @param min_retries The number of retries to run. Exactly wrapping the PsN option. Defaults to 1\n#' runParaRetries()\n\nrunParaRetries <- function(modFileName, dir = paste0(\"para_retries_\", format(Sys.time(), \"%y%m%d_%H%M%S\")),\n                           clean = 2, threads = 100, min_retries = 1, degree = 0.1,\n                           slurm_partition = \"standard\", rawres_input = \"\", seed = format(Sys.time(), \"%Y%m%d\"),\n                           local = FALSE, nm_output = NULL){\n\n  # Test that degree is not outside its bounds\n  if(degree <= 0 || degree >= 1){\n    print(\"Degree setting must be between 0 and 1\")\n    return(NULL)\n\n  # If it is ok, set the degree option\n  }else{\n    perturbation <- paste0(\" -degree=\", degree)\n  }\n\n  # Set nm_output if there is any\n  if(length(nm_output) > 0){\n    extraNMOutputs <- paste0(\" -nm_output=\", paste(nm_output, collapse = \",\"))\n  }else{\n    extraNMOutputs <- \"\"\n  }\n\n  paraRetriesCmd <- \"srun perl /blue/home/USER/bjuny231/PrecondProject/_hackedPsN6/PsN4_4/bin/parallel_retries -run_on_slurm \"\n\n  partition <- paste0(\" -slurm_partition=\", slurm_partition)\n\n  if(local == TRUE){\n    paraRetriesCmd <- \"perl C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/_hackedPsN6/PsN4_4/bin/parallel_retries \"\n    partition <- \"\"\n  }\n\n  # If there is a rawres input file supplied, and that file exists, use it and disregard min_retries.\n  # If there isn't one, use the min_retries setting\n  ifelse(file.exists(rawres_input),\n         retriesOrInput <- paste0(\" -rawres_input=\", rawres_input),\n         retriesOrInput <- paste0(\" -min_retries=\", min_retries))\n\n  # Create the command\n  cmd <- paste0(paraRetriesCmd, modFileName, \" -dir=\", dir, retriesOrInput, \" -clean=\", clean,\n                perturbation, \" -threads=\", threads, \" -seed=\", seed, partition, extraNMOutputs)\n\n  # Print the command to command line\n  print(cmd)\n\n  # Run the command\n  system(cmd, intern=FALSE, wait=TRUE)\n\n  return(dir)\n}\n",
+    "created" : 1440160239437.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3213827430",
+    "id" : "DCEEAD49",
+    "lastKnownWriteTime" : 1438945242,
+    "path" : "C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/Scripts/dismount/R/runParaRetries.R",
+    "project_path" : "R/runParaRetries.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

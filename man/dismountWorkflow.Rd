@@ -4,7 +4,7 @@
 \alias{dismountWorkflow}
 \title{Full workflow with parallel retries, result categorization and dismount/precond run}
 \usage{
-dismountWorkflow(modFileName = "run83.mod", retries = 9, ...)
+dismountWorkflow(modFileName, retries = 9)
 }
 \arguments{
 \item{modFileName}{The model file to use. Default is "run83.mod".}
