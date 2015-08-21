@@ -7,7 +7,6 @@
 #'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 #'
-#'
 
 dismountWorkflow <- function(modFileName, retries = 9){
 
@@ -84,6 +83,7 @@ dismountWorkflow <- function(modFileName, retries = 9){
   print(paste("After dismount on", length(retryModFilePaths), "samples,",
               nOverMinOfvDismountRetries, "samples were over minimum OFV by 1 or more"))
 
+  setwd(userWD)
 }
 
 
