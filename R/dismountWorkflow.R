@@ -5,7 +5,7 @@
 #' @param modFileName The model file to use. Default is "run83.mod".
 #' @param retries The number of retries to run as part of the initial parallel retries.
 #'
-#' @author Henrik Bjugård Nyberg
+#' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 #'
 #'
 
@@ -31,6 +31,17 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
 
   rawresNoNA <- subset(rawres, ofv != 'NA')
 
+  # Find the minimum OFV value to use as reference
+  minOfv <- min(rawresNoNA$ofv)
+
+  # List the retries that
+  overMinOfvRetries <-  subset(rawresNoNA, ofv > minOfv + 1)
+  nOverMinOfvRetries <- nrow(overMinOfvRetries)
+
+  # Print a message about the number of retries over
+  print(paste("After parallel retries with", retries, "samples,",
+              nOverMinOfvRetries, "samples were over minimum OFV by 1 or more"))
+
   # add retry number to rawres dataframe
   retry <- rawresNoNA$model - 1
   rawresNoNA <- cbind(retry, rawresNoNA)
@@ -47,7 +58,27 @@ dismountWorkflow <- function(modFileName = "run83.mod", retries = 9, ...){
   # Run dismount on the models
   dismountDirList <- sapply(retryModFilePaths, runDismount)
 
-  # Parse the rawres files and put them together
+  # Wait for the queue to have only the master job left
+  waitForSlurmQ(targetLength = 1)
+
+  # Find and parse the rawres files, and then put them together
+  dismountRawresFiles <- list.files(recursive = TRUE)[grep("pert_init_est_modelfit/raw_results.csv", list.files(recursive = TRUE))]
+  dismountRawresList <- lapply(dismountRawresFiles, parseRawres)
+  dismountRawres <- do.call("rbind", dismountRawresList)
+
+  # I bind in the retry number as well
+  # This is a little dangerous as it assumes the order is the same...
+  # I could do this within the apply above instead, and parse the actual number...
+  dismountRawres <- cbind(retry, dismountRawres)
+
+  # Pick out the
+  overMinOfvDismountRetries <- subset(dismountRawres, ofv > minOfv + 1)
+  nOverMinOfvDismountRetries <- nrow(overMinOfvDismountRetries)
+
+  # Print a message about the number of retries over
+  print(paste("After dismount on", length(retryModFilePaths), "samples,",
+              nOverMinOfvDismountRetries, "samples were over minimum OFV by 1 or more"))
+
 }
 
 

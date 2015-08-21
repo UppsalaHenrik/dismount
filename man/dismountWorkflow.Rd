@@ -15,6 +15,6 @@ dismountWorkflow(modFileName = "run83.mod", retries = 9, ...)
 Full workflow with parallel retries, result categorization and dismount/precond run
 }
 \author{
-Henrik Bjugård Nyberg
+Henrik Bjugård Nyberg - henrik.b.nyberg@farmbio.uu.se
 }
 

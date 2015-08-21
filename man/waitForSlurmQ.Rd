@@ -21,4 +21,7 @@ code has kicked off before parsing results. Will print messages
 with how many runs it waits for and for how long. The wait will
 time out after ( secsToWait * maxWaits ) seconds.
 }
+\author{
+Henrik Bjugård Nyberg - henrik.b.nyberg@farmbio.uu.se
+}
 

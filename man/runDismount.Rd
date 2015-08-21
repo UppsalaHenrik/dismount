@@ -20,4 +20,7 @@ runDismount()}
 Runs dismount (aka isestimable). Currently limited to slurm queue submission.
 This function is in need of some TLC.
 }
+\author{
+Henrik Bjugård Nyberg - henrik.b.nyberg@farmbio.uu.se
+}
 

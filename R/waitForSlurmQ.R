@@ -10,6 +10,8 @@
 #' @param secsToWait How many seconds to wait between parsing the queue. Default is 30.
 #' @param maxWaits Maximum number of times the wait should happen before timing out. Default is 20.
 #' waitForSlurmQ()
+#'
+#' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 
 waitForSlurmQ <- function(targetLength = 0, secsToWait = 30, maxWaits = 20){
 

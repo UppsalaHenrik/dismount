@@ -13,9 +13,12 @@ fileSysSetup(modFilePath, runType = "", subDirs = c())
 in the folder name cerated. Default is an empty string.}
 
 \item{subDirs}{additional subdirectories to create under the main one.
-Default is an empty vector.}
+       Default is an empty vector.}
 }
 \description{
 Set up directories for a set of executions
+}
+\author{
+Henrik Bjugård Nyberg - henrik.b.nyberg@farmbio.uu.se
 }
 

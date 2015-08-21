@@ -15,4 +15,7 @@ parseRawres()}
 \description{
 Parse a PsN raw results file
 }
+\author{
+Henrik Bjugård Nyberg - henrik.b.nyberg@farmbio.uu.se
+}
 
