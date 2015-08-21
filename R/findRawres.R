@@ -1,26 +1,29 @@
+#' Find the raw results csvs in a specified location
+#'
+#' @param path The path in which to look.
 #'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 
-findRawres <- function(dirName){
+findRawres <- function(path){
 
   # Find the relevant file
-  rawresFileName <- list.files(dirName)[grep("^raw_results_.+\\.csv", list.files(dirName))]
-  rawresPath <- paste0(dirName, "/", rawresFileName)
+  rawresFileName <- list.files(path)[grep("^raw_results_.+\\.csv", list.files(path))]
+  rawresPath <- paste0(path, "/", rawresFileName)
 
   # Check wether the relevant folder and files exist
-  dirExists <- file.exists(dirName)
+  dirExists <- file.exists(path)
   rawresExists <- file.exists(rawresPath)
 
   # If the directory cannot be found, return NULL
   if(dirExists == FALSE){
-    dirMessage <- paste("Could not find directory", dirName)
+    dirMessage <- paste("Could not find directory", path)
     print(dirMessage)
     return(NULL)
   }
 
   # If the raw results file cannot be found, return NULL
   if(rawresExists == FALSE){
-    rawresMessage <- paste("Could not find raw results file in ", dirName)
+    rawresMessage <- paste("Could not find raw results file in ", path)
     print(rawresMessage)
     return(NULL)
   }

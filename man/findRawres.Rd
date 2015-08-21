@@ -2,12 +2,15 @@
 % Please edit documentation in R/findRawres.R
 \name{findRawres}
 \alias{findRawres}
-\title{}
+\title{Find the raw results csvs in a specified location}
 \usage{
-findRawres(dirName)
+findRawres(path)
+}
+\arguments{
+\item{path}{The path in which to look.}
 }
 \description{
-
+Find the raw results csvs in a specified location
 }
 \author{
 Henrik Bjugård Nyberg - henrik.b.nyberg@farmbio.uu.se
