@@ -2,14 +2,15 @@
 #'
 #'
 #' @param rawresPath The file path for the rawres file to parse. No default.
-#'
+#' @param addPath If set the the returned data frame will include the file 
+#'        name that was parsed. Default is TRUE
 #'
 #' parseRawres()
 #'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 
 
-parseRawres <- function(rawresPath){
+parseRawres <- function(rawresPath, addPath = TRUE){
 
   print(paste("Parsing", rawresPath))
 
@@ -23,8 +24,14 @@ parseRawres <- function(rawresPath){
     return(NULL)
   }
 
-  # Parse rawres into data frame and return it
+  # Parse rawres into data frame
   rawres <- read.csv(rawresPath)
+  
+  # If the addPath option is set, append it
+  if(addPath == TRUE){
+    rawres$rawresPath <- rawresPath
+  }
 
+  # Return the data frame
   return(rawres)
 }

@@ -2,7 +2,7 @@
 #'
 #'
 #' @param modelFileName The name of the model file. No default.
-#' @param pertSize
+#' @param pertSize Size of perturbation. No default.
 #'
 #'
 

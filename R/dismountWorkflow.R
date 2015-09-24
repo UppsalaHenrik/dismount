@@ -8,81 +8,85 @@
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 #'
 
-dismountWorkflow <- function(modFileName, retries = 9){
-
+dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE, 
+                             doPrecond = FALSE, doDismount = TRUE, rerunDirName){
+  
+  # Save the current working directory for later
   userWD <- getwd()
-
+  
   #Set up folders for the workflow
   dismountRunsDir <- "dismountRuns"
-  modFileNameNoExt <- fileSysSetup(modFileName, "massDismount", c(dismountRunsDir))
-
+  precondRunsDir <- "precondRuns"
+  modFileNameNoExt <- fileSysSetup(modFileName, "massRun", c(dismountRunsDir, precondRunsDir))
+  
   workflowWD <- getwd()
-
+  
   # Run initial para retries (wait = TRUE)
-  print("Running parallel retries")
-  paraRetriesDirName <- runParaRetries(modFileName, min_retries = retries, degree = 0.99,
-                            slurm_partition = "standard", local = FALSE, nm_output = "rmt",
-                            seed = 20150806)
-
-  # Wait for the queue to have only the master job left
-  waitForSlurmQ(targetLength = 1)
-
+  if(doParaRetries){
+    print("Running parallel retries")
+    paraRetriesDirName <- runParaRetries(modFileName, min_retries = retries, degree = 0.99,
+                                         slurm_partition = "standard", local = FALSE, 
+                                         nm_output = c("rmt", "ext"), seed = 20150806)
+    
+    # Wait for the queue to have only the master job left
+    waitForSlurmQ(targetLength = 1)
+  }else{
+    
+    paraRetriesDirName <- rerunDirName
+    
+  }
+  
   # Find rawres file and parse it. Just in case there is more than one matched I take the first one.
-  rawresPath <- findRawres(paraRetriesDirName)
-  rawres <- parseRawres(rawresPath)
-
-  rawresNoNA <- subset(rawres, ofv != 'NA')
-
+  paraRetriesRawresPath <- findRawres(paraRetriesDirName)
+  paraRetriesRawres <- parseRawres(paraRetriesRawresPath)
+  
+  paraRetriesRawresNoNA <- subset(rawres, ofv != 'NA')
+  
   # Find the minimum OFV value to use as reference
-  minOfv <- min(rawresNoNA$ofv)
-
-  # List the retries that
-  overMinOfvRetries <-  subset(rawresNoNA, ofv > minOfv + 1)
-  nOverMinOfvRetries <- nrow(overMinOfvRetries)
-
-  # Print a message about the number of retries over
-  print(paste("After parallel retries with", retries, "samples,",
-              nOverMinOfvRetries, "samples were over minimum OFV by 1 or more"))
-
+  minOfv <- min(paraRetriesRawresNoNA$ofv)
+  
   # add retry number to rawres dataframe
   retry <- rawresNoNA$model - 1
-  rawresNoNA <- cbind(retry, rawresNoNA)
-
+  paraRetriesRawresNoNA <- cbind(retry, paraRetriesRawresNoNA)
+  
   # List the Retry model files for dismount runs
   retryModFilePaths <- list.files(path = paraRetriesDirName, pattern = "retry.+mod$")
-
-  # Copy those files into the dismount runs directory
-  file.copy(paste0(paraRetriesDirName, "/", retryModFilePaths), dismountRunsDir)
-
-  # Set the dismount runs directory as WD
-  setwd(dismountRunsDir)
-
-  # Run dismount on the models
-  dismountDirList <- sapply(retryModFilePaths, runDismount)
-  # I've had issues with the runs not strting before I start the wait below, so here is a little initial wait
-  Sys.sleep(10)
-
-  # Wait for the queue to have only the master job left
-  waitForSlurmQ(targetLength = 1)
-
-  # Find and parse the rawres files, and then put them together
-  dismountRawresFiles <- list.files(recursive = TRUE)[grep("pert_init_est_modelfit/raw_results.csv", list.files(recursive = TRUE))]
-  dismountRawresList <- lapply(dismountRawresFiles, parseRawres)
-  dismountRawres <- do.call("rbind", dismountRawresList)
-
-  # I bind in the retry number as well
-  # This is a little dangerous as it assumes the order is the same...
-  # I could do this within the apply above instead, and parse the actual number...
-  dismountRawres <- cbind(retry[-1], dismountRawres)
-
-  # Pick out the
-  overMinOfvDismountRetries <- subset(dismountRawres, ofv > minOfv + 1)
-  nOverMinOfvDismountRetries <- nrow(overMinOfvDismountRetries)
-
-  # Print a message about the number of retries over
-  print(paste("After dismount on", length(retryModFilePaths), "samples,",
-              nOverMinOfvDismountRetries, "samples were over minimum OFV by 1 or more"))
-
+  
+  if()
+  
+  if(doDismount){  
+    # Copy those files into the dismount runs directory
+    file.copy(paste0(paraRetriesDirName, "/", retryModFilePaths), dismountRunsDir)
+    
+    # Set the dismount runs directory as WD
+    setwd(dismountRunsDir)
+    
+    # Run dismount on the models
+    dismountDirList <- sapply(retryModFilePaths, runDismount)
+    # I've had issues with the runs not strting before I start the wait below, so here is a little initial wait
+    Sys.sleep(10)
+    
+    # Wait for the queue to have only the master job left
+    waitForSlurmQ(targetLength = 1)
+    
+    # Find and parse the rawres files, and then put them together
+    dismountRawresFiles <- list.files(recursive = TRUE)[grep("pert_init_est_modelfit/raw_results.csv", list.files(recursive = TRUE))]
+    dismountRawresList <- lapply(dismountRawresFiles, parseRawres)
+    dismountRawres <- do.call("rbind", dismountRawresList)
+    
+    # I bind in the retry number as well
+    # This is a little dangerous as it assumes the order is the same...
+    # I could do this within the apply above instead, and parse the actual number...
+    dismountRawres <- cbind(retry[-1], dismountRawres)
+    
+    # Pick out the
+    overMinOfvDismountRetries <- subset(dismountRawres, ofv > minOfv + 1)
+    nOverMinOfvDismountRetries <- nrow(overMinOfvDismountRetries)
+    
+    # Print a message about the number of retries over
+    print(paste("After dismount on", length(retryModFilePaths), "samples,",
+                nOverMinOfvDismountRetries, "samples were over minimum OFV by 1 or more"))
+  }
   setwd(userWD)
 }
 
@@ -100,9 +104,15 @@ dismountWorkflow <- function(modFileName, retries = 9){
 
 
 
-
-
-
+# 
+# # List the retries that are above min ofv
+# overMinOfvRetries <-  subset(rawresNoNA, ofv > minOfv + 1)
+# nOverMinOfvRetries <- nrow(overMinOfvRetries)
+# 
+# # Print a message about the number of retries over
+# print(paste("After parallel retries with", retries, "samples,",
+#             nOverMinOfvRetries, "samples were over minimum OFV by 1 or more"))
+# 
 
 
 # The below block of code was there for categorization, which I am now skipping.
