@@ -44,7 +44,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   paraRetriesRawresPath <- findRawres(paraRetriesDirName)
   paraRetriesRawres <- parseRawres(paraRetriesRawresPath)
   
-  paraRetriesRawresNoNA <- subset(rawres, ofv != 'NA')
+  paraRetriesRawresNoNA <- subset(paraRetriesRawres, ofv != 'NA')
   
   # Find the minimum OFV value to use as reference
   minOfv <- min(paraRetriesRawresNoNA$ofv)
