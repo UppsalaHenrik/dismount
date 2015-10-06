@@ -10,7 +10,7 @@
 
 
 runPrecond <- function(modelFileName, pertSize, precondScriptPath,
-                       runNum, illCondFileName, pertSeed){
+                       runNum, preCondMatFileName = NULL, pertSeed){
 
   modelFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modelFileName)))
 
@@ -18,11 +18,22 @@ runPrecond <- function(modelFileName, pertSize, precondScriptPath,
   waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
 
   # Create a dir name to use
-  dirName <- paste0("./illCondRuns/", gsub(".csv$", "", basename(illCondFileName)))
+  dirName <- paste0("./preCondRuns/", modelFileNameNoExt, "_", 
+                    gsub(".csv$", "", basename(preCondMatFileName)))
 
+  if(length(preCondMatFileName) == 0){
+    
+    preCondMatOpt <- "" 
+    
+  }else{
+    
+    preCondMatOpt <- paste0(" -pre=", preCondMatFileName)
+    
+  }
+  
   # Create the command
   cmd <- paste0("srun perl ", precondScriptPath, " ", modelFileName, " -dir=", dirName,
-                " -pre=", illCondFileName, " -cholesky -pertSize=", pertSize,
+                preCondMatOpt, " -cholesky -pertSize=", pertSize,
                 " -clean=2 -seedForPert=", pertSeed)
 
   print(cmd)
