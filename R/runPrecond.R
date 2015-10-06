@@ -19,7 +19,9 @@ runPrecond <- function(modelFileName, pertSize, precondScriptPath,
 
   # Create a dir name to use
   dirName <- paste0("./preCondRuns/", modelFileNameNoExt, "_", 
-                    gsub(".csv$", "", basename(preCondMatFileName)))
+                    gsub(".csv$", "", ifelse(length(preCondMatFileName) == 0,
+                                             "",
+                                             basename(preCondMatFileName)))
 
   if(length(preCondMatFileName) == 0){
     
