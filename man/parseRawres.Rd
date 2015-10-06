@@ -4,11 +4,13 @@
 \alias{parseRawres}
 \title{Parse a PsN raw results file}
 \usage{
-parseRawres(rawresPath)
+parseRawres(rawresPath, addPath = TRUE)
 }
 \arguments{
-\item{rawresPath}{The file path for the rawres file to parse. No default.
+\item{rawresPath}{The file path for the rawres file to parse. No default.}
 
+\item{addPath}{If set the the returned data frame will include the file
+       name that was parsed. Default is TRUE
 
 parseRawres()}
 }

@@ -4,13 +4,14 @@
 \alias{runPrecond}
 \title{Run precond}
 \usage{
-runPrecond(modelFileName, pertSize, precondScriptPath, runNum, illCondFileName,
-  pertSeed)
+runPrecond(modelFileName, pertSize = 0,
+  precondScriptPath = "/blue/home/USER/yasao745/PsN4_4_ver_YA/bin/precond_numstab",
+  preCondMatFileName = NULL, pertSeed = 123456)
 }
 \arguments{
 \item{modelFileName}{The name of the model file. No default.}
 
-\item{pertSize}{}
+\item{pertSize}{Size of perturbation. No default.}
 }
 \description{
 Run precond
