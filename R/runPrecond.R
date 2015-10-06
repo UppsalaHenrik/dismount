@@ -9,9 +9,9 @@
 
 
 
-runPrecond <- function(modelFileName, pertSize, 
+runPrecond <- function(modelFileName, pertSize = 0, 
                        precondScriptPath = "/blue/home/USER/yasao745/PsN4_4_ver_YA/bin/precond",
-                       runNum, preCondMatFileName = NULL, pertSeed){
+                       preCondMatFileName = NULL, pertSeed = 123456){
 
   modelFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modelFileName)))
 
