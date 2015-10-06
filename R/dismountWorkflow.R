@@ -50,7 +50,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   minOfv <- min(paraRetriesRawresNoNA$ofv)
   
   # add retry number to rawres dataframe
-  retry <- rawresNoNA$model - 1
+  retry <- paraRetriesRawresNoNA$model - 1
   paraRetriesRawresNoNA <- cbind(retry, paraRetriesRawresNoNA)
   
   # List the Retry files for dismount and/or precond runs
