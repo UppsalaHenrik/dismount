@@ -84,13 +84,13 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     # I could do this within the apply above instead, and parse the actual number...
     precondRawres <- cbind(retry[-1], precondRawres)
     
-    # Pick out the
-    overMinOfvPrecondRetries <- subset(precondRawres, ofv > minOfv + 1)
-    nOverMinOfvPrecondRetries <- nrow(overMinOfvPrecondRetries)
-    
-    # Print a message about the number of retries over
-    print(paste("After precond on", length(retryModFilePaths), "samples,",
-                nOverMinOfvPrecondRetries, "samples were over minimum OFV by 1 or more"))
+#     # Pick out the
+#     overMinOfvPrecondRetries <- subset(precondRawres, ofv > minOfv + 1)
+#     nOverMinOfvPrecondRetries <- nrow(overMinOfvPrecondRetries)
+#     
+#     # Print a message about the number of retries over
+#     print(paste("After precond on", length(retryModFilePaths), "samples,",
+#                 nOverMinOfvPrecondRetries, "samples were over minimum OFV by 1 or more"))
     
   }
   
@@ -121,13 +121,13 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     # I could do this within the apply above instead, and parse the actual number...
     dismountRawres <- cbind(retry[-1], dismountRawres)
     
-    # Pick out the
-    overMinOfvDismountRetries <- subset(dismountRawres, ofv > minOfv + 1)
-    nOverMinOfvDismountRetries <- nrow(overMinOfvDismountRetries)
-    
-    # Print a message about the number of retries over
-    print(paste("After dismount on", length(retryModFilePaths), "samples,",
-                nOverMinOfvDismountRetries, "samples were over minimum OFV by 1 or more"))
+#     # Pick out the
+#     overMinOfvDismountRetries <- subset(dismountRawres, ofv > minOfv + 1)
+#     nOverMinOfvDismountRetries <- nrow(overMinOfvDismountRetries)
+#     
+#     # Print a message about the number of retries over
+#     print(paste("After dismount on", length(retryModFilePaths), "samples,",
+#                 nOverMinOfvDismountRetries, "samples were over minimum OFV by 1 or more"))
   }
   setwd(userWD)
 }

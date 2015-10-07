@@ -43,6 +43,8 @@ runPrecond <- function(modelFileName, pertSize = 0,
 
   # Run the command
   system(cmd, intern=FALSE, wait=FALSE)
+  
+  Sys.sleep(0.1)
 
   return(dirName)
 }
