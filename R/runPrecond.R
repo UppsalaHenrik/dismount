@@ -19,7 +19,7 @@ runPrecond <- function(modelFileName, pertSize = 0,
   waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
 
   # Create a dir name to use
-  dirName <- paste0("./preCondRuns/", modelFileNameNoExt, "_", 
+  dirName <- paste0(modelFileNameNoExt, "_", 
                     gsub(".csv$", "", ifelse(length(preCondMatFileName) == 0,
                                              "",
                                              basename(preCondMatFileName))))
