@@ -6,12 +6,11 @@
 #'
 #'
 
+# "/blue/home/USER/bjuny231/PrecondProject/_hackedPsN6/PsN4_4/bin/precond_numStab"
 
 
-
-runPrecond <- function(modelFileName, pertSize = 0, 
-                       precondScriptPath = "/blue/home/USER/bjuny231/PrecondProject/_hackedPsN6/PsN4_4/bin/precond_numStab",
-                       preCondMatFileName = NULL, pertSeed = 123456){
+runPrecond <- function(modelFileName, pertSize = 0, precondScriptPath = "precond",
+                       preCondMatFileName = NULL, pertSeed = 123456, always = TRUE){
 
   modelFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modelFileName)))
 
@@ -19,10 +18,10 @@ runPrecond <- function(modelFileName, pertSize = 0,
   waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
 
   # Create a dir name to use
-  dirName <- paste0(modelFileNameNoExt, "_", 
+  dirName <- paste0(modelFileNameNoExt, 
                     gsub(".csv$", "", ifelse(length(preCondMatFileName) == 0,
                                              "",
-                                             basename(preCondMatFileName))))
+                                             paste0("_", basename(preCondMatFileName)))))
 
   if(length(preCondMatFileName) == 0){
     
@@ -34,10 +33,17 @@ runPrecond <- function(modelFileName, pertSize = 0,
     
   }
   
+  if(always){
+    alwaysOpt <- " -always"
+  }else{
+    alwaysOpt <- ""
+  }
+  
+  
   # Create the command
-  cmd <- paste0("srun perl ", precondScriptPath, " ", modelFileName, " -dir=", dirName,
+  cmd <- paste0(precondScriptPath, " ", modelFileName, " -dir=", dirName,
                 preCondMatOpt, " -cholesky -pertSize=", pertSize,
-                " -clean=2 -seedForPert=", pertSeed)
+                " -clean=2 -seedForPert=", pertSeed, alwaysOpt)
 
   print(cmd)
 

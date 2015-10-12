@@ -1,5 +1,5 @@
 
-createPlotlyObj <- function(ofvVector, paramVals1, paramVals2){
+createPlotlyObj <- function(ofvVector, paramVals1, paramVals2, plotTitle = "OFV Surface"){
   
   xSide <- length(paramVals1)
   
@@ -7,24 +7,47 @@ createPlotlyObj <- function(ofvVector, paramVals1, paramVals2){
   
   zMatrix <- matrix(ofvVector, nrow = ySide, ncol = xSide, byrow = TRUE)
   
+  colorScaleMid <- list(c(0, "rgb(255,255,255)"),
+                        list(0.2, "rgb(255, 255, 102)"),
+                        list(0.3, "rgb(255, 204, 0)"),
+                        list(0.4, "rgb(255, 153, 0)"),
+                        list(0.5, "rgb(255, 0, 0)"), 
+                        list(0.6, "rgb(255, 153, 0)"),
+                        list(0.7, "rgb(255, 204, 0)"),
+                        list(0.8, "rgb(255, 255, 102)"),
+                        list(1, "rgb(255,255,255)"))
+  
+  colorScaleMidDark <- list(c(0, "rgb(0,0,0)"),
+                        list(0.2, "rgb(80, 0, 0)"),
+                        list(0.3, "rgb(160, 0, 0)"),
+                        list(0.4, "rgb(230, 0, 0)"),
+                        list(0.5, "rgb(255, 0, 0)"), 
+                        list(0.6, "rgb(255, 153, 0)"),
+                        list(0.7, "rgb(255, 204, 0)"),
+                        list(0.8, "rgb(255, 255, 102)"),
+                        list(1, "rgb(255,255,255)"))
+  
+  colorScaleMin <- list(c(0, "rgb(255,0,0)"),
+                        list(0.01, "rgb(200,0,0)"),
+                        list(0.02, "rgb(150,0,0)"),
+                        list(0.03, "rgb(100,0,0)"),
+                        list(0.05, "rgb(50,0,0)"), 
+                        list(0.20, "rgb(255,255,255)"),
+                        list(0.75, "rgb(255,255,255)"),
+                        list(1, "rgb(255,255,255)"))
+  
+  
   plotlyTrace <- list(z = zMatrix, 
                       x = paramVals1, 
                       y = paramVals2,
-                      colorscale = list(c(0, "rgb(255,0,0)"),
-                                        list(0.01, "rgb(200,0,0)"),
-                                        list(0.02, "rgb(150,0,0)"),
-                                        list(0.03, "rgb(100,0,0)"),
-                                        list(0.05, "rgb(50,0,0)"), 
-                                        list(0.20, "rgb(255,255,255)"),
-                                        list(0.75, "rgb(255,255,255)"),
-                                        list(1, "rgb(255,255,255)")),
+                      colorscale = colorScaleMidDark,
                       type = "surface"
   )
   
   ofvRange <- c(min(ofvVector), max(ofvVector))
   
   layout <- list(
-    title = "OFV Surface", 
+    title = plotTitle, 
     titlefont = list(
       family = "'Open sans', verdana, arial, sans-serif", 
       size = 17, 

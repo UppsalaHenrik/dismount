@@ -75,7 +75,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     waitForSlurmQ(targetLength = 1)
     
     # Find and parse the rawres files, and then put them together
-    precondRawresFiles <- list.files(recursive = TRUE)[grep("pert_init_est_modelfit/raw_results.csv", list.files(recursive = TRUE))]
+    precondRawresFiles <- list.files(recursive = TRUE)[grep("raw_results.csv", list.files(recursive = TRUE))]
     precondRawresList <- lapply(precondRawresFiles, parseRawres)
     precondRawres <- do.call("rbind", precondRawresList)
     

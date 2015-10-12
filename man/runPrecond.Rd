@@ -4,9 +4,8 @@
 \alias{runPrecond}
 \title{Run precond}
 \usage{
-runPrecond(modelFileName, pertSize = 0,
-  precondScriptPath = "/blue/home/USER/yasao745/PsN4_4_ver_YA/bin/precond_numstab",
-  preCondMatFileName = NULL, pertSeed = 123456)
+runPrecond(modelFileName, pertSize = 0, precondScriptPath = "precond",
+  preCondMatFileName = NULL, pertSeed = 123456, always = TRUE)
 }
 \arguments{
 \item{modelFileName}{The name of the model file. No default.}
