@@ -2,15 +2,15 @@
 #'
 #'
 #' @param modelFileName The name of the model file. No default.
-#' @param pertSize Size of perturbation. No default.
+#' @param precondScriptPath Optional precond script path. Default is precond.
 #'
 #'
 
 # "/blue/home/USER/bjuny231/PrecondProject/_hackedPsN6/PsN4_4/bin/precond_numStab"
 
 
-runPrecond <- function(modelFileName, pertSize = 0, precondScriptPath = "precond",
-                       preCondMatFileName = NULL, pertSeed = 123456, always = TRUE){
+runPrecond <- function(modelFileName, precondScriptPath = "precond",
+                       preCondMatFileName = NULL, always = TRUE){
 
   modelFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modelFileName)))
 
@@ -42,8 +42,7 @@ runPrecond <- function(modelFileName, pertSize = 0, precondScriptPath = "precond
   
   # Create the command
   cmd <- paste0(precondScriptPath, " ", modelFileName, " -dir=", dirName,
-                preCondMatOpt, " -cholesky -pertSize=", pertSize,
-                " -clean=2 -seedForPert=", pertSeed, alwaysOpt)
+                preCondMatOpt, " -clean=2", alwaysOpt)
 
   print(cmd)
 

@@ -4,13 +4,13 @@
 \alias{runPrecond}
 \title{Run precond}
 \usage{
-runPrecond(modelFileName, pertSize = 0, precondScriptPath = "precond",
-  preCondMatFileName = NULL, pertSeed = 123456, always = TRUE)
+runPrecond(modelFileName, precondScriptPath = "precond",
+  preCondMatFileName = NULL, always = TRUE)
 }
 \arguments{
 \item{modelFileName}{The name of the model file. No default.}
 
-\item{pertSize}{Size of perturbation. No default.}
+\item{precondScriptPath}{Optional precond script path. Default is precond.}
 }
 \description{
 Run precond
