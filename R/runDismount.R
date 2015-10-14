@@ -18,20 +18,24 @@
 
 # I should rewrite this better... para retries run function would be the example to look at
 
-runDismount <- function(modelFileName, wait = FALSE){
+runDismount <- function(modelFileName, wait = FALSE, logging = FALSE){
 
   # Wait for the SLURM queue to have less than 100 runs in it
   waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
 
 
+  if(logging){
+    logOpt <- paste0(" > ", dir, "_log.txt 2>&1")
+  }else{
+    logOpt <- ""
+  }
 
   modelFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modelFileName)))
 
   dir <- paste("dismount", modelFileNameNoExt, format(Sys.time(), "%y%m%d_%H%M%S"), sep = "_")
 
   cmd <- paste0("srun perl /blue/home/USER/yasao745/PsN4_4_ver_YA/bin/isestimable ",
-                basename(as.character(modelFileName)), " -dir=", dir, " > ",
-                dir, "_log.txt 2>&1")
+                basename(as.character(modelFileName)), " -dir=", dir, logOpt)
 
   # Print the command to command line
   print(cmd)
