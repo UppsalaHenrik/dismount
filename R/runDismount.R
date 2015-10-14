@@ -8,7 +8,7 @@
 #' @param wait Wraps the wait option in system(), which specifies whether to
 #' wait for the system call to complete before continuing in R (TRUE) or not
 #' wait after submission (FALSE). Default is FALSE
-#'
+#' @param logging Whether to log the command line outputs to a text file or not. Default is FALSE.
 #'
 #' runDismount()
 #'
@@ -43,5 +43,8 @@ runDismount <- function(modelFileName, wait = FALSE, logging = FALSE){
   # Run the command
   system(cmd, intern = FALSE, wait = wait)
 
+  # Sleep one tenth of a second to not overload the system.
+  Sys.sleep(0.1)
+  
   return(dir)
 }
