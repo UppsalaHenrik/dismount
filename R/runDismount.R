@@ -38,7 +38,7 @@ runDismount <- function(modelFileName, wait = FALSE, logging = FALSE, runOnSlurm
 
   modelFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modelFileName)))
 
-  dir <- paste("dismount", modelFileNameNoExt, format(Sys.time(), "%y%m%d_%H%M%S"), sep = "_")
+  dir <- paste("dismount", modelFileNameNoExt, sep = "_")
 
   cmd <- paste0("srun perl /blue/home/USER/yasao745/PsN4_4_ver_YA/bin/isestimable ",
                 basename(as.character(modelFileName)), " -dir=", dir, runOnSlurmOpt, 
@@ -50,8 +50,8 @@ runDismount <- function(modelFileName, wait = FALSE, logging = FALSE, runOnSlurm
   # Run the command
   system(cmd, intern = FALSE, wait = wait)
 
-  # Sleep one tenth of a second to not overload the system.
-  Sys.sleep(0.1)
+  # Sleep half a second to not overload the system.
+  Sys.sleep(0.5)
   
   return(dir)
 }
