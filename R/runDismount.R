@@ -18,7 +18,7 @@
 
 # I should rewrite this better... para retries run function would be the example to look at
 
-runDismount <- function(modelFileName, wait = FALSE, logging = FALSE, runOnSlurm = TRUE){
+runDismount <- function(modelFileName, wait = FALSE, logging = FALSE, runOnSlurm = FALSE){
 
   # Wait for the SLURM queue to have less than 100 runs in it
   waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
@@ -51,7 +51,7 @@ runDismount <- function(modelFileName, wait = FALSE, logging = FALSE, runOnSlurm
   system(cmd, intern = FALSE, wait = wait)
 
   # Sleep half a second to not overload the system.
-  Sys.sleep(0.5)
+  Sys.sleep(3)
   
   return(dir)
 }
