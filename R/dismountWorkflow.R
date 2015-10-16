@@ -132,149 +132,29 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     dismountRawresList <- lapply(dismountRawresFiles, parseRawres)
     dismountRawres <- do.call("rbind", dismountRawresList)
     
-    # I bind in the retry number as well
-    # This is a little dangerous as it assumes the order is the same...
-    # I could do this within the apply above instead, and parse the actual number...
-    dismountRawres <- cbind(retry[-1], dismountRawres)
+    dismountRetry <- as.numeric(gsub("/.+$", "", gsub(".+retry", "", dismountRawres$rawresPath)))
     
-#     # Pick out the
-#     overMinOfvDismountRetries <- subset(dismountRawres, ofv > minOfv + 1)
-#     nOverMinOfvDismountRetries <- nrow(overMinOfvDismountRetries)
-#     
-#     # Print a message about the number of retries over
-#     print(paste("After dismount on", length(retryModFilePaths), "samples,",
-#                 nOverMinOfvDismountRetries, "samples were over minimum OFV by 1 or more"))
+    dismountRawres <- cbind(dismountRawres, dismountRetry)
+    
+    
   }
+  
+  setwd(workflowWD)
+  
+  write.csv(dismountRawres, "dismountRawres.csv")
+  
+  dismountOfvDiffs <- sapply(intersect(dismountRawres$dismountRetry, 
+                                      paraRetriesRawresNoNA$retry), 
+                            function(x){
+                              
+                              dismountOfv <- dismountRawres$ofv[dismountRawres$dismountRetry == x]
+                              print(dismountOfv)
+                              paraRetriesOfv <- paraRetriesRawresNoNA$ofv[paraRetriesRawresNoNA$retry == x]
+                              
+                              ofvDiff <- paraRetriesOfv - dismountOfv
+                              
+                              return (ofvDiff)
+                              
+                            })
   setwd(userWD)
 }
-
-
-
-
-
-
-
-
-
-# Below is some ancient code that was the starting point for the above. Please disregard
-
-
-
-
-
-# 
-# # List the retries that are above min ofv
-# overMinOfvRetries <-  subset(rawresNoNA, ofv > minOfv + 1)
-# nOverMinOfvRetries <- nrow(overMinOfvRetries)
-# 
-# # Print a message about the number of retries over
-# print(paste("After parallel retries with", retries, "samples,",
-#             nOverMinOfvRetries, "samples were over minimum OFV by 1 or more"))
-# 
-
-
-# The below block of code was there for categorization, which I am now skipping.
-
-
-
-# Categorize retries, pick out runs with min success, cov fail and an ofv higher than minimum
-# These are potential saddle points
-#   minOfv <- min(rawresNoNA$ofv)
-#   covFailOverMLERawres <- subset(rawresNoNA, minimization_successful == 1 &
-#                                  covariance_step_successful == 0 &
-#                                  ofv > minOfv + 1)
-#
-#   # Pick out runs at minimum with min success and cov fail, These can probably be bettered with precond
-#   covFailAtMLERawres <-subset(rawresNoNA, minimization_successful == 1 &
-#                               covariance_step_successful == 0 &
-#                               ofv < minOfv + 1)
-#
-#
-#
-#   # Run dismount of all the models.
-#
-#   # list the model files
-#   retryModFileNames <- list.files(pattern = paste0("retry.+\\.mod"))
-#
-#   # run dismount on them
-#   dismountDirs <- sapply(retryModFileNames, runDismount)
-#
-#   # Wait for the queue to be empty
-#   waitForSlurmQ(targetLength = 1)
-#
-#
-#
-#
-#   print("done... so far")
-# parse isestimable files
-
-# If certain situation (error messages?), run precond
-
-# parse precond rawres file
-
-# Build new rawres with all the runs (hopefully they are now all at MLE)
-
-
-# Set back the working directory
-
-#
-#   # parse relevant lst files for saddle point covariance step error messages
-#   saddleRetriesList <- lapply(covFailOverMLERawres$retry, function(x){
-#
-#     lstFileName <- list.files(pattern = paste0("retry", x, ".lst"))
-#
-#     covMessages <- parseCovMessages(lstFileName)
-#
-#     # Look for the saddle point message and, if found, return x, the retry number
-#     if(grepl("R MATRIX ALGORITHMICALLY NON-POSITIVE-SEMIDEFINITE BUT NONSINGULAR", covMessages)){
-#       return(x)
-#     }
-#
-#   # If the saddle point message isn't found, return NULL
-#   return(NULL)
-#   })
-#
-#   saddleRetries <- unlist(saddleRetriesList)
-#
-#   # Find the model files that correspond to the saddle point retries
-#   saddleModelFiles <- unlist(lapply(saddleRetries, function(x){
-#     list.files(pattern = paste0("retry", x, ".mod"))
-#   }))
-#
-#   # Run isestimable (dismount) on them
-#
-#   dismountDirs <- sapply(saddleModelFiles, runDismount)
-
-
-
-#
-#
-# read.csv()
-#
-# ofvLim <- min(rawres$ofv, na.rm = TRUE) + 1
-#
-# modNums <- rawres$model[rawres$minimization_successful == 1 &
-#                           rawres$covariance_step_successful == 0 &
-#                           rawres$ofv >= ofvLim]
-#
-# retryNums <- modNums - 1
-#
-#
-#
-# lstFiles <- getParaRetryFiles(path = "./", fileExt = ".lst", retryNumsToParse = retryNums)
-#
-# covMessageList <- sapply(lstFiles, parseCovMessages)
-#
-#
-# list.files()[]
-#
-#
-# rMatFiles <- list.files()[grep("\\.rmt", list.files())]
-#
-# rMatList <- lapply(rMatFiles, parseNonmemMat)
-#
-# rMatListNoZero <- lapply(lapply(rMatList, stripZeroRowsCols), '[[', 1)
-#
-# rMatEigenDecompList <- lapply(rMatListNoZero, eigen)
-#
-# lapply(rMatEigenDecompList, '[', "values").
