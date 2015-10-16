@@ -87,7 +87,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     # Still a little dodgy though
     precondRetry <- as.numeric(gsub(".csv", "", gsub(".+retry", "", precondRawres$rawresPath)))
     
-    precondRawres <- cbind(precondRawres, precondRetry)
+    precondRawres <- cbind(precondRawres, retry = precondRetry)
 
     write.csv(precondRawres, "precondRawres.csv")
     
@@ -105,7 +105,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                               print(precondOfv)
                               paraRetriesOfv <- paraRetriesRawresNoNA$ofv[paraRetriesRawresNoNA$retry == x]
                               
-                              ofvDiff <- paraRetriesOfv - precondOfv
+                              ofvDiff <- precondOfv - paraRetriesOfv
                               
                               return (ofvDiff)
                               
@@ -134,7 +134,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     
     dismountRetry <- as.numeric(gsub("/.+$", "", gsub(".+retry", "", dismountRawres$rawresPath)))
     
-    dismountRawres <- cbind(dismountRawres, dismountRetry)
+    dismountRawres <- cbind(dismountRawres, retry = dismountRetry)
     
     
   }
@@ -151,7 +151,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                               print(dismountOfv)
                               paraRetriesOfv <- paraRetriesRawresNoNA$ofv[paraRetriesRawresNoNA$retry == x]
                               
-                              ofvDiff <- paraRetriesOfv - dismountOfv
+                              ofvDiff <- dismountOfv - paraRetriesOfv
                               
                               return (ofvDiff)
                               
