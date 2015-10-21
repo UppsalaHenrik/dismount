@@ -4,15 +4,17 @@
 \alias{runDismount}
 \title{Run dismount (isestimable)}
 \usage{
-runDismount(modelFileName, wait = FALSE)
+runDismount(modelFileName, wait = FALSE, logging = FALSE,
+  runOnSlurm = FALSE)
 }
 \arguments{
 \item{modelFileName}{The name of the model file. No default}
 
 \item{wait}{Wraps the wait option in system(), which specifies whether to
 wait for the system call to complete before continuing in R (TRUE) or not
-wait after submission (FALSE). Default is FALSE
+wait after submission (FALSE). Default is FALSE}
 
+\item{logging}{Whether to log the command line outputs to a text file or not. Default is FALSE.
 
 runDismount()}
 }

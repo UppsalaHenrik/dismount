@@ -4,13 +4,17 @@
 \alias{parseRawres}
 \title{Parse a PsN raw results file}
 \usage{
-parseRawres(rawresPath, addPath = TRUE)
+parseRawres(rawresPath, addPath = TRUE, addGroup = TRUE)
 }
 \arguments{
 \item{rawresPath}{The file path for the rawres file to parse. No default.}
 
-\item{addPath}{If set the the returned data frame will include the file
-       name that was parsed. Default is TRUE
+\item{addPath}{If set the the returned data frame will include a column containing
+the file name that was parsed. Default is TRUE.}
+
+\item{addGroup}{If set the returned data frame will include a group column with
+       a group number based on minimization and covariance step success. Default
+       is TRUE
 
 parseRawres()}
 }
