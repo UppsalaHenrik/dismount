@@ -2,15 +2,18 @@
 #'
 #'
 #' @param rawresPath The file path for the rawres file to parse. No default.
-#' @param addPath If set the the returned data frame will include the file 
-#'        name that was parsed. Default is TRUE
+#' @param addPath If set the the returned data frame will include a column containing
+#'        the file name that was parsed. Default is TRUE.
+#' @param addGroup If set the returned data frame will include a group column with
+#'        a group number based on minimization and covariance step success. Default 
+#'        is TRUE
 #'
 #' parseRawres()
 #'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 
 
-parseRawres <- function(rawresPath, addPath = TRUE){
+parseRawres <- function(rawresPath, addPath = TRUE, addGroup = TRUE){
 
   print(paste("Parsing", rawresPath))
 
@@ -30,6 +33,11 @@ parseRawres <- function(rawresPath, addPath = TRUE){
   # If the addPath option is set, append it
   if(addPath == TRUE){
     rawres$rawresPath <- rawresPath
+  }
+  
+  # If the addGroup option is set, append the group assigned 
+  if(addGroup == TRUE){
+    rawres <- assignExecutionGroups(rawres)
   }
 
   # Return the data frame

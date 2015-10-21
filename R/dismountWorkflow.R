@@ -49,9 +49,11 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   # Find the minimum OFV value to use as reference
   minOfv <- min(paraRetriesRawresNoNA$ofv)
   
-  # add retry number to rawres dataframe and write it out
+  # add retry number and group to rawres dataframe, and write it out
   retry <- paraRetriesRawresNoNA$model - 1
   paraRetriesRawresNoNA <- cbind(retry, paraRetriesRawresNoNA)
+  paraRetriesRawresNoNA <- assignExecutionGroups(paraRetriesRawresNoNA)
+  
   write.csv(paraRetriesRawresNoNA, "paraRetriesRawres.csv")
   
   # List the Retry files for dismount and/or precond runs
@@ -95,6 +97,8 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   
   setwd(workflowWD)
 
+  precondRawres <- assignExecutionGroups(precondRawres)
+  
   write.csv(precondRawres, "precondRawres.csv")
   
   precondOfvDiffs <- sapply(intersect(precondRawres$precondRetry, 
@@ -107,7 +111,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                               
                               ofvDiff <- precondOfv - paraRetriesOfv
                               
-                              return (ofvDiff)
+                              return(ofvDiff)
                               
                             })
 
@@ -153,8 +157,19 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                               
                               ofvDiff <- dismountOfv - paraRetriesOfv
                               
-                              return (ofvDiff)
+                              return(ofvDiff)
                               
                             })
+  
+  # I need to put together an OFV comparison DF.
+  
+  paraRetriesOFVs <- cbind(retry = paraRetriesRawresNoNA$retry, paraRetriesOFV = paraRetriesRawresNoNA$ofv)
+  precondOFVs <- cbind(retry = precondRawres$retry, paraRetriesOFV = precondRawres$ofv)
+  dismountOFVs <- cbind(retry = dismountRawres$retry, paraRetriesOFV = dismountRawres$ofv)
+  
+  merge(paraRetriesOFVs, precondOFVs, by = "retry")
+  
   setwd(userWD)
+  
+  
 }
