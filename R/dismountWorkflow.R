@@ -54,7 +54,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   paraRetriesRawresNoNA <- cbind(retry, paraRetriesRawresNoNA)
   paraRetriesRawresNoNA <- assignExecutionGroups(paraRetriesRawresNoNA)
   
-  write.csv(paraRetriesRawresNoNA, "paraRetriesRawres.csv")
+  write.csv(paraRetriesRawresNoNA, "paraRetriesRawres.csv", row.names = FALSE)
   
   # List the Retry files for dismount and/or precond runs
   # This might need to be more strict
@@ -80,7 +80,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     # Find and parse the rawres files, and then put them together
     precondRawresFiles <- list.files(recursive = TRUE)[grep("raw_results.+retry.+csv", 
                                                             list.files(recursive = TRUE))]
-
+    
     precondRawresList <- lapply(precondRawresFiles, parseRawres)
     precondRawres <- do.call("rbind", precondRawresList)
     
@@ -90,30 +90,14 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     precondRetry <- as.numeric(gsub(".csv", "", gsub(".+retry", "", precondRawres$rawresPath)))
     
     precondRawres <- cbind(precondRawres, retry = precondRetry)
-
-    write.csv(precondRawres, "precondRawres.csv")
+    
+    precondRawres <- assignExecutionGroups(precondRawres)
+    
+    setwd(workflowWD)
+    
+    write.csv(precondRawres, "precondRawres.csv", row.names = FALSE)
     
   }
-  
-  setwd(workflowWD)
-
-  precondRawres <- assignExecutionGroups(precondRawres)
-  
-  write.csv(precondRawres, "precondRawres.csv")
-  
-  precondOfvDiffs <- sapply(intersect(precondRawres$precondRetry, 
-                                      paraRetriesRawresNoNA$retry), 
-                            function(x){
-                              
-                              precondOfv <- precondRawres$ofv[precondRawres$precondRetry == x]
-                              print(precondOfv)
-                              paraRetriesOfv <- paraRetriesRawresNoNA$ofv[paraRetriesRawresNoNA$retry == x]
-                              
-                              ofvDiff <- precondOfv - paraRetriesOfv
-                              
-                              return(ofvDiff)
-                              
-                            })
 
   
   if(doDismount){  
@@ -140,36 +124,33 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     
     dismountRawres <- cbind(dismountRawres, retry = dismountRetry)
     
+    dismountRawres <- assignExecutionGroups(dismountRawres)
+        
+    setwd(workflowWD)
     
+    write.csv(dismountRawres, "dismountRawres.csv", row.names = FALSE)
   }
-  
-  setwd(workflowWD)
-  
-  write.csv(dismountRawres, "dismountRawres.csv")
-  
-  dismountOfvDiffs <- sapply(intersect(dismountRawres$dismountRetry, 
-                                      paraRetriesRawresNoNA$retry), 
-                            function(x){
-                              
-                              dismountOfv <- dismountRawres$ofv[dismountRawres$dismountRetry == x]
-                              print(dismountOfv)
-                              paraRetriesOfv <- paraRetriesRawresNoNA$ofv[paraRetriesRawresNoNA$retry == x]
-                              
-                              ofvDiff <- dismountOfv - paraRetriesOfv
-                              
-                              return(ofvDiff)
-                              
-                            })
+
   
   # I need to put together an OFV comparison DF.
   
-  paraRetriesOFVs <- cbind(retry = paraRetriesRawresNoNA$retry, paraRetriesOFV = paraRetriesRawresNoNA$ofv)
-  precondOFVs <- cbind(retry = precondRawres$retry, paraRetriesOFV = precondRawres$ofv)
-  dismountOFVs <- cbind(retry = dismountRawres$retry, paraRetriesOFV = dismountRawres$ofv)
+  paraRetriesOFVsGroups <- cbind(retry = paraRetriesRawresNoNA$retry, 
+                                 paraRetriesOFV = paraRetriesRawresNoNA$ofv,
+                                 paraRetriesGroup = paraRetriesRawresNoNA$group)
   
-  merge(paraRetriesOFVs, precondOFVs, by = "retry")
+  precondOFVsGroups <- cbind(retry = precondRawres$retry, 
+                             precondOFV = precondRawres$ofv,
+                             precondGroup = precondRawres$group)
+  
+  dismountOFVsGroups <- cbind(retry = dismountRawres$retry, 
+                              dismountOFV = dismountRawres$ofv,
+                              dismountGroup = dismountRawres$group)
+  
+  compOFVsGroups <- merge(merge(paraRetriesOFVsGroups, precondOFVsGroups, by = "retry"), 
+                          dismountOFVsGroups, by = "retry")
+  
+  write.csv(compOFVsGroups, "OFVandGroupComparison.csv", row.names = FALSE)
   
   setwd(userWD)
-  
   
 }

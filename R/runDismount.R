@@ -40,7 +40,7 @@ runDismount <- function(modelFileName, wait = FALSE, logging = FALSE, runOnSlurm
 
   dir <- paste("dismount", modelFileNameNoExt, sep = "_")
 
-  cmd <- paste0("srun perl /blue/home/USER/yasao745/PsN4_4_ver_YA/bin/isestimable ",
+  cmd <- paste0("srun perl /blue/home/USER/bjuny231/PrecondProject/_HackedPsN7/PsN4_4_ver_YA/bin/isestimable ",
                 basename(as.character(modelFileName)), " -dir=", dir, runOnSlurmOpt, 
                 logOpt)
 
