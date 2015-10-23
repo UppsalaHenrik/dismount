@@ -51,8 +51,8 @@ runDismount <- function(modelFileName, wait = FALSE, logging = FALSE, runOnSlurm
   # Run the command
   system(cmd, intern = FALSE, wait = wait)
 
-  # Sleep half a second to not overload the system.
-  Sys.sleep(0.5)
+  # Sleep a tenth of a second to not overload the system.
+  Sys.sleep(0.1)
   
   return(dir)
 }
