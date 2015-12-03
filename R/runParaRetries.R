@@ -30,7 +30,7 @@ runParaRetries <- function(modFileName, dir = paste0("para_retries_", format(Sys
     extraNMOutputs <- ""
   }
 
-  paraRetriesCmd <- "srun perl /blue/home/USER/bjuny231/PrecondProject/_hackedPsN6/PsN4_4/bin/parallel_retries -run_on_slurm "
+  paraRetriesCmd <- "perl /blue/home/USER/bjuny231/PrecondProject/_HackedPsN7/PsN4_4_ver_YA/bin/parallel_retries "
 
   partition <- paste0(" -slurm_partition=", slurm_partition)
 
