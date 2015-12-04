@@ -11,6 +11,8 @@
 #' @param maxWaits Maximum number of times the wait should happen before timing out. Default is 20.
 #' waitForSlurmQ()
 #'
+#' @export
+#'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 
 waitForSlurmQ <- function(targetLength = 0, secsToWait = 30, maxWaits = 20){

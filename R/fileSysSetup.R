@@ -6,6 +6,9 @@
 #' @param subDirs additional subdirectories to create under the main one.
 #'        Default is an empty vector.
 #'
+#'
+#' @export
+#'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 
 fileSysSetup <- function(modFilePath, runType = "", subDirs = c()){

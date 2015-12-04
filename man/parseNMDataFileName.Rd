@@ -7,10 +7,7 @@
 parseNMDataFileName(modFilePath)
 }
 \arguments{
-\item{modFilePath}{The model file Path.
-
-
-parseNMDataFileName()}
+\item{modFilePath}{The model file Path.}
 }
 \description{
 Reads the data file name from a NONMEM control file.

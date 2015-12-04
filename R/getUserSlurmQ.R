@@ -4,6 +4,9 @@
 #' No options available. Returns a character string with the rows
 #' of the queue, including the header.
 #'getUserSlurmQ()
+#'
+#' @export
+#'
 
 getUserSlurmQ <- function(){
 

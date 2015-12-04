@@ -9,6 +9,9 @@
 #' @param doDismount Whether or not dismount should be run on all samples. Default is TRUE.
 #' @param rerunDirName If doParaRetries is FALSE, then this directory will be assumed to contain a parallel retries run with model files and outputs to use for dismount and/or precond. No default.  
 #'
+#'
+#' @export
+#'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 #'
 

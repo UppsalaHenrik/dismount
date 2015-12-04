@@ -6,6 +6,9 @@
 #'               and covariance_step_successful columns.
 #' 
 #' 
+#'
+#' @export
+#'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 #'
 

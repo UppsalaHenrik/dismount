@@ -7,6 +7,9 @@
 #' @param threads The number of threads to use. Exactly wrapping the PsN option. Defaults to 100.
 #' @param min_retries The number of retries to run. Exactly wrapping the PsN option. Defaults to 1
 #' runParaRetries()
+#'
+#' @export
+#'
 
 runParaRetries <- function(modFileName, dir = paste0("para_retries_", format(Sys.time(), "%y%m%d_%H%M%S")),
                            clean = 2, threads = 100, min_retries = 1, degree = 0.1,

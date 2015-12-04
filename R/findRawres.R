@@ -2,6 +2,9 @@
 #'
 #' @param path The path in which to look.
 #'
+#'
+#' @export
+#'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 
 findRawres <- function(path){

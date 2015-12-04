@@ -10,6 +10,9 @@
 #'
 #' parseRawres()
 #'
+#'
+#' @export
+#'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 
 

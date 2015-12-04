@@ -5,6 +5,9 @@
 #' @param precondScriptPath Optional precond script path. Default is precond.
 #'
 #'
+#'
+#' @export
+#'
 
 # "/blue/home/USER/bjuny231/PrecondProject/_hackedPsN6/PsN4_4/bin/precond_numStab"
 
