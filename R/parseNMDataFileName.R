@@ -4,11 +4,12 @@
 #'
 #' @param modFilePath The model file Path.
 #'
+#' parseNMDataFileName()
 #'
 #' @export
 #'
 #'
-#' parseNMDataFileName()
+#' 
 
 parseNMDataFileName <- function(modFilePath){
 
