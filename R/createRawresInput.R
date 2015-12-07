@@ -1,77 +1,162 @@
 
 
-createRawresInput <- function(paramValue1, paramValue2, paramName1, paramName2,
-                               lims1, lims2, resol, fixedParams){
+createRawresInput2 <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2"), 
+                               lims1 = c(0.99*as.numeric(paramVector[paramsToCompare[1]]),
+                                         1.01*as.numeric(paramVector[paramsToCompare[1]])), 
+                               lims2 = c(0.99*as.numeric(paramVector[paramsToCompare[2]]),
+                                         1.01*as.numeric(paramVector[paramsToCompare[2]])), 
+                               resol = 50){
   
-  # Throw an error if the param value is not within the limits
-  if(paramValue1 <= lims1[1] || paramValue1 >= lims1[2]){
-    print("Given parameter 1 value is not within the given limits")
-    return(NULL)
-  }
+  
+  # This is dependent on there not being a FILE option set on the $EST. Not great but fine for now.
+  modFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modFilePath)))
+  extFileName <- paste0(modFileNameNoExt, ".ext")
+  extFileDF <- parseExtFile(extFileName)
+  
+  # Pick out the final parameter values row
+  paramVectorRow <- subset(extFileDF, ITERATION == -1e+9)
+  
+  # Ignoring the first and last column (Iteration and OBJ)
+  paramVector <- paramVectorRow[2:(length(paramVectorRow)-1)]
+  
+  # Reordering to fit PsN standard with SIGMA last.
+  paramVector <- paramVector[c(1:(sigmaCols-1), (sigmaCols[length(sigmaCols)]+1):length(paramVector), sigmaCols)]
 
-  if(paramValue2 <= lims2[1] || paramValue2 >= lims2[2]){
-    print("Given parameter 2 value is not within the given limits")
-    return(NULL)
-  }
-  
-  # Creating a vector of parameter values. In order to include the exact point 
-  # this is done in two steps. One under the value and one over.
+  # Picking out the relevant parameters
+  paramValue1 <- paramVector[paramsToCompare[1]]
+  paramValue2 <- paramVector[paramsToCompare[2]]
   
   # Determine how far along the vector the paramValue should be for param 1 (X)
-  frac1 <- round((paramValue1-lims1[1])/(lims1[2]-lims1[1]), 
+  frac1 <- round((paramValue1[[1]]-lims1[1])/(lims1[2]-lims1[1]), 
                  digits = ceiling(log10(resol)))
-
-  lowSeq1 <- seq(from = lims1[1], to = paramValue1, 
+  
+  lowSeq1 <- seq(from = lims1[1], to = paramValue1[[1]], 
                  length.out = round(frac1*resol))
   
-  uppSeq1 <- seq(from = paramValue1, to = lims1[2], 
+  uppSeq1 <- seq(from = paramValue1[[1]], to = lims1[2], 
                  length.out = 1 + resol - round(frac1*resol))[-1]
   
   paramVals1 <- c(lowSeq1, uppSeq1)
   
   # Same for parameter 2 (Y)
-  frac2 <- round((paramValue2-lims2[1])/(lims2[2]-lims2[1]), 
+  frac2 <- round((paramValue2[[1]]-lims2[1])/(lims2[2]-lims2[1]), 
                  digits = ceiling(log10(resol)))
-
-  lowSeq2 <- seq(from = lims2[1], to = paramValue2, 
+  
+  lowSeq2 <- seq(from = lims2[1], to = paramValue2[[1]], 
                  length.out = round(frac2*resol))
   
-  uppSeq2 <- seq(from = paramValue2, to = lims2[2], 
+  uppSeq2 <- seq(from = paramValue2[[1]], to = lims2[2], 
                  length.out = 1 + resol - round(frac2*resol))[-1]
-    
+  
   paramVals2 <- c(lowSeq2, uppSeq2)
   
   # I need a "model" column with a sequence of numbers numbers. 
-  # PsN will add the first row so I start from 2.
+  # PsN will use the first row so I start from 2.
   modelCol <- c(2:(resol^2+1))
   
   # Fixed parameters are set to the same value for every row.
-  fixedParamCols <- data.frame(sapply(fixedParams, function(x){
+  paramCols <- data.frame(sapply(paramVector, function(x){
     
     rep(x, resol^2)
     
-  }))
+  }), check.names = FALSE)
   
   # I create a data frame with all combinations of the paramVals1 and 2 
   paramValsDF <- expand.grid(paramVals1, paramVals2)
   
-  # Put the columns in a list and cbind them together
-  colList <- list(modelCol, paramValsDF, fixedParamCols)
-  
-  rawresInput <- do.call("cbind", colList)
+  # I replace the two columns for the parameters I want to compare with the 
+  paramCols[paramsToCompare] <- paramValsDF
   
   # I add a placeholder first row that PsN will overwrite
-  firstRow <- rep(1, length(rawresInput))
+  firstRow <- rep(1, length(paramCols))
   
+  rawresInput <- cbind(modelCol, paramCols)
   rawresInput <- rbind(firstRow, rawresInput)
   
-  names(rawresInput) <- c("model", paramName1, paramName2, names(fixedParamCols))
-
-  fileName <- paste("rawresInput", paramName1, paramName2, resol^2, 
-                    "values", format(Sys.time(), "%y%m%d_%H%M%S"), ".csv", sep="_")
+  names(rawresInput) <- c("model", names(paramVector))
+  
+  fileName <- paste0("rawresInput_", paste(gsub("[[:punct:]]", "", paramsToCompare), collapse = "_"), 
+                     "_", resol^2, "values_", format(Sys.time(), "%y%m%d_%H%M%S"), ".csv")
   
   write.csv(rawresInput, fileName, row.names=FALSE)
+  
+  # Check to make sure the output file exists
+  if (!file.exists(fileName)) {
+    stop("Failed to create rawres input file; expected file \"", 
+         fileName, "\" does not exist.")
+  }
   
   # I return both the fileName of the CSV and the value vectors.
   return(list(fileName, paramVals1, paramVals2))
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 
+# 
+# 
+# NMParam <- setClass(
+#   "NMParam",
+#   representation(
+#     name = "character",
+#     value = "numeric",
+#     lowerBound = "numeric",
+#     upBound = "numeric",
+#     fixed = "logical", 
+#     type = "character"
+#   )
+# )
+# 
+# lala <- NMParam(name = "lala",
+#                 value = 1,
+#                 fixed = FALSE,
+#                 type = "theta")  
+# class(lala)
+# 
+# lala@name <- "param1"
+
+# 
+# 
+# 
+# 
+# # Use RNMImport to get parameter
+# runThetas <- getThetas(nmRun)
+# names(runThetas) <- paste0("THETA", 1:length(runThetas))
+# runOmegas <- getOmegas(nmRun)
+# runSigmas <- getSigmas(nmRun)
+# 
+# 
+# ### Create a vector of parameters in the right order
+# 
+# # Creating a vector of Omega names in the expected order 
+# indexOmegaMatNums <- expand.grid(1:nrow(runOmegas), 1:nrow(runOmegas))
+# indexOmegaMatStrings <- apply(indexOmegaMatNums, 1, function(x){
+#   paste0("OMEGA(", x[1], ",", x[2], ")")
+# })
+# indexOmegaMat <- matrix(indexOmegaMatStrings, ncol = nrow(runOmegas), nrow = nrow(runOmegas), byrow = TRUE)
+# indexOmega <- indexOmegaMat[upper.tri(indexMat, diag = TRUE)]
+# 
+# # Same operation for sigmas
+# indexSigmaMatNums <- expand.grid(1:nrow(runSigmas), 1:nrow(runSigmas))
+# indexSigmaMatStrings <- apply(indexSigmaMatNums, 1, function(x){
+#   paste0("SIGMA(", x[1], ",", x[2], ")")
+# })
+# indexSigmaMat <- matrix(indexSigmaMatStrings, ncol = nrow(runSigmas), nrow = nrow(runSigmas), byrow = TRUE)
+# indexSigma <- indexSigmaMat[upper.tri(indexSigmaMat, diag = TRUE)]
+# 
+# runOmegaVector <- getOmegas(nmRun)[upper.tri(getOmegas(nmRun), diag = TRUE)]
+# names(runOmegaVector) <- indexOmega
+# runSigmaVector <- getSigmas(nmRun)[upper.tri(getSigmas(nmRun), diag = TRUE)]
+# names(runSigmaVector) <- indexSigma
+# paramVector <- c(runThetas, runOmegaVector, runSigmaVector)
