@@ -23,6 +23,7 @@ plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("THETA1"
   dirName <- runParaRetries(modFilePath, rawres_input = rawresInputList[[1]], clean = 3, local = local)
   
   print("Parsing OFVs")
+  rawresPath <- findRawres(dirName)
   ofvVector <- parseRawresOfvs(rawresPath)
   
   print("Creating Plotly plot")
