@@ -24,7 +24,7 @@ plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("THETA1"
   writeLines(modFile, newModFileName)
     
   print("Creating the rawres input file")
-  rawresInputList <- createRawresInput(modFilePath = newModFileName, paramsToCompare = paramsToCompare, resol = resol, ...)
+  rawresInputList <- createRawresInput(modFilePath = modFilePath, paramsToCompare = paramsToCompare, resol = resol, ...)
   
   print("Running Parallel retries")
   dirName <- runParaRetries(newModFileName, rawres_input = rawresInputList[[1]], clean = 3, local = local)
