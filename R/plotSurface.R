@@ -12,16 +12,12 @@
 
 
 plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("THETA1", "THETA2"), 
-                        xLims = c(0.99*as.numeric(paramVector[paramsToCompare[1]]),
-                                  1.01*as.numeric(paramVector[paramsToCompare[1]])), 
-                        yLims = c(0.99*as.numeric(paramVector[paramsToCompare[2]]),
-                                  1.01*as.numeric(paramVector[paramsToCompare[2]])), 
-                        resol = 10, local = FALSE){
+                        xLims, yLims, resol = 10, local = FALSE){
   
   require(plotly)
   
   print("Creating the rawres input file")
-  rawresInputList <- createRawresInput(modFilePath, paramsToCompare, xLims, yLims, resol = 10)
+  rawresInputList <- createRawresInput(modFilePath, paramsToCompare, resol = 10)
   
   print("Running Parallel retries")
   dirName <- runParaRetries(modFilePath, rawres_input = rawresInputList[[1]], clean = 3, local = local)
