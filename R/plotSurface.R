@@ -4,9 +4,8 @@
 #' 
 #' @param plotlyAccount A username and key for Plotly access on the form plotly(username='user', key='key').
 #' @param modFilePath Model file to use. The called function createRawresInput assumes that there is an ext file with the same base file name.
-#' @param xLims A vector of two values, lower and upper limit for the first paramsToCompare. Default is 1% below and above the original value
-#' @param yLims A vector of two values, lower and upper limit for the first paramsToCompare. Default is 1% below and above the original value
 #' @param resol Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.
+#' @param ... Further options to createRawresInput
 #' 
 #' @export
 
