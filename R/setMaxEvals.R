@@ -2,7 +2,7 @@
 setMaxEvals <- function(controlFile, newMaxEvals){
   
   # Find any rows with a MAXEVAL setting 
-  rowNum <- grep("MAXEVAL", controlFile)
+  rowNum <- grep("MAX[A-Z]*?=", controlFile)
   
   # If there is no current setting, just return the original file.
   if(length(rowNum) == 0){
@@ -16,7 +16,7 @@ setMaxEvals <- function(controlFile, newMaxEvals){
   
   splitRow <- unlist(strsplit(row, " "))
   
-  splitRow[grep("MAXEVALS?=([0-9]+)", splitRow)] <- paste0("MAXEVAL=", newMaxEvals)
+  splitRow[grep("MAX[A-Z]*?=", splitRow)] <- paste0("MAXEVAL=", newMaxEvals)
    
   # Put the file to be edited in the new object 
   newControlFile <- controlFile
