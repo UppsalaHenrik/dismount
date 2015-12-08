@@ -5,10 +5,7 @@
 \title{plotSurface}
 \usage{
 plotSurface(plotlyAccount, modFilePath, paramsToCompare = c("THETA1",
-  "THETA2"), xLims = c(0.99 * as.numeric(paramVector[paramsToCompare[1]]),
-  1.01 * as.numeric(paramVector[paramsToCompare[1]])), yLims = c(0.99 *
-  as.numeric(paramVector[paramsToCompare[2]]), 1.01 *
-  as.numeric(paramVector[paramsToCompare[2]])), resol = 10, local = FALSE)
+  "THETA2"), xLims, yLims, resol = 10, local = FALSE)
 }
 \arguments{
 \item{plotlyAccount}{A username and key for Plotly access on the form plotly(username='user', key='key').}
