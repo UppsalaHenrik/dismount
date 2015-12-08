@@ -1,11 +1,22 @@
+#' createRawresInput
+#' 
+#' Creates a csv file with formatting compatible with raw results files from PsN.
+#' 
+#' @param modFilePath Model file to use. The function assumes that there is an ext file with the same base file name.
+#' @param paramsToCompare A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2").
+#' @param lims1 A vector of two values, lower and upper limit for the first paramsToCompare. Default is 1% below and above the original value
+#' @param lims2 A vector of two values, lower and upper limit for the second paramsToCompare. Default is 1% below and above the original value
+#' @param resol Resolution on each axis. Default is 50 and will return 50^2 = 2500 sets of parameter values.
+#' 
+#' 
+#' @export
 
-
-createRawresInput2 <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2"), 
-                               lims1 = c(0.99*as.numeric(paramVector[paramsToCompare[1]]),
-                                         1.01*as.numeric(paramVector[paramsToCompare[1]])), 
-                               lims2 = c(0.99*as.numeric(paramVector[paramsToCompare[2]]),
-                                         1.01*as.numeric(paramVector[paramsToCompare[2]])), 
-                               resol = 50){
+createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2"), 
+                              lims1 = c(0.99*as.numeric(paramVector[paramsToCompare[1]]),
+                                        1.01*as.numeric(paramVector[paramsToCompare[1]])), 
+                              lims2 = c(0.99*as.numeric(paramVector[paramsToCompare[2]]),
+                                        1.01*as.numeric(paramVector[paramsToCompare[2]])), 
+                              resol = 50){
   
   
   # This is dependent on there not being a FILE option set on the $EST. Not great but fine for now.
@@ -89,74 +100,3 @@ createRawresInput2 <- function(modFilePath, paramsToCompare = c("THETA1", "THETA
   # I return both the fileName of the CSV and the value vectors.
   return(list(fileName, paramVals1, paramVals2))
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# 
-# 
-# 
-# NMParam <- setClass(
-#   "NMParam",
-#   representation(
-#     name = "character",
-#     value = "numeric",
-#     lowerBound = "numeric",
-#     upBound = "numeric",
-#     fixed = "logical", 
-#     type = "character"
-#   )
-# )
-# 
-# lala <- NMParam(name = "lala",
-#                 value = 1,
-#                 fixed = FALSE,
-#                 type = "theta")  
-# class(lala)
-# 
-# lala@name <- "param1"
-
-# 
-# 
-# 
-# 
-# # Use RNMImport to get parameter
-# runThetas <- getThetas(nmRun)
-# names(runThetas) <- paste0("THETA", 1:length(runThetas))
-# runOmegas <- getOmegas(nmRun)
-# runSigmas <- getSigmas(nmRun)
-# 
-# 
-# ### Create a vector of parameters in the right order
-# 
-# # Creating a vector of Omega names in the expected order 
-# indexOmegaMatNums <- expand.grid(1:nrow(runOmegas), 1:nrow(runOmegas))
-# indexOmegaMatStrings <- apply(indexOmegaMatNums, 1, function(x){
-#   paste0("OMEGA(", x[1], ",", x[2], ")")
-# })
-# indexOmegaMat <- matrix(indexOmegaMatStrings, ncol = nrow(runOmegas), nrow = nrow(runOmegas), byrow = TRUE)
-# indexOmega <- indexOmegaMat[upper.tri(indexMat, diag = TRUE)]
-# 
-# # Same operation for sigmas
-# indexSigmaMatNums <- expand.grid(1:nrow(runSigmas), 1:nrow(runSigmas))
-# indexSigmaMatStrings <- apply(indexSigmaMatNums, 1, function(x){
-#   paste0("SIGMA(", x[1], ",", x[2], ")")
-# })
-# indexSigmaMat <- matrix(indexSigmaMatStrings, ncol = nrow(runSigmas), nrow = nrow(runSigmas), byrow = TRUE)
-# indexSigma <- indexSigmaMat[upper.tri(indexSigmaMat, diag = TRUE)]
-# 
-# runOmegaVector <- getOmegas(nmRun)[upper.tri(getOmegas(nmRun), diag = TRUE)]
-# names(runOmegaVector) <- indexOmega
-# runSigmaVector <- getSigmas(nmRun)[upper.tri(getSigmas(nmRun), diag = TRUE)]
-# names(runSigmaVector) <- indexSigma
-# paramVector <- c(runThetas, runOmegaVector, runSigmaVector)
