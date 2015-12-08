@@ -4,8 +4,8 @@
 #' 
 #' @param modFilePath Model file to use. The function assumes that there is an ext file with the same base file name.
 #' @param paramsToCompare A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2").
-#' @param lims1 A vector of two values, lower and upper limit for the first paramsToCompare. Default is 1% below and above the original value
-#' @param lims2 A vector of two values, lower and upper limit for the second paramsToCompare. Default is 1% below and above the original value
+#' @param lims1 A vector of two values, lower and upper limit for the first paramsToCompare. Default is 1 percent below and above the original value
+#' @param lims2 A vector of two values, lower and upper limit for the second paramsToCompare. Default is 1 percent below and above the original value
 #' @param resol Resolution on each axis. Default is 10 and will return 10^2 = 100 sets of parameter values.
 #' 
 #' 
