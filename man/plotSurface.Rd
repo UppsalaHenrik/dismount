@@ -12,11 +12,11 @@ plotSurface(plotlyAccount, modFilePath, paramsToCompare = c("THETA1",
 
 \item{modFilePath}{Model file to use. The called function createRawresInput assumes that there is an ext file with the same base file name.}
 
+\item{paramsToCompare}{A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2"). Parameters to compare. Model file cannot currently use labels for parameters.}
+
 \item{resol}{Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.}
 
-\item{xLims}{A vector of two values, lower and upper limit for the first paramsToCompare. Default is 1% below and above the original value}
-
-\item{yLims}{A vector of two values, lower and upper limit for the first paramsToCompare. Default is 1% below and above the original value}
+\item{...}{Further options to createRawresInput}
 }
 \description{
 Plots a surface using Plotly and returns the URL
