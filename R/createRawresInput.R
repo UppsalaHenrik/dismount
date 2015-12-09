@@ -30,14 +30,50 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   # Pick out the final parameter values row
   paramVectorRow <- subset(extFileDF, ITERATION == -1e+9)
   
+  # Pick out the OBJ values and package it with the original values of paramsToCompare
+  origParamsAndOFV <- cbind(paramVectorRow[paramsToCompare], 
+                        paramVectorRow[length(paramVectorRow)])
+  
   # Ignoring the first and last column (Iteration and OBJ)
-  paramVector <- paramVectorRow[2:(length(paramVectorRow)-1)]
+  paramVectorFull <- paramVectorRow[2:(length(paramVectorRow)-1)]
+
+  # Getting the columns for the different parameter types so that I can reorder and remove unnecessary ones
+  thetaCols <- grep("THETA", names(paramVectorFull))
+  omegaCols <- grep("OMEGA", names(paramVectorFull))
+  sigmaCols <- grep("SIGMA", names(paramVectorFull))
   
   # Reordering to fit PsN standard with SIGMA last.
-  thetaCols <- grep("THETA", names(paramVector))
-  omegaCols <- grep("OMEGA", names(paramVector))
-  sigmaCols <- grep("SIGMA", names(paramVector))
-  paramVector <- paramVector[c(thetaCols, omegaCols, sigmaCols)]
+  paramVectorFull <- paramVectorFull[c(thetaCols, omegaCols, sigmaCols)]
+
+  ### Getting rid of zero value off-diagonal elements. This is required for PsN rawres_input
+  # First some more or less dodgy regex
+  indices <- gsub("SIGMA", "", names(paramVectorFull))
+  indices <- gsub("OMEGA", "", indices) 
+  indices <- gsub("\\(", "", indices)
+  indices <- gsub("\\)", "", indices)
+  # Spliting the two numbers 
+  indicesList <- strsplit(indices, ",")
+
+  
+  # Checking if they are off-diagonal sigmas/omegas 
+  paramVectorOffDiags <- unlist(sapply(indicesList, function(x){
+    # If the indices do not match and the value isn't NA (catches THETAs) then it is an 
+    # off/diagonal sigma or omega and I set TRUE
+    y <- ifelse(x[1] != x[2] && !is.na(x[2]), TRUE, FALSE)
+    return(y)
+  }), recursive = FALSE)
+  
+  # Put the names removed above back
+  
+  
+  # Check if they are also zero. I seem to be messing up the names here. I'm reducing 
+  # this to a vector so that naming in the next step is taken from paramVectorFull
+  paramVectorOffDiagZeroes <- c(paramVectorOffDiags & paramVectorFull == 0)
+  
+  # Finally we have the PsN compatible
+  paramVector <- paramVectorFull[!paramVectorOffDiagZeroes]
+
+
 
   # Picking out the relevant parameters
   paramValue1 <- paramVector[paramsToCompare[1]]
@@ -105,5 +141,5 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   }
   
   # I return both the fileName of the CSV and the value vectors.
-  return(list(fileName,paramValsList[[paramsToCompare[1]]], paramValsList[[paramsToCompare[2]]]))
+  return(list(fileName, paramValsList[[paramsToCompare[1]]], paramValsList[[paramsToCompare[2]]], origParamsAndOFV))
 }
