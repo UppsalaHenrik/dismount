@@ -11,7 +11,7 @@
 #' @export
 
 
-plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("THETA1", "THETA2"), 
+plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("Param1", "Param2"), 
                         resol = 10, local = FALSE, ...){
   
   require(plotly)
@@ -34,7 +34,8 @@ plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("THETA1"
   ofvVector <- parseRawresOfvs(rawresPath)
   
   print("Creating Plotly plot")
-  url <- createPlotlyObj(ofvVector, rawresInputList[[2]], rawresInputList[[3]])
+  url <- createPlotlyObj(ofvVector, xParamVals = rawresInputList[[2]], yParamVals = rawresInputList[[3]], 
+                         paramsToCompare = paramsToCompare)
   
   return(url)
 }

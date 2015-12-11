@@ -1,9 +1,12 @@
 
-createPlotlyObj <- function(ofvVector, paramVals1, paramVals2, plotTitle = "OFV Surface"){
+createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, paramsToCompare = c("Param1", "Param2"), 
+                            zlab = "Z: OFV", plotTitle = "OFV Surface"){
   
-  xSide <- length(paramVals1)
+  xSide <- length(xParamVals)
+  xlab <- paramsToCompare[1]
   
-  ySide <- length(paramVals2)
+  ySide <- length(yParamVals)
+  ylab <- paramsToCompare[2]
   
   zMatrix <- matrix(ofvVector, nrow = ySide, ncol = xSide, byrow = TRUE)
   
@@ -38,8 +41,8 @@ createPlotlyObj <- function(ofvVector, paramVals1, paramVals2, plotTitle = "OFV 
   
   
   plotlyTrace <- list(z = zMatrix, 
-                      x = paramVals1, 
-                      y = paramVals2,
+                      x = xParamVals, 
+                      y = yParamVals,
                       colorscale = colorScaleMidDark,
                       type = "surface"
   )
@@ -92,7 +95,7 @@ createPlotlyObj <- function(ofvVector, paramVals1, paramVals2, plotTitle = "OFV 
     separators = ".,", 
     scene = list(
       xaxis = list(
-        title = "X: Theta 1 - V1", 
+        title = paste("X:", xlab), 
         titlefont = list(
           family = "'Open sans', verdana, arial, sans-serif", 
           size = 14, 
@@ -128,7 +131,7 @@ createPlotlyObj <- function(ofvVector, paramVals1, paramVals2, plotTitle = "OFV 
         spikethickness = 2
       ), 
       yaxis = list(
-        title = "Y: Theta 2 - Q", 
+        title = paste("Y:", ylab), 
         titlefont = list(
           family = "'Open sans', verdana, arial, sans-serif", 
           size = 14, 
