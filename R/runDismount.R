@@ -3,7 +3,7 @@
 #' Runs dismount (aka isestimable). Currently limited to slurm queue submission.
 #' This function is in need of some TLC.
 #'
-#'
+#' @param dismountPath Path to the isestimable/dismount
 #' @param modelFileName The name of the model file. No default
 #' @param wait Wraps the wait option in system(), which specifies whether to
 #' wait for the system call to complete before continuing in R (TRUE) or not
@@ -22,7 +22,8 @@
 
 # I should rewrite this better... para retries run function would be the example to look at
 
-runDismount <- function(modelFileName, wait = FALSE, logging = FALSE, runOnSlurm = FALSE){
+runDismount <- function(modelFileName, dismountPath = "/blue/home/USER/yasao745/PsN4_4_ver_YA/bin/isestimable", 
+                        wait = FALSE, logging = FALSE, runOnSlurm = FALSE){
 
   # Wait for the SLURM queue to have less than 100 runs in it
   waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
@@ -44,7 +45,7 @@ runDismount <- function(modelFileName, wait = FALSE, logging = FALSE, runOnSlurm
 
   dir <- paste("dismount", modelFileNameNoExt, sep = "_")
 
-  cmd <- paste0("perl /blue/home/USER/bjuny231/PrecondProject/_HackedPsN7/PsN4_4_ver_YA/bin/isestimable ",
+  cmd <- paste0("perl ", dismountPath, " ",
                 basename(as.character(modelFileName)), " -dir=", dir, runOnSlurmOpt, 
                 logOpt)
 

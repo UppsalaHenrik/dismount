@@ -1,4 +1,9 @@
-
+#' parseRawresOfvs
+#' 
+#' @param rawresPath Path to the raw results file to parse OFV values from.
+#' 
+#' @export
+#' 
 
 parseRawresOfvs <- function(rawresPath){
   

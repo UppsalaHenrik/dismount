@@ -6,20 +6,21 @@
 #' @param modFilePath Model file to use. The called function createRawresInput assumes that there is an ext file with the same base file name.
 #' @param paramsToCompare Parameters to compare. A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2"). Model file parameter labels will be removed.
 #' @param resol Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.
+#' @param ofvScaling If true OFVs are scaled to between zero and one. Default is FALSE.
 #' @param ... Further options to createRawresInput
 #' 
 #' @export
 
 
 plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("Param1", "Param2"), 
-                        resol = 10, local = FALSE, ...){
+                        resol = 10, local = FALSE, ofvScaling = FALSE,...){
   
   require(plotly)
   
   print(paste("Preparing model file", modFilePath, "by removing commented out code and setting MAXEVALS"))
   modFileOrig <- readLines(modFilePath)
   modFile <- setMaxEvals(modFileOrig, 0) 
-  modFile <- gsub(";.+", "", modFile)
+  modFile <- gsub("[[:space:]];.+", "", modFile)
   newModFileName <- paste0("new_", basename(modFilePath))
   writeLines(modFile, newModFileName)
     
@@ -32,6 +33,21 @@ plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("Param1"
   print("Parsing OFVs")
   rawresPath <- findRawres(dirName)
   ofvVector <- parseRawresOfvs(rawresPath)
+  
+  if(ofvScaling){
+
+    # Subtract smallest number    
+    ofvVector <- ofvVector - min(ofvVector)
+    
+    # Calculate a scaling factor that brings the smallest non-zero number up
+    ofvScalingFactor <- 10^abs(min(log10(ofvVector[ofvVector > 0])))
+    
+    # Scale it so that the numbers become easier to handle
+    ofvVector <- ofvVector * ofvScalingFactor
+    
+    # Scale it to a fraction of the maximum
+    ofvVector <- ofvVector/max(ofvVector)
+  }
   
   print("Creating Plotly plot")
   url <- createPlotlyObj(ofvVector, xParamVals = rawresInputList[[2]], yParamVals = rawresInputList[[3]], 

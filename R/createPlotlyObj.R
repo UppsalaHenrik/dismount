@@ -1,3 +1,16 @@
+#' createPlotlyObj
+#' 
+#' @param ofvVector Vector of OFV values for the plot.
+#' @param xParamVals Vector of X axis values.
+#' @param yParamVals Vector of Y axis values.
+#' @param paramsToCompare A vector of two parameters to plot against.
+#' @param zlab Label for Z axis.
+#' @param plotTitle Plot title.
+#' 
+#' @export
+#' 
+
+
 
 createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, paramsToCompare = c("Param1", "Param2"), 
                             zlab = "Z: OFV", plotTitle = "OFV Surface"){

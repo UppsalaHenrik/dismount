@@ -16,7 +16,8 @@
 #'
 
 dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE, 
-                             doPrecond = FALSE, doDismount = TRUE, rerunDirName){
+                             doPrecond = FALSE, doDismount = TRUE, rerunDirName,
+							 degree = 0.99, seed = 20150821){
   
   # Save the current working directory for later
   userWD <- getwd()
@@ -31,9 +32,9 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   # Run initial para retries (wait = TRUE)
   if(doParaRetries){
     print("Running parallel retries")
-    paraRetriesDirName <- runParaRetries(modFileName, min_retries = retries, degree = 0.99,
+    paraRetriesDirName <- runParaRetries(modFileName, min_retries = retries, degree = degree,
                                          slurm_partition = "standard", local = FALSE, 
-                                         nm_output = c("rmt", "ext"), seed = 20150806)
+                                         nm_output = c("rmt", "ext"), seed = seed)
     
     # Wait for the queue to have only the master job left
     waitForSlurmQ(targetLength = 1)

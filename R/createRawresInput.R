@@ -36,7 +36,14 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   
   # Ignoring the first and last column (Iteration and OBJ)
   paramVectorFull <- paramVectorRow[2:(length(paramVectorRow)-1)]
-
+  
+  # Checking if they are off-diagonal sigmas/omegas 
+  paramVectorOffDiags <- unlist(sapply(indicesList, function(x){
+    # If the indices do not match and the value isn't NA (catches THETAs) then it is an 
+    # off/diagonal sigma or omega and I set TRUE
+    y <- ifelse(x[1] != x[2] && !is.na(x[2]), TRUE, FALSE)
+    return(y)
+  
   # Getting the columns for the different parameter types so that I can reorder and remove unnecessary ones
   thetaCols <- grep("THETA", names(paramVectorFull))
   omegaCols <- grep("OMEGA", names(paramVectorFull))
@@ -54,14 +61,7 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   # Spliting the two numbers 
   indicesList <- strsplit(indices, ",")
 
-  
-  # Checking if they are off-diagonal sigmas/omegas 
-  paramVectorOffDiags <- unlist(sapply(indicesList, function(x){
-    # If the indices do not match and the value isn't NA (catches THETAs) then it is an 
-    # off/diagonal sigma or omega and I set TRUE
-    y <- ifelse(x[1] != x[2] && !is.na(x[2]), TRUE, FALSE)
-    return(y)
-  }), recursive = FALSE)
+}), recursive = FALSE)
   
   # Put the names removed above back
   

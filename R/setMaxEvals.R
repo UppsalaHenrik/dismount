@@ -1,3 +1,4 @@
+# This function is not great
 
 setMaxEvals <- function(controlFile, newMaxEvals){
   
