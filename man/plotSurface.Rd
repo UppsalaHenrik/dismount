@@ -4,17 +4,19 @@
 \alias{plotSurface}
 \title{plotSurface}
 \usage{
-plotSurface(plotlyAccount, modFilePath, paramsToCompare = c("THETA1",
-  "THETA2"), resol = 10, local = FALSE, ...)
+plotSurface(plotlyAccount, modFilePath, paramsToCompare = c("Param1",
+  "Param2"), resol = 10, local = FALSE, ofvScaling = FALSE, ...)
 }
 \arguments{
 \item{plotlyAccount}{A username and key for Plotly access on the form plotly(username='user', key='key').}
 
 \item{modFilePath}{Model file to use. The called function createRawresInput assumes that there is an ext file with the same base file name.}
 
-\item{paramsToCompare}{A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2"). Parameters to compare. Model file cannot currently use labels for parameters.}
+\item{paramsToCompare}{Parameters to compare. A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2"). Model file parameter labels will be removed.}
 
 \item{resol}{Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.}
+
+\item{ofvScaling}{If true OFVs are scaled to between zero and one. Default is FALSE.}
 
 \item{...}{Further options to createRawresInput}
 }

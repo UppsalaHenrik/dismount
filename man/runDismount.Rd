@@ -4,11 +4,14 @@
 \alias{runDismount}
 \title{Run dismount (isestimable)}
 \usage{
-runDismount(modelFileName, wait = FALSE, logging = FALSE,
-  runOnSlurm = FALSE)
+runDismount(modelFileName,
+  dismountPath = "/blue/home/USER/yasao745/PsN4_4_ver_YA/bin/isestimable",
+  wait = FALSE, logging = FALSE, runOnSlurm = FALSE)
 }
 \arguments{
 \item{modelFileName}{The name of the model file. No default}
+
+\item{dismountPath}{Path to the isestimable/dismount}
 
 \item{wait}{Wraps the wait option in system(), which specifies whether to
 wait for the system call to complete before continuing in R (TRUE) or not

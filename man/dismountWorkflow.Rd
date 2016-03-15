@@ -5,7 +5,8 @@
 \title{Full workflow with parallel retries, result categorization and dismount/precond run}
 \usage{
 dismountWorkflow(modFileName, retries = 9, doParaRetries = TRUE,
-  doPrecond = FALSE, doDismount = TRUE, rerunDirName)
+  doPrecond = FALSE, doDismount = TRUE, rerunDirName, degree = 0.99,
+  seed = 20150821)
 }
 \arguments{
 \item{modFileName}{The model file to use. Default is "run83.mod".}
