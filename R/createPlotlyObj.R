@@ -226,7 +226,7 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, paramsToCompare =
   plotlyData <- list(plotlyTrace)
   
 
-  plotlyObj <- plotly_POST(plotlyData)
+  plotlyObj <- plotly_POST(plotlyData, fileopt = "new", sharing = "secret")
   
   return(plotlyObj$url)
 }

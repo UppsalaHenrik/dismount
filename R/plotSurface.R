@@ -54,7 +54,8 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, paramsToCompare 
   
   print("Creating Plotly plot")
   url <- createPlotlyObj(plotlyAccount, ofvVector, xParamVals = rawresInputList[[2]], 
-                         yParamVals = rawresInputList[[3]], paramsToCompare = paramsToCompare)
+                         yParamVals = rawresInputList[[3]], paramsToCompare = paramsToCompare,
+                         zlab = modFilePath)
   
   return(url)
 }
