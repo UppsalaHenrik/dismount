@@ -2,7 +2,8 @@
 #' 
 #' Plots a surface using Plotly and returns the URL
 #' 
-#' @param plotlyAccount A username and key for Plotly access on the form plotly(username='user', key='key').
+#' @param plotlyUsername Plotly online user name
+#' @param plotlyKey Plotly online key.
 #' @param modFilePath Model file to use. The called function createRawresInput assumes that there is an ext file with the same base file name.
 #' @param paramsToCompare Parameters to compare. A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2"). Model file parameter labels will be removed.
 #' @param resol Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.
@@ -12,10 +13,12 @@
 #' @export
 
 
-plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("Param1", "Param2"), 
+plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, paramsToCompare = c("Param1", "Param2"), 
                         resol = 10, local = FALSE, ofvScaling = FALSE,...){
   
   require(plotly)
+  Sys.setenv("plotly_username" = plotlyUsername)
+  Sys.setenv("plotly_api_key" = plotlyKey)
   
   print(paste("Preparing model file", modFilePath, "by removing commented out code and setting MAXEVALS"))
   modFileOrig <- readLines(modFilePath)
@@ -50,8 +53,8 @@ plotSurface <- function(plotlyAccount, modFilePath, paramsToCompare = c("Param1"
   }
   
   print("Creating Plotly plot")
-  url <- createPlotlyObj(ofvVector, xParamVals = rawresInputList[[2]], yParamVals = rawresInputList[[3]], 
-                         paramsToCompare = paramsToCompare)
+  url <- createPlotlyObj(plotlyAccount, ofvVector, xParamVals = rawresInputList[[2]], 
+                         yParamVals = rawresInputList[[3]], paramsToCompare = paramsToCompare)
   
   return(url)
 }

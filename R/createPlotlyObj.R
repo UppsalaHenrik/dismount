@@ -223,9 +223,10 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, paramsToCompare =
     hidesources = FALSE
   )
   
-  data <- list(plotlyTrace)
+  plotlyData <- list(plotlyTrace)
   
-  plotlyObj <- py$plotly(data, kwargs=list(layout=layout))
+
+  plotlyObj <- plotly_POST(plotlyData)
   
   return(plotlyObj$url)
 }

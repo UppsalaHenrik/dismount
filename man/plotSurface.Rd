@@ -4,11 +4,14 @@
 \alias{plotSurface}
 \title{plotSurface}
 \usage{
-plotSurface(plotlyAccount, modFilePath, paramsToCompare = c("Param1",
-  "Param2"), resol = 10, local = FALSE, ofvScaling = FALSE, ...)
+plotSurface(plotlyUsername, plotlyKey, modFilePath,
+  paramsToCompare = c("Param1", "Param2"), resol = 10, local = FALSE,
+  ofvScaling = FALSE, ...)
 }
 \arguments{
-\item{plotlyAccount}{A username and key for Plotly access on the form plotly(username='user', key='key').}
+\item{plotlyUsername}{Plotly online user name}
+
+\item{plotlyKey}{Plotly online key.}
 
 \item{modFilePath}{Model file to use. The called function createRawresInput assumes that there is an ext file with the same base file name.}
 
