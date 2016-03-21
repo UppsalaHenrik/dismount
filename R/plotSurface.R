@@ -13,8 +13,10 @@
 #' @export
 
 
-plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, paramsToCompare = c("Param1", "Param2"), 
-                        resol = 10, local = FALSE, ofvScaling = FALSE,...){
+plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, 
+                        paramsToCompare = c("Param1", "Param2"), 
+                        resol = 10, local = FALSE, ofvScaling = FALSE, 
+                        slurm_partition = "standard",...){
   
   require(plotly)
   Sys.setenv("plotly_username" = plotlyUsername)
@@ -31,7 +33,8 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, paramsToCompare 
   rawresInputList <- createRawresInput(modFilePath = modFilePath, paramsToCompare = paramsToCompare, resol = resol, ...)
   
   print("Running Parallel retries")
-  dirName <- runParaRetries(newModFileName, rawres_input = rawresInputList[[1]], clean = 3, local = local)
+  dirName <- runParaRetries(newModFileName, rawres_input = rawresInputList[[1]], clean = 3, 
+                            slurm_partition = slurm_partition, local = local)
   
   print("Parsing OFVs")
   rawresPath <- findRawres(dirName)
@@ -53,7 +56,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, paramsToCompare 
   }
   
   print("Creating Plotly plot")
-  url <- createPlotlyObj(plotlyAccount, ofvVector, xParamVals = rawresInputList[[2]], 
+  url <- createPlotlyObj(ofvVector, xParamVals = rawresInputList[[2]], 
                          yParamVals = rawresInputList[[3]], paramsToCompare = paramsToCompare,
                          zlab = modFilePath)
   
