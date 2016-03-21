@@ -57,5 +57,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, paramsToCompare 
                          yParamVals = rawresInputList[[3]], paramsToCompare = paramsToCompare,
                          zlab = modFilePath)
   
+  write(url, file = paste0(dirName, "_URL", ".txt"))
+  
   return(url)
 }
