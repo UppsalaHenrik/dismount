@@ -6,7 +6,7 @@
 \usage{
 plotSurface(plotlyUsername, plotlyKey, modFilePath,
   paramsToCompare = c("Param1", "Param2"), resol = 10, local = FALSE,
-  ofvScaling = FALSE, ...)
+  ofvScaling = FALSE, slurm_partition = "standard", ...)
 }
 \arguments{
 \item{plotlyUsername}{Plotly online user name}
