@@ -7,7 +7,9 @@
 runPsnClean(path = ".", level = 3)
 }
 \arguments{
-\item{level}{How much to clean up. Higher setting removes more. 2 - 4 is available with 3 being the default.}
+\item{level}{How much to clean up. Higher setting removes more. 2 - 4 is available with 3 being the default.
+
+runPsnClean()}
 }
 \description{
 Runs the PsN cleanup script. Currently only the level option is mapped and wrapped.
