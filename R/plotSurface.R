@@ -62,5 +62,9 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   
   write(url, file = paste0(dirName, "_URL", ".txt"))
   
-  return(url)
+  # Clean up
+  
+  runPsnClean(dirName, level = 4)
+  
+  return(list(url, dirName))
 }
