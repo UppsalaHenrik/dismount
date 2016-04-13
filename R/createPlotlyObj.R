@@ -12,7 +12,8 @@
 
 
 
-createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, paramsToCompare = c("Param1", "Param2"), 
+createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, 
+                            paramsToCompare = c("Param1", "Param2"), 
                             zlab = "Z: OFV", plotTitle = "OFV Surface"){
   
   xSide <- length(xParamVals)
