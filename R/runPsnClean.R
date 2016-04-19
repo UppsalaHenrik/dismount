@@ -14,7 +14,13 @@
 
 runPsnClean <- function(path = ".", level = 3, interact = FALSE, addOpt = ""){
   
-  ifelse(interact, interactOpt = " -interactive ", interactOpt = " -no-interactive ")
+  # Determine what string to use for the interactive option
+  
+  interactOpt <- ifelse(interact, 
+                        " -interactive ", 
+                        " -no-interactive ")
+  
+  # Paste together the command and run it
   
   cmd <- paste0("psn_clean ", path, " -level=", level, interactOpt, addOpt)
   system(cmd)
