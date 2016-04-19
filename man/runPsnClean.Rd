@@ -4,10 +4,14 @@
 \alias{runPsnClean}
 \title{Run psn_clean}
 \usage{
-runPsnClean(path = ".", level = 3)
+runPsnClean(path = ".", level = 3, interact = FALSE, addOpt = "")
 }
 \arguments{
-\item{level}{How much to clean up. Higher setting removes more. 2 - 4 is available with 3 being the default.
+\item{level}{How much to clean up. Higher setting removes more. 2 - 4 is available with 3 being the default.}
+
+\item{interact}{If TRUE the user is prompted for deletion or every file in an interactive session. Default is FALSE.}
+
+\item{addOpt}{String of additional options to include on command line. Must follow PsN conventions and include space in between options. Default is an empty string.
 
 runPsnClean()}
 }
