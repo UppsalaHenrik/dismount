@@ -27,7 +27,7 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
   
   origOfv <- origVals[3]
   
-  labelVector <- paste("OFV =", ofvVector)
+  labelVector <- paste("OFV =", format(ofvVector, digits = 2))
   
   if(ofvScaling){
     

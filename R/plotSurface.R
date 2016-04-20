@@ -48,7 +48,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
                          origVals = rawresInputList[[4]],
                          paramsToCompare = paramsToCompare,
                          ofvScaling = ofvScaling,
-                         plotTitle = paste("OFV surface for para retries run \n", dirName))
+                         plotTitle = paste("OFV surface for para retries run\\n", dirName))
   
   plotly_POST(plotlyObj, fileopt = "new")
   
