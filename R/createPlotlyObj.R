@@ -27,6 +27,8 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
   
   origOfv <- origVals[3]
   
+  labelVector <- paste("OFV =", ofvVector)
+  
   if(ofvScaling){
     
     # Subtract smallest number    
@@ -53,7 +55,7 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
                       nrow = ySide, 
                       ncol = xSide, 
                       byrow = TRUE)
-  labelMatrix <- matrix(paste("OFV =", ofvVector), 
+  labelMatrix <- matrix(labelVector, 
                         nrow = ySide, 
                         ncol = xSide, 
                         byrow = TRUE)
