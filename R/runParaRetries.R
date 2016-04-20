@@ -6,6 +6,7 @@
 #' @param clean The post-run clean-up level. Exactly wrapping the PsN option. Defaults to 2.
 #' @param threads The number of threads to use. Exactly wrapping the PsN option. Defaults to 100.
 #' @param min_retries The number of retries to run. Exactly wrapping the PsN option. Defaults to 1
+#' 
 #' runParaRetries()
 #'
 #' @export

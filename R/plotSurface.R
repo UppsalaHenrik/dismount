@@ -8,6 +8,7 @@
 #' @param paramsToCompare Parameters to compare. A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2"). Model file parameter labels will be removed.
 #' @param resol Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.
 #' @param ofvScaling If true OFVs are scaled to between zero and one. Default is FALSE.
+#' @param cleanLevel PsN clean script will be run on the parallel retries folder. See psn_clean documentation. Default is 4, the highest cleaning level.
 #' @param ... Further options to createRawresInput
 #' 
 #' @export
@@ -16,7 +17,8 @@
 plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, 
                         paramsToCompare = c("Param1", "Param2"), 
                         resol = 10, local = FALSE, ofvScaling = FALSE, 
-                        slurm_partition = "standard",...){
+                        slurm_partition = "standard",
+                        cleanLevel = 4, ...){
   
   require(plotly)
   Sys.setenv("plotly_username" = plotlyUsername)
@@ -40,31 +42,21 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   rawresPath <- findRawres(dirName)
   ofvVector <- parseRawresOfvs(rawresPath)
   
-  if(ofvScaling){
-
-    # Subtract smallest number    
-    ofvVector <- ofvVector - min(ofvVector)
-    
-    # Calculate a scaling factor that brings the smallest non-zero number up
-    ofvScalingFactor <- 10^abs(min(log10(ofvVector[ofvVector > 0])))
-    
-    # Scale it so that the numbers become easier to handle
-    ofvVector <- ofvVector * ofvScalingFactor
-    
-    # Scale it to a fraction of the maximum
-    ofvVector <- ofvVector/max(ofvVector)
-  }
-  
   print("Creating Plotly plot")
-  url <- createPlotlyObj(ofvVector, xParamVals = rawresInputList[[2]], 
-                         yParamVals = rawresInputList[[3]], paramsToCompare = paramsToCompare,
-                         zlab = modFilePath)
+  plotlyObj <- createPlotlyObj(ofvVector, xParamVals = rawresInputList[[2]], 
+                         yParamVals = rawresInputList[[3]], 
+                         origVals = rawresInputList[[4]],
+                         paramsToCompare = paramsToCompare,
+                         ofvScaling = ofvScaling,
+                         plotTitle = paste("OFV surface for para retries run \n", dirName))
+  
+  plotly_POST(plotlyObj, fileopt = "new")
   
   write(url, file = paste0(dirName, "_URL", ".txt"))
   
-  # Clean up
+  # Clean up using the psn_clean 
   
-  runPsnClean(dirName, level = 4)
+  runPsnClean(dirName, level = cleanLevel, interact = FALSE)
   
   return(list(url, dirName))
 }

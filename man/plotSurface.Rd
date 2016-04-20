@@ -6,7 +6,7 @@
 \usage{
 plotSurface(plotlyUsername, plotlyKey, modFilePath,
   paramsToCompare = c("Param1", "Param2"), resol = 10, local = FALSE,
-  ofvScaling = FALSE, slurm_partition = "standard", ...)
+  ofvScaling = FALSE, slurm_partition = "standard", cleanLevel = 4, ...)
 }
 \arguments{
 \item{plotlyUsername}{Plotly online user name}
@@ -20,6 +20,8 @@ plotSurface(plotlyUsername, plotlyKey, modFilePath,
 \item{resol}{Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.}
 
 \item{ofvScaling}{If true OFVs are scaled to between zero and one. Default is FALSE.}
+
+\item{cleanLevel}{PsN clean script will be run on the parallel retries folder. See psn_clean documentation. Default is 4, the highest cleaning level.}
 
 \item{...}{Further options to createRawresInput}
 }
