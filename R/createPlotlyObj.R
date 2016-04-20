@@ -58,8 +58,8 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
                         ncol = xSide, 
                         byrow = TRUE)
   
-  p <- plot_ly(x = paramVector2,
-               y = paramVector1,
+  p <- plot_ly(x = xParamVals,
+               y = yParamVals,
                z = ofvMatrix, 
                type = "surface",
                text = labelMatrix

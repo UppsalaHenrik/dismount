@@ -4,9 +4,9 @@
 \alias{createPlotlyObj}
 \title{createPlotlyObj}
 \usage{
-createPlotlyObj(ofvVector, xParamVals, yParamVals,
-  paramsToCompare = c("Param1", "Param2"), zlab = "Z: OFV",
-  plotTitle = "OFV Surface")
+createPlotlyObj(ofvVector, xParamVals, yParamVals, origVals,
+  paramsToCompare = c("Param1", "Param2"), ofvScaling = FALSE,
+  zlab = "Z: OFV", plotTitle = "OFV Surface")
 }
 \arguments{
 \item{ofvVector}{Vector of OFV values for the plot.}
@@ -16,6 +16,8 @@ createPlotlyObj(ofvVector, xParamVals, yParamVals,
 \item{yParamVals}{Vector of Y axis values.}
 
 \item{paramsToCompare}{A vector of two parameters to plot against.}
+
+\item{ofvScaling}{If true OFVs are scaled to between zero and one. Default is FALSE.}
 
 \item{zlab}{Label for Z axis.}
 

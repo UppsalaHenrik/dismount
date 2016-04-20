@@ -19,6 +19,7 @@ runParaRetries(modFileName, dir = paste0("para_retries_", format(Sys.time(),
 \item{threads}{The number of threads to use. Exactly wrapping the PsN option. Defaults to 100.}
 
 \item{min_retries}{The number of retries to run. Exactly wrapping the PsN option. Defaults to 1
+
 runParaRetries()}
 }
 \description{
