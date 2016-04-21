@@ -2,8 +2,8 @@
 #' 
 #' Plots a surface using Plotly and returns the URL
 #' 
-#' @param plotlyUsername Plotly online user name
-#' @param plotlyKey Plotly online key.
+#' @param plotlyUsername Plotly online user name. Not needed if environment variables already set. See plotly instructions.
+#' @param plotlyKey Plotly online key. Not needed if environment variables already set. See plotly instructions.
 #' @param modFilePath Model file to use. The called function createRawresInput assumes that there is an ext file with the same base file name.
 #' @param paramsToCompare Parameters to compare. A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2"). Model file parameter labels will be removed.
 #' @param resol Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.
@@ -30,7 +30,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   modFile <- gsub("[[:space:]];.+", "", modFile)
   newModFileName <- paste0("new_", basename(modFilePath))
   writeLines(modFile, newModFileName)
-    
+  
   print("Creating the rawres input file")
   rawresInputList <- createRawresInput(modFilePath = modFilePath, paramsToCompare = paramsToCompare, resol = resol, ...)
   
@@ -42,21 +42,24 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   rawresPath <- findRawres(dirName)
   ofvVector <- parseRawresOfvs(rawresPath)
   
+  plotTitle <- paste0("<b>OFV Surface for ", modFilePath, "</b><br>", resol, "x", resol, 
+                      "resolution. Retries folder ", dirName)
+  
   print("Creating Plotly plot")
   plotlyObj <- createPlotlyObj(ofvVector, xParamVals = rawresInputList[[2]], 
-                         yParamVals = rawresInputList[[3]], 
-                         origVals = rawresInputList[[4]],
-                         paramsToCompare = paramsToCompare,
-                         ofvScaling = ofvScaling,
-                         plotTitle = paste("OFV surface for para retries run\\n", dirName))
+                               yParamVals = rawresInputList[[3]], 
+                               origVals = rawresInputList[[4]],
+                               paramsToCompare = paramsToCompare,
+                               ofvScaling = ofvScaling,
+                               plotTitle = plotTitle)
   
   plotly_POST(plotlyObj, fileopt = "new")
   
-  write(url, file = paste0(dirName, "_URL", ".txt"))
+  # write(url, file = paste0(dirName, "_URL", ".txt"))
   
   # Clean up using the psn_clean 
   
   runPsnClean(dirName, level = cleanLevel, interact = FALSE)
   
-  return(list(url, dirName))
+  return(list(plotlyObj, dirName))
 }
