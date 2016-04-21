@@ -25,7 +25,7 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
   ySide <- length(yParamVals)
   ylab <- paste("Y:", paramsToCompare[2])
   
-  origOfv <- origVals[3]
+  origOfv <- origVals[[3]]
   
   labelVector <- paste("OFV =", format(ofvVector, digits = 2))
   
@@ -66,8 +66,8 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
                type = "surface",
                text = labelMatrix
   ) %>%
-    add_trace(x = origVals[1], 
-              y = origVals[2], 
+    add_trace(x = origVals[[1]], 
+              y = origVals[[2]], 
               z = origOfv, 
               type = "scatter3d", 
               marker = list(opacity = 0.65,
