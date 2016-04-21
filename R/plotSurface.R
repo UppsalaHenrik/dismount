@@ -58,7 +58,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   # write(url, file = paste0(dirName, "_URL", ".txt"))
   
   # Clean up using the psn_clean 
-  
+  print(paste("Cleaning up", dirName, "with level =", cleanLevel))
   runPsnClean(dirName, level = cleanLevel, interact = FALSE)
   
   return(list(plotlyObj, dirName))
