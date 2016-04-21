@@ -28,8 +28,8 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
   origOfv <- origVals[[3]]
   
   # Creating labels for the original values regardless whether ofvs are scaled or not. 
-  labelVector <- paste("OFV =", format(ofvVector, digits = 2))
-  origOfvLabel <- paste("OFV =", format(origOfv, digits = 2))
+  labelVector <- paste("OFV =", format(ofvVector, digits = 8))
+  origOfvLabel <- paste("OFV =", format(origOfv, digits = 8))
   
   if(ofvScaling){
     
