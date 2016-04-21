@@ -22,6 +22,14 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   # This is dependent on there not being a FILE option set on the $EST. Not great but fine for now.
   modFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modFilePath)))
   extFileName <- paste0(modFileNameNoExt, ".ext")
+  
+  if(!file.exists(extFileName)){
+    
+    print("No .ext file found for this model. Please run it first")
+    
+    break()
+  }
+  
   extFileDFList <- parseExtFile(extFileName)
   
   # Get the last table in the ext file
@@ -32,7 +40,7 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   
   # Pick out the OBJ values and package it with the original values of paramsToCompare
   origParamsAndOFV <- cbind(paramVectorRow[paramsToCompare], 
-                        paramVectorRow[length(paramVectorRow)])
+                            paramVectorRow[length(paramVectorRow)])
   
   # Ignoring the first and last column (Iteration and OBJ)
   paramVectorFull <- paramVectorRow[2:(length(paramVectorRow)-1)]
@@ -44,7 +52,7 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   
   # Reordering to fit PsN standard with SIGMA last.
   paramVectorFull <- paramVectorFull[c(thetaCols, omegaCols, sigmaCols)]
-
+  
   ### Getting rid of zero value off-diagonal elements. This is required for PsN rawres_input
   # First some more or less dodgy regex
   indices <- gsub("SIGMA", "", names(paramVectorFull))
@@ -61,8 +69,8 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
     # off/diagonal sigma or omega and I set TRUE
     y <- ifelse(x[1] != x[2] && !is.na(x[2]), TRUE, FALSE)
     return(y)
-  
-}), recursive = FALSE)
+    
+  }), recursive = FALSE)
   
   # Put the names removed above back
   
@@ -73,37 +81,61 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   
   # Finally we have the PsN compatible
   paramVector <- paramVectorFull[!paramVectorOffDiagZeroes]
-
-
-
+  
+  
+  
   # Picking out the relevant parameters
   paramValue1 <- paramVector[paramsToCompare[1]]
   paramValue2 <- paramVector[paramsToCompare[2]]
   paramValsList <- list()
   
-  # Determine how far along the vector the paramValue should be for param 1 (X)
-  frac1 <- round((paramValue1[[1]]-lims1[1])/(lims1[2]-lims1[1]), 
-                 digits = ceiling(log10(resol)))
+  # Check if the original data is within the limits and create paramValsList accordingly
   
-  lowSeq1 <- seq(from = lims1[1], to = paramValue1[[1]], 
-                 length.out = round(frac1*resol))
-  
-  uppSeq1 <- seq(from = paramValue1[[1]], to = lims1[2], 
-                 length.out = 1 + resol - round(frac1*resol))[-1]
-  
-  paramValsList[[paramsToCompare[1]]] <- c(lowSeq1, uppSeq1)
+  if(paramValue1[[1]] > lims1[1] && paramValue1[[1]] < lims1[2]){
+    
+    # Determine how far along the vector the paramValue should be for param 1 (X)
+    frac1 <- round((paramValue1[[1]]-lims1[1])/(lims1[2]-lims1[1]), 
+                   digits = ceiling(log10(resol)))
+    
+    lowSeq1 <- seq(from = lims1[1], to = paramValue1[[1]], 
+                   length.out = round(frac1*resol))
+    
+    uppSeq1 <- seq(from = paramValue1[[1]], to = lims1[2], 
+                   length.out = 1 + resol - round(frac1*resol))[-1]
+    
+    paramValsList[[paramsToCompare[1]]] <- c(lowSeq1, uppSeq1)
+    
+  }else{
+    
+    paramValsList[[paramsToCompare[1]]] <- seq(from = lims1[1], 
+                                               to = lims1[2],
+                                               length.out = resol)
+    
+  }
   
   # Same for parameter 2 (Y)
-  frac2 <- round((paramValue2[[1]]-lims2[1])/(lims2[2]-lims2[1]), 
-                 digits = ceiling(log10(resol)))
   
-  lowSeq2 <- seq(from = lims2[1], to = paramValue2[[1]], 
-                 length.out = round(frac2*resol))
+  if(paramValue2[[1]] > lims2[1] && paramValue2[[1]] < lims2[2]){
+    
+    frac2 <- round((paramValue2[[1]]-lims2[1])/(lims2[2]-lims2[1]), 
+                   digits = ceiling(log10(resol)))
+    
+    lowSeq2 <- seq(from = lims2[1], to = paramValue2[[1]], 
+                   length.out = round(frac2*resol))
+    
+    uppSeq2 <- seq(from = paramValue2[[1]], to = lims2[2], 
+                   length.out = 1 + resol - round(frac2*resol))[-1]
+    
+    paramValsList[[paramsToCompare[2]]] <- c(lowSeq2, uppSeq2)
+    
+  }else{
+    
+    paramValsList[[paramsToCompare[2]]] <- seq(from = lims2[1], 
+                                               to = lims2[2],
+                                               length.out = resol)
+    
+  }
   
-  uppSeq2 <- seq(from = paramValue2[[1]], to = lims2[2], 
-                 length.out = 1 + resol - round(frac2*resol))[-1]
-  
-  paramValsList[[paramsToCompare[2]]] <- c(lowSeq2, uppSeq2)
   
   # I need a "model" column with a sequence of numbers numbers. 
   # PsN will use the first row so I start from 2.
@@ -142,5 +174,6 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   }
   
   # I return both the fileName of the CSV and the value vectors.
-  return(list(fileName, paramValsList[[paramsToCompare[1]]], paramValsList[[paramsToCompare[2]]], origParamsAndOFV))
+  return(list(fileName, paramValsList[[paramsToCompare[1]]], 
+              paramValsList[[paramsToCompare[2]]], origParamsAndOFV))
 }

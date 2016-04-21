@@ -9,9 +9,9 @@ plotSurface(plotlyUsername, plotlyKey, modFilePath,
   ofvScaling = FALSE, slurm_partition = "standard", cleanLevel = 4, ...)
 }
 \arguments{
-\item{plotlyUsername}{Plotly online user name}
+\item{plotlyUsername}{Plotly online user name. Not needed if environment variables already set. See plotly instructions.}
 
-\item{plotlyKey}{Plotly online key.}
+\item{plotlyKey}{Plotly online key. Not needed if environment variables already set. See plotly instructions.}
 
 \item{modFilePath}{Model file to use. The called function createRawresInput assumes that there is an ext file with the same base file name.}
 
