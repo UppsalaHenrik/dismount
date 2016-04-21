@@ -28,12 +28,13 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
   origOfv <- origVals[[3]]
   
   labelVector <- paste("OFV =", format(ofvVector, digits = 2))
+  origOfvLabel <- paste("OFV =", format(origOfv, digits = 2))
   
   if(ofvScaling){
     
-    # Subtract smallest number    
-    ofvVector <- ofvVector - min(ofvVector)
+    # Subtract smallest number
     origOfv <- origOfv - min(ofvVector)
+    ofvVector <- ofvVector - min(ofvVector)
     
     # Calculate a scaling factor that brings the smallest non-zero number up
     ofvScalingFactor <- 10^abs(min(log10(ofvVector[ofvVector > 0])))
@@ -43,9 +44,9 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
     origOfv <- origOfv * ofvScalingFactor
     
     # Scale it to a fraction of the maximum
-    ofvVector <- ofvVector/max(ofvVector)
     origOfv <- origOfv/max(ofvVector)
-    
+    ofvVector <- ofvVector/max(ofvVector)
+
     # Change the z axis label
     zlab = paste0(zlab, ", scaled")
   }
@@ -69,7 +70,8 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
     add_trace(x = origVals[[1]], 
               y = origVals[[2]], 
               z = origOfv, 
-              type = "scatter3d", 
+              type = "scatter3d",
+              text = origOfvLabel,
               marker = list(opacity = 0.65,
                             color = "#FF0000",
                             symbol = "x"
