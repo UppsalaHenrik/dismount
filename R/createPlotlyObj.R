@@ -27,12 +27,14 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
   
   origOfv <- origVals[[3]]
   
+  # Creating labels for the original values regardless whether ofvs are scaled or not. 
   labelVector <- paste("OFV =", format(ofvVector, digits = 2))
   origOfvLabel <- paste("OFV =", format(origOfv, digits = 2))
   
   if(ofvScaling){
     
-    # Subtract smallest number
+    # Subtract smallest number. Handling origOfv first so it uses the 
+    # values before conversion of ofvVector
     origOfv <- origOfv - min(ofvVector)
     ofvVector <- ofvVector - min(ofvVector)
     

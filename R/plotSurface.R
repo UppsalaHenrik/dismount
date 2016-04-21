@@ -42,7 +42,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   rawresPath <- findRawres(dirName)
   ofvVector <- parseRawresOfvs(rawresPath)
   
-  plotTitle <- paste0("<b>OFV Surface for ", modFilePath, "</b><br>", resol, "x", resol, 
+  plotTitle <- paste0("\\<b>OFV Surface for ", modFilePath, "</b><br>", resol, "x", resol, 
                       "resolution. Retries folder ", dirName)
   
   print("Creating Plotly plot")
