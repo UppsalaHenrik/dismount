@@ -3,6 +3,7 @@
 #' @param ofvVector Vector of OFV values for the plot.
 #' @param xParamVals Vector of X axis values.
 #' @param yParamVals Vector of Y axis values.
+#' @param origVals Whether or not to plot the original model final estimate as a point in the plot.
 #' @param paramsToCompare A vector of two parameters to plot against.
 #' @param ofvScaling If true OFVs are scaled to between zero and one. Default is FALSE.
 #' @param zlab Label for Z axis.
@@ -13,7 +14,8 @@
 
 
 
-createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
+createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, 
+                            origVals, plotOrigVals = FALSE,
                             paramsToCompare = c("Param1", "Param2"), 
                             ofvScaling = FALSE,
                             zlab = "Z: OFV", 
@@ -48,7 +50,7 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
     # Scale it to a fraction of the maximum
     origOfv <- origOfv/max(ofvVector)
     ofvVector <- ofvVector/max(ofvVector)
-
+    
     # Change the z axis label
     zlab = paste0(zlab, ", scaled")
   }
@@ -69,23 +71,25 @@ createPlotlyObj <- function(ofvVector, xParamVals, yParamVals, origVals,
                type = "surface",
                text = labelMatrix
   ) %>%
-    add_trace(x = origVals[[1]], 
-              y = origVals[[2]], 
-              z = origOfv, 
-              type = "scatter3d",
-              text = origOfvLabel,
-              marker = list(opacity = 0.65,
-                            color = "#FF0000",
-                            symbol = "x"
-              )
-    ) %>%
     layout(title = plotTitle,
            scene = list(
              xaxis = list(title = xlab),
              yaxis = list(title = ylab),
-             zaxis = list(title = zlab)
-           )
+             zaxis = list(title = zlab))
     )
+  
+  if(plotOrigVals){
+    p <- add_trace(x = origVals[[1]], 
+                   y = origVals[[2]], 
+                   z = origOfv, 
+                   type = "scatter3d",
+                   text = origOfvLabel,
+                   marker = list(opacity = 0.65,
+                                 color = "#FF0000",
+                                 symbol = "x"
+                   )
+    )
+  }
   
   return(p)
 }

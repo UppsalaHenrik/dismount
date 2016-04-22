@@ -5,8 +5,8 @@
 \title{createPlotlyObj}
 \usage{
 createPlotlyObj(ofvVector, xParamVals, yParamVals, origVals,
-  paramsToCompare = c("Param1", "Param2"), ofvScaling = FALSE,
-  zlab = "Z: OFV", plotTitle = "OFV Surface")
+  plotOrigVals = FALSE, paramsToCompare = c("Param1", "Param2"),
+  ofvScaling = FALSE, zlab = "Z: OFV", plotTitle = "OFV Surface")
 }
 \arguments{
 \item{ofvVector}{Vector of OFV values for the plot.}
@@ -14,6 +14,8 @@ createPlotlyObj(ofvVector, xParamVals, yParamVals, origVals,
 \item{xParamVals}{Vector of X axis values.}
 
 \item{yParamVals}{Vector of Y axis values.}
+
+\item{origVals}{Whether or not to plot the original model final estimate as a point in the plot.}
 
 \item{paramsToCompare}{A vector of two parameters to plot against.}
 

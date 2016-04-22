@@ -6,7 +6,8 @@
 \usage{
 plotSurface(plotlyUsername, plotlyKey, modFilePath,
   paramsToCompare = c("Param1", "Param2"), resol = 10, local = FALSE,
-  ofvScaling = FALSE, slurm_partition = "standard", cleanLevel = 4, ...)
+  ofvScaling = FALSE, slurm_partition = "standard", cleanLevel = 4,
+  plotOrigVals = FALSE, ...)
 }
 \arguments{
 \item{plotlyUsername}{Plotly online user name. Not needed if environment variables already set. See plotly instructions.}
@@ -24,6 +25,8 @@ plotSurface(plotlyUsername, plotlyKey, modFilePath,
 \item{cleanLevel}{PsN clean script will be run on the parallel retries folder. See psn_clean documentation. Default is 4, the highest cleaning level.}
 
 \item{...}{Further options to createRawresInput}
+
+\item{origVals}{Whether or not to plot the original model final estimate as a point in the plot.}
 }
 \description{
 Plots a surface using Plotly and returns the URL

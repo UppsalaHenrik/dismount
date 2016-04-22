@@ -9,6 +9,7 @@
 #' @param resol Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.
 #' @param ofvScaling If true OFVs are scaled to between zero and one. Default is FALSE.
 #' @param cleanLevel PsN clean script will be run on the parallel retries folder. See psn_clean documentation. Default is 4, the highest cleaning level.
+#' @param origVals Whether or not to plot the original model final estimate as a point in the plot.
 #' @param ... Further options to createRawresInput
 #' 
 #' @export
@@ -17,8 +18,8 @@
 plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, 
                         paramsToCompare = c("Param1", "Param2"), 
                         resol = 10, local = FALSE, ofvScaling = FALSE, 
-                        slurm_partition = "standard",
-                        cleanLevel = 4, ...){
+                        slurm_partition = "standard", cleanLevel = 4, 
+                        plotOrigVals = FALSE, ...){
   
   require(plotly)
   Sys.setenv("plotly_username" = plotlyUsername)
@@ -49,6 +50,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   plotlyObj <- createPlotlyObj(ofvVector, xParamVals = rawresInputList[[2]], 
                                yParamVals = rawresInputList[[3]], 
                                origVals = rawresInputList[[4]],
+                               plotOrigVals = plotOrigVals,
                                paramsToCompare = paramsToCompare,
                                ofvScaling = ofvScaling,
                                plotTitle = plotTitle)
