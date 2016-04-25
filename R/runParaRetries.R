@@ -4,7 +4,7 @@
 #' @param modFileName The model to run parallel retries on. Only one permitted.
 #' @param paraRetriesCmd Command or path used to run parallel retries. Default is "parallel_retries" which assumes the PsN directory is on the PATH.
 #' @param dir The directory to run in. Defaults to "para_retries_<date>_<time>".
-#' @param clean The post-run clean-up level. Exactly wrapping the PsN option. Defaults to 2.
+#' @param clean The PsN clean-up level. Exactly wrapping the PsN option. Defaults to 2.
 #' @param threads The number of threads to use. Exactly wrapping the PsN option. Defaults to 100.
 #' @param min_retries The number of retries to run. Exactly wrapping the PsN option. Defaults to 1
 #' 
@@ -17,7 +17,7 @@ runParaRetries <- function(modFileName, paraRetriesCmd = "parallel_retries",
                            dir = paste0("para_retries_", format(Sys.time(), "%y%m%d_%H%M%S")),
                            clean = 2, threads = 100, min_retries = 1, degree = 0.1,
                            slurm_partition = "standard", rawres_input = "", seed = format(Sys.time(), "%Y%m%d"),
-                           local = FALSE, nm_output = NULL){
+                           nm_output = NULL){
 
   # Test that degree is not outside its bounds
   if(degree <= 0 || degree >= 1){
