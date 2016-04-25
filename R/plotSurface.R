@@ -43,11 +43,11 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   rawresPath <- findRawres(dirName)
   rawres <- parseRawres(rawresPath, cols = c(paramsToCompare, "ofv"), skipRows = 1)
 
-  xParamValsInput <- rawresInputList[[2]]
-  xParamValsOutput <- order(unique(rawres[[paramsToCompare[1]]]))
+  xParamValsInput <- sort(rawresInputList[[2]])
+  xParamValsOutput <- sort(order(unique(rawres[[paramsToCompare[1]]])))
 
-  yParamValsInput <- rawresInputList[[3]]
-  yParamValsOutput <- order(unique(rawres[[paramsToCompare[2]]]))
+  yParamValsInput <- sort(rawresInputList[[3]])
+  yParamValsOutput <- sort(unique(rawres[[paramsToCompare[2]]]))
   
   
   # Checking that input and output parameter values are the same (NONMEM does change them sometimes)
@@ -66,7 +66,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
     if(!identical(yParamValsInput[x], yParamValsOutput[x])){
       paramMessage <- paste("Input and output values are different:\n", 
                             "Input ", x, ":", yParamValsInput[x],
-                            "Output ", x, ":", yParamValsOuput[x],
+                            "Output ", x, ":", yParamValsOutput[x],
                             "Using output values") 
       print(paramMessage)
     }

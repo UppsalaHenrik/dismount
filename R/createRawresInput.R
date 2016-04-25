@@ -6,6 +6,7 @@
 #' @param paramsToCompare A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2").
 #' @param lims1 A vector of two values, lower and upper limit for the first paramsToCompare. Default is 1 percent below and above the original value
 #' @param lims2 A vector of two values, lower and upper limit for the second paramsToCompare. Default is 1 percent below and above the original value
+#' @param absolute Whether or not to take the absolute value of all parameter values before constructing the input file. Default is FALSE.
 #' @param resol Resolution on each axis. Default is 10 and will return 10^2 = 100 sets of parameter values.
 #' 
 #' 
@@ -16,7 +17,7 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
                                         1.01*as.numeric(paramVector[paramsToCompare[1]])), 
                               lims2 = c(0.99*as.numeric(paramVector[paramsToCompare[2]]),
                                         1.01*as.numeric(paramVector[paramsToCompare[2]])), 
-                              resol = 10){
+                              absolute = TRUE, resol = 10){
   
   
   # This is dependent on there not being a FILE option set on the $EST. Not great but fine for now.
@@ -44,6 +45,11 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   
   # Ignoring the first and last column (Iteration and OBJ)
   paramVectorFull <- paramVectorRow[2:(length(paramVectorRow)-1)]
+  
+  # Take absolute if option is set
+  if(absolute){
+    paramVectorFull <- abs(paramVectorFull)
+  }
   
   # Getting the columns for the different parameter types so that I can reorder and remove unnecessary ones
   thetaCols <- grep("THETA", names(paramVectorFull))
