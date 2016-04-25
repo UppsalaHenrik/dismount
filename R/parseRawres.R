@@ -6,7 +6,6 @@
 #' @param skipRows Number of rows to skip after the header. Not to be confused with 'skip' which is a read.csv option that will skip rows from the top of the file before looking for a header.
 #' @param addPath If set the the returned data frame will include a column containing the file name that was parsed. Default is FALSE.
 #' @param addGroup If set the returned data frame will include a group column with a group number based on minimization and covariance step success. Default is FALSE
-#' @param ... Further options passed to read.csv
 #'
 #' parseRawres()
 #'
@@ -37,11 +36,11 @@ parseRawres <- function(rawresPath, cols = NULL, skipRows = 0,
 
   if(length(cols) > 0){
     
-    rawres <- read.csv(rawresPath, header = TRUE, check.names = FALSE, ...)[cols]
+    rawres <- read.csv(rawresPath, header = TRUE, check.names = FALSE)[cols]
     
   }else{
     
-    rawres <- read.csv(rawresPath, header = TRUE, check.names = FALSE, ...)
+    rawres <- read.csv(rawresPath, header = TRUE, check.names = FALSE)
     
   }
   
