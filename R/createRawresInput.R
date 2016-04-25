@@ -49,6 +49,8 @@ createRawresInput <- function(modFilePath, paramsToCompare = c("THETA1", "THETA2
   # Take absolute if option is set
   if(absolute){
     paramVectorFull <- abs(paramVectorFull)
+    lims1 <- sort(abs(lims1))
+    lims2 <- sort(abs(lims2))
   }
   
   # Getting the columns for the different parameter types so that I can reorder and remove unnecessary ones

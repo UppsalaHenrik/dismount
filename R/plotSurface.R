@@ -8,6 +8,7 @@
 #' @param paramsToCompare Parameters to compare. A vector of two parameter names following the NONMEM ext file standard names. Default is c("THETA1", "THETA2"). Model file parameter labels will be removed.
 #' @param resol Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.
 #' @param ofvScaling If true OFVs are scaled to between zero and one. Default is FALSE.
+#' @param absolute Whether or not to take the absolute value of all parameter values before constructing the input file. Default is FALSE.
 #' @param cleanLevel PsN clean script will be run on the parallel retries folder. See psn_clean documentation. Default is 4, the highest cleaning level.
 #' @param origVals Whether or not to plot the original model final estimate as a point in the plot.
 #' @param ... Further options to createRawresInput
@@ -17,7 +18,7 @@
 
 plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, 
                         paramsToCompare = c("Param1", "Param2"), 
-                        resol = 10, ofvScaling = FALSE, 
+                        resol = 10, ofvScaling = FALSE, absolute = FALSE,
                         slurm_partition = "standard", cleanLevel = 4, 
                         plotOrigVals = FALSE, ...){
   
@@ -33,7 +34,8 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   writeLines(modFile, newModFileName)
   
   print("Creating the rawres input file")
-  rawresInputList <- createRawresInput(modFilePath = modFilePath, paramsToCompare = paramsToCompare, resol = resol, ...)
+  rawresInputList <- createRawresInput(modFilePath = modFilePath, paramsToCompare = paramsToCompare, 
+                                       resol = resol, absolute = absolute, ...)
   
   print("Running Parallel retries")
   dirName <- runParaRetries(newModFileName, rawres_input = rawresInputList[[1]], clean = 3, 
