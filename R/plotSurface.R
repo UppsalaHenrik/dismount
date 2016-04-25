@@ -17,7 +17,7 @@
 
 plotSurface <- function(plotlyUsername, plotlyKey, modFilePath, 
                         paramsToCompare = c("Param1", "Param2"), 
-                        resol = 10, local = FALSE, ofvScaling = FALSE, 
+                        resol = 10, ofvScaling = FALSE, 
                         slurm_partition = "standard", cleanLevel = 4, 
                         plotOrigVals = FALSE, ...){
   
@@ -37,7 +37,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   
   print("Running Parallel retries")
   dirName <- runParaRetries(newModFileName, rawres_input = rawresInputList[[1]], clean = 3, 
-                            slurm_partition = slurm_partition, local = local)
+                            slurm_partition = slurm_partition)
   
   print("Parsing OFVs")
   rawresPath <- findRawres(dirName)
