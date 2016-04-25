@@ -4,17 +4,21 @@
 \alias{parseRawres}
 \title{Parse a PsN raw results file}
 \usage{
-parseRawres(rawresPath, addPath = TRUE, addGroup = TRUE)
+parseRawres(rawresPath, cols = NULL, skipRows = 0, addPath = FALSE,
+  addGroup = FALSE)
 }
 \arguments{
 \item{rawresPath}{The file path for the rawres file to parse. No default.}
 
-\item{addPath}{If set the the returned data frame will include a column containing
-the file name that was parsed. Default is TRUE.}
+\item{cols}{A vector of column names or numbers to be parsed. If set to vector of length 1 or longer all other columns will be discarded. Please observe that column names must match the read.csv interpretation of the column header.}
 
-\item{addGroup}{If set the returned data frame will include a group column with
-       a group number based on minimization and covariance step success. Default 
-       is TRUE
+\item{skipRows}{Number of rows to skip after the header. Not to be confused with 'skip' which is a read.csv option that will skip rows from the top of the file before looking for a header.}
+
+\item{addPath}{If set the the returned data frame will include a column containing the file name that was parsed. Default is FALSE.}
+
+\item{addGroup}{If set the returned data frame will include a group column with a group number based on minimization and covariance step success. Default is FALSE}
+
+\item{...}{Further options passed to read.csv
 
 parseRawres()}
 }
