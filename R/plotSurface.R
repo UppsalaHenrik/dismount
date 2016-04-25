@@ -46,7 +46,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   rawres <- parseRawres(rawresPath, cols = c(paramsToCompare, "ofv"), skipRows = 1)
 
   xParamValsInput <- sort(rawresInputList[[2]])
-  xParamValsOutput <- sort(order(unique(rawres[[paramsToCompare[1]]])))
+  xParamValsOutput <- sort(unique(rawres[[paramsToCompare[1]]]))
 
   yParamValsInput <- sort(rawresInputList[[3]])
   yParamValsOutput <- sort(unique(rawres[[paramsToCompare[2]]]))
@@ -80,7 +80,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   origVals <- rawresInputList[[4]]
   
   if(absolute){
-    origParamsAndOFV[paramsToCompare] <- abs(origParamsAndOFV[paramsToCompare])
+    origVals[paramsToCompare] <- abs(origVals[paramsToCompare])
   }
   
   print("Creating Plotly plot")
