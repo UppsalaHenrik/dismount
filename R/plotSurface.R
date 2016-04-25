@@ -45,7 +45,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
 
   xParamValsInput <- rawresInputList[[2]]
   xParamValsOutput <- order(unique(rawres[[paramsToCompare[1]]]))
-  
+
   yParamValsInput <- rawresInputList[[3]]
   yParamValsOutput <- order(unique(rawres[[paramsToCompare[2]]]))
   
@@ -56,7 +56,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
     if(!identical(xParamValsInput[x], xParamValsOutput[x])){
       paramMessage <- paste("Input and output values are different:\n", 
                             "Input ", x, ":", xParamValsInput[x],
-                            "Output ", x, ":", xParamValsOuput[x],
+                            "Output ", x, ":", xParamValsOutput[x],
                             "Using output values") 
       print(paramMessage)
     }
