@@ -77,6 +77,10 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   plotTitle <- paste0("\n<b>OFV Surface for ", modFilePath, "</b><br>", resol, "x", resol, 
                       "resolution. Retries folder ", dirName)
   
+  origVals <- rawresInputList[[4]]
+  
+  if(absolute){
+    origParamsAndOFV[paramsToCompare] <- abs(origParamsAndOFV[paramsToCompare])
   }
   
   print("Creating Plotly plot")
