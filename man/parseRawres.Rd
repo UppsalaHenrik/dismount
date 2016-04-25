@@ -16,9 +16,7 @@ parseRawres(rawresPath, cols = NULL, skipRows = 0, addPath = FALSE,
 
 \item{addPath}{If set the the returned data frame will include a column containing the file name that was parsed. Default is FALSE.}
 
-\item{addGroup}{If set the returned data frame will include a group column with a group number based on minimization and covariance step success. Default is FALSE}
-
-\item{...}{Further options passed to read.csv
+\item{addGroup}{If set the returned data frame will include a group column with a group number based on minimization and covariance step success. Default is FALSE
 
 parseRawres()}
 }

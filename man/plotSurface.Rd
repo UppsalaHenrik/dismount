@@ -5,8 +5,8 @@
 \title{plotSurface}
 \usage{
 plotSurface(plotlyUsername, plotlyKey, modFilePath,
-  paramsToCompare = c("Param1", "Param2"), resol = 10, local = FALSE,
-  ofvScaling = FALSE, slurm_partition = "standard", cleanLevel = 4,
+  paramsToCompare = c("Param1", "Param2"), resol = 10, ofvScaling = FALSE,
+  absolute = FALSE, slurm_partition = "standard", cleanLevel = 4,
   plotOrigVals = FALSE, ...)
 }
 \arguments{
@@ -21,6 +21,8 @@ plotSurface(plotlyUsername, plotlyKey, modFilePath,
 \item{resol}{Resolution on each axis. Default is 10 and will use 10^2 = 100 sets of parameter values, NONMEM runs, and ofv values to create the plot.}
 
 \item{ofvScaling}{If true OFVs are scaled to between zero and one. Default is FALSE.}
+
+\item{absolute}{Whether or not to take the absolute value of all parameter values before constructing the input file. Default is FALSE.}
 
 \item{cleanLevel}{PsN clean script will be run on the parallel retries folder. See psn_clean documentation. Default is 4, the highest cleaning level.}
 
