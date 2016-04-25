@@ -41,14 +41,44 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
   
   print("Parsing OFVs")
   rawresPath <- findRawres(dirName)
-  ofvVector <- parseRawresOfvs(rawresPath)
+  rawres <- parseRawres(rawresPath, cols = c(paramsToCompare, "ofv"), skipRows = 1)
+
+  xParamValsInput <- rawresInputList[[2]]
+  xParamValsOutput <- order(unique(rawres[[paramsToCompare[1]]]))
+  
+  yParamValsInput <- rawresInputList[[3]]
+  yParamValsOutput <- order(unique(rawres[[paramsToCompare[2]]]))
+  
+  
+  # Checking that input and output parameter values are the same (NONMEM does change them sometimes)
+  sapply(seq_along(xParamValsInput), function(x){
+    
+    if(!identical(xParamValsInput[x], xParamValsOutput[x])){
+      paramMessage <- paste("Input and output values are different:\n", 
+                            "Input ", x, ":", xParamValsInput[x],
+                            "Output ", x, ":", xParamValsOuput[x],
+                            "Using output values") 
+      print(paramMessage)
+    }
+  })
+  sapply(seq_along(yParamValsInput), function(x){
+    
+    if(!identical(yParamValsInput[x], yParamValsOutput[x])){
+      paramMessage <- paste("Input and output values are different:\n", 
+                            "Input ", x, ":", yParamValsInput[x],
+                            "Output ", x, ":", yParamValsOuput[x],
+                            "Using output values") 
+      print(paramMessage)
+    }
+  })
   
   plotTitle <- paste0("\n<b>OFV Surface for ", modFilePath, "</b><br>", resol, "x", resol, 
                       "resolution. Retries folder ", dirName)
   
   print("Creating Plotly plot")
-  plotlyObj <- createPlotlyObj(ofvVector, xParamVals = rawresInputList[[2]], 
-                               yParamVals = rawresInputList[[3]], 
+  plotlyObj <- createPlotlyObj(ofvVector = rawres[["ofv"]], 
+                               xParamVals = xParamValsOutput, 
+                               yParamVals = yParamValsOutput, 
                                origVals = rawresInputList[[4]],
                                plotOrigVals = plotOrigVals,
                                paramsToCompare = paramsToCompare,
@@ -56,9 +86,7 @@ plotSurface <- function(plotlyUsername, plotlyKey, modFilePath,
                                plotTitle = plotTitle)
   
   plotly_POST(plotlyObj, fileopt = "new")
-  
-  # write(url, file = paste0(dirName, "_URL", ".txt"))
-  
+
   # Clean up using the psn_clean 
   print(paste("Cleaning up", dirName, "with level =", cleanLevel))
   runPsnClean(dirName, level = cleanLevel, interact = FALSE)

@@ -2,6 +2,7 @@
 #'
 #' This is a wrapper function for parallel_retries in PsN
 #' @param modFileName The model to run parallel retries on. Only one permitted.
+#' @param paraRetriesCmd Command or path used to run parallel retries. Default is "parallel_retries" which assumes the PsN directory is on the PATH.
 #' @param dir The directory to run in. Defaults to "para_retries_<date>_<time>".
 #' @param clean The post-run clean-up level. Exactly wrapping the PsN option. Defaults to 2.
 #' @param threads The number of threads to use. Exactly wrapping the PsN option. Defaults to 100.
@@ -12,7 +13,8 @@
 #' @export
 #'
 
-runParaRetries <- function(modFileName, dir = paste0("para_retries_", format(Sys.time(), "%y%m%d_%H%M%S")),
+runParaRetries <- function(modFileName, paraRetriesCmd = "parallel_retries", 
+                           dir = paste0("para_retries_", format(Sys.time(), "%y%m%d_%H%M%S")),
                            clean = 2, threads = 100, min_retries = 1, degree = 0.1,
                            slurm_partition = "standard", rawres_input = "", seed = format(Sys.time(), "%Y%m%d"),
                            local = FALSE, nm_output = NULL){
@@ -34,14 +36,7 @@ runParaRetries <- function(modFileName, dir = paste0("para_retries_", format(Sys
     extraNMOutputs <- ""
   }
 
-  paraRetriesCmd <- "perl /blue/home/USER/bjuny231/PrecondProject/_HackedPsN7/PsN4_4_ver_YA/bin/parallel_retries "
-
   partition <- paste0(" -slurm_partition=", slurm_partition)
-
-  if(local == TRUE){
-    paraRetriesCmd <- "perl C:/Users/hnyberg/Dropbox/Doktorandsaker/PrecondProject/_hackedPsN7/PsN4_4/bin/parallel_retries "
-    partition <- ""
-  }
 
   # If there is a rawres input file supplied, and that file exists, use it and disregard min_retries.
   # If there isn't one, use the min_retries setting
@@ -50,8 +45,10 @@ runParaRetries <- function(modFileName, dir = paste0("para_retries_", format(Sys
          retriesOrInput <- paste0(" -min_retries=", min_retries))
 
   # Create the command
-  cmd <- paste0(paraRetriesCmd, modFileName, " -dir=", dir, retriesOrInput, " -clean=", clean,
-                perturbation, " -threads=", threads, " -seed=", seed, partition, extraNMOutputs)
+  cmd <- paste0(paraRetriesCmd, " ", modFileName, " -dir=", dir, 
+                retriesOrInput, " -clean=", clean,
+                perturbation, " -threads=", threads, " -seed=", 
+                seed, partition, extraNMOutputs)
 
   # Print the command to command line
   print(cmd)
