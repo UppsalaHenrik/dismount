@@ -17,7 +17,7 @@ runParaRetries <- function(modFileName, paraRetriesCmd = "parallel_retries",
                            dir = paste0("para_retries_", format(Sys.time(), "%y%m%d_%H%M%S")),
                            clean = 2, threads = 100, min_retries = 1, degree = 0.1,
                            slurm_partition = "standard", rawres_input = "", seed = format(Sys.time(), "%Y%m%d"),
-                           nm_output = NULL){
+                           nm_output = NULL, wait = TRUE){
 
   # Test that degree is not outside its bounds
   if(degree <= 0 || degree >= 1){
@@ -54,7 +54,7 @@ runParaRetries <- function(modFileName, paraRetriesCmd = "parallel_retries",
   print(cmd)
 
   # Run the command
-  system(cmd, intern=FALSE, wait=TRUE)
+  system(cmd, intern = FALSE, wait = wait)
 
   return(dir)
 }

@@ -5,21 +5,29 @@
 \title{Full workflow with parallel retries, result categorization and dismount/precond run}
 \usage{
 dismountWorkflow(modFileName, retries = 9, doParaRetries = TRUE,
-  doPrecond = FALSE, doDismount = TRUE, rerunDirName, degree = 0.99,
-  seed = 20150821)
+  doPrecond = FALSE, doDismount = TRUE, doCompParaRetries = TRUE,
+  rerunDirName, degree = 0.99, seed = 20160504, dismountPertDirection = 1)
 }
 \arguments{
 \item{modFileName}{The model file to use. Default is "run83.mod".}
 
-\item{retries}{The number of retries to run as part of the initial parallel retries.}
+\item{retries}{The number of retries to run as part of the initial parallel 
+retries.}
 
-\item{doParaRetries}{Whether or not the parallel retries should be run. Default is TRUE. If FALSE then a rerunDirName is expected.}
+\item{doParaRetries}{Whether or not the parallel retries should be run. 
+Default is TRUE. If FALSE then a rerunDirName is expected.}
 
-\item{doPrecond}{Whether or not preconditioning should be run on all samples. Default is FALSE}
+\item{doPrecond}{Whether or not preconditioning should be run on all 
+samples. Default is FALSE}
 
-\item{doDismount}{Whether or not dismount should be run on all samples. Default is TRUE.}
+\item{doDismount}{Whether or not dismount should be run on all samples. 
+Default is TRUE.}
 
-\item{rerunDirName}{If doParaRetries is FALSE, then this directory will be assumed to contain a parallel retries run with model files and outputs to use for dismount and/or precond. No default.}
+\item{rerunDirName}{If doParaRetries is FALSE, then this directory will be 
+assumed to contain a parallel retries run with model files and outputs to 
+use for dismount and/or precond. No default.}
+
+\item{dismountPertDirection}{Perturbation direction.}
 }
 \description{
 Full workflow with parallel retries, result categorization and dismount/precond run

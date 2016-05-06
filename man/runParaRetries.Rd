@@ -8,7 +8,7 @@ runParaRetries(modFileName, paraRetriesCmd = "parallel_retries",
   dir = paste0("para_retries_", format(Sys.time(), "\%y\%m\%d_\%H\%M\%S")),
   clean = 2, threads = 100, min_retries = 1, degree = 0.1,
   slurm_partition = "standard", rawres_input = "",
-  seed = format(Sys.time(), "\%Y\%m\%d"), nm_output = NULL)
+  seed = format(Sys.time(), "\%Y\%m\%d"), nm_output = NULL, wait = TRUE)
 }
 \arguments{
 \item{modFileName}{The model to run parallel retries on. Only one permitted.}

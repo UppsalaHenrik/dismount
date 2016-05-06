@@ -3,12 +3,18 @@
 #'
 #'
 #' @param modFileName The model file to use. Default is "run83.mod".
-#' @param retries The number of retries to run as part of the initial parallel retries.
-#' @param doParaRetries Whether or not the parallel retries should be run. Default is TRUE. If FALSE then a rerunDirName is expected.
-#' @param doPrecond Whether or not preconditioning should be run on all samples. Default is FALSE
-#' @param doDismount Whether or not dismount should be run on all samples. Default is TRUE.
-#' @param rerunDirName If doParaRetries is FALSE, then this directory will be assumed to contain a parallel retries run with model files and outputs to use for dismount and/or precond. No default.  
-#'
+#' @param retries The number of retries to run as part of the initial parallel 
+#' retries.
+#' @param doParaRetries Whether or not the parallel retries should be run. 
+#' Default is TRUE. If FALSE then a rerunDirName is expected.
+#' @param doPrecond Whether or not preconditioning should be run on all 
+#' samples. Default is FALSE
+#' @param doDismount Whether or not dismount should be run on all samples. 
+#' Default is TRUE.
+#' @param rerunDirName If doParaRetries is FALSE, then this directory will be 
+#' assumed to contain a parallel retries run with model files and outputs to 
+#' use for dismount and/or precond. No default.  
+#' @param dismountPertDirection Perturbation direction.
 #'
 #' @export
 #'
@@ -16,8 +22,9 @@
 #'
 
 dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE, 
-                             doPrecond = FALSE, doDismount = TRUE, rerunDirName,
-							 degree = 0.99, seed = 20150821){
+                             doPrecond = FALSE, doDismount = TRUE,
+                             doCompParaRetries = TRUE, rerunDirName,
+                             degree = 0.99, seed = 20160504, dismountPertDirection = 1){
   
   # Save the current working directory for later
   userWD <- getwd()
@@ -25,7 +32,11 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   #Set up folders for the workflow
   dismountRunsDir <- "dismountRuns"
   precondRunsDir <- "precondRuns"
-  modFileNameNoExt <- fileSysSetup(modFileName, "massRun", c(dismountRunsDir, precondRunsDir))
+  compParaRetriesDir <- "compParaRetries"
+  modFileNameNoExt <- fileSysSetup(modFileName, "massRun", c(dismountRunsDir, 
+                                                             precondRunsDir, 
+                                                             compParaRetriesDir))
+  
   
   workflowWD <- getwd()
   
@@ -33,8 +44,11 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   if(doParaRetries){
     print("Running parallel retries")
     paraRetriesDirName <- runParaRetries(modFileName, min_retries = retries, degree = degree,
-                                         slurm_partition = "standard", local = FALSE, 
-                                         nm_output = c("rmt", "ext"), seed = seed)
+                                         paraRetriesCmd = paste0("perl /blue/home/USER/bjuny231/",
+                                                                 "PrecondProject/_HackedPsN7/",
+                                                                 "PsN4_4_ver_YA/bin/parallel_retries"),
+                                         slurm_partition = "standard", nm_output = c("rmt", "ext"), 
+                                         seed = seed)
     
     # Wait for the queue to have only the master job left
     waitForSlurmQ(targetLength = 1)
@@ -62,8 +76,20 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   
   # List the Retry files for dismount and/or precond runs
   # This might need to be more strict
-  retryModFilePaths <- list.files(path = paraRetriesDirName, pattern = "retry.+mod$")
-  retryFilePaths <- list.files(path = paraRetriesDirName, pattern = "retry.+$")
+  retryModFilePaths <- list.files(path = paraRetriesDirName, 
+                                  pattern = "retry.+mod$")
+  retryFilePaths <- list.files(path = paraRetriesDirName, 
+                               pattern = "retry.+$")
+  
+  
+  # Initialize a list to store all the OFVs from the different procedures
+  ofvList <- list()
+  
+  #add paraRetriesOfvs to that list 
+  paraRetriesOfvs <- cbind(retry = paraRetriesRawresNoNA$retry, 
+                           paraRetriesOfv = paraRetriesRawresNoNA$ofv)
+  
+  ofvList[length(ofvList)+1] <- list(paraRetriesOfvs)
   
   if(doPrecond){
     
@@ -101,59 +127,105 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     
     write.csv(precondRawres, "precondRawres.csv", row.names = FALSE)
     
+    precondOfvs <- cbind(retry = precondRawres$retry, 
+                         precondOfv = precondRawres$ofv)
+    
+    ofvList[length(ofvList)+1] <- list(precondOfvs)
+    
   }
-
   
   if(doDismount){  
-    # Copy those files into the dismount runs directory
-    file.copy(paste0(paraRetriesDirName, "/", retryFilePaths), dismountRunsDir)
     
     # Set the dismount runs directory as WD
     setwd(dismountRunsDir)
     
-    # Run dismount on the models
-    dismountDirList <- sapply(retryModFilePaths, runDismount)
+    dismountOfvsList <- lapply(dismountPertDirection, function(x){
+      
+      
+      dismountOfvs <- workflowDismountRuns(paraRetriesDirName, 
+                                           retryFilePaths, retryModFilePaths, 
+                                           x)  
+      
+    })
+    
+    # Merge the list, compare the ofvs and put together a data frame with the 
+    # lowest ofvs from the different directions.
+    dismountOfvPairs <- Reduce(function(...) merge(..., by = "retry", all = TRUE), 
+                               dismountOfvsList)
+    
+    dismountOfvs <- data.frame(dismountOfvPairs$retry,
+                               pmin(dismountOfvPairs$ofv.x, 
+                                    dismountOfvPairs$ofv.y, 
+                                    na.rm = TRUE))
+    
+    names(dismountOfvs) <- c("retry", "ofv")
+    
+    # Add the dismount OFVs to the list of ofvs to compare
+    ofvList[length(ofvList)+1] <- list(dismountOfvs)
+    
+    #Set back the wd
+    setwd(workflowWD)
+  }
+  
+  if(doCompParaRetries){
+    
+    # Copy those files into the precond runs directory
+    file.copy(paste0(paraRetriesDirName, "/", retryFilePaths), compParaRetriesDir)
+    
+    # Set the comp para retries directory as WD
+    setwd(compParaRetriesDir)
+    
+    # Run para retries
+    compParaRetriesDirList <- sapply(retryModFilePaths, runParaRetries)
     # I've had issues with the runs not strting before I start the wait below, so here is a little initial wait
     Sys.sleep(10)
     
     # Wait for the queue to have only the master job left
     waitForSlurmQ(targetLength = 1)
+    Sys.sleep(5)
     
-    # Find and parse the rawres files, and then put them together
-    dismountRawresFiles <- list.files(recursive = TRUE)[grep("pert_init_est_modelfit/raw_results.csv", list.files(recursive = TRUE))]
-    dismountRawresList <- lapply(dismountRawresFiles, parseRawres)
-    dismountRawres <- do.call("rbind", dismountRawresList)
+    # Here I use the ext files rather than the rawres files
+    extFiles <- list.files(pattern = ".+retr.+.ext$")
     
-    dismountRetry <- as.numeric(gsub("/.+$", "", gsub(".+retry", "", dismountRawres$rawresPath)))
+    paraRetriesCompOfvRows <- lapply(extFiles, function(x){
+      
+      retry <- gsub("^.+retry", "", x)
+      retry <- as.integer(gsub("\\....$", "", retry))
+      
+      extFileDFList <- parseExtFile(x)
+      
+      # Get the last table in the ext file
+      extFileDF <- extFileDFList[[length(extFileDFList)]]
+      
+      # Pick out the final parameter values row
+      paramVectorRow <- subset(extFileDF, ITERATION == -1e+9)
+      
+      # Pick out the OBJ values and package it with the original values of paramsToCompare
+      paraRetriesCompOfv <- cbind(paramVectorRow[length(paramVectorRow)])
+      
+      print(x)
+      
+      ofvRow <- unlist(c(retry, paraRetriesCompOfv))
+      names(ofvRow) <- c("retry", "paraRetriesCompOfv")
+      
+      return(ofvRow)
+      
+    })
     
-    dismountRawres <- cbind(dismountRawres, retry = dismountRetry)
+    compParaRetriesOfvs <- data.frame(do.call("rbind", paraRetriesCompOfvRows))
     
-    dismountRawres <- assignExecutionGroups(dismountRawres)
-        
     setwd(workflowWD)
     
-    write.csv(dismountRawres, "dismountRawres.csv", row.names = FALSE)
+    write.csv(compParaRetriesOfvs, "compParaRetriesOfvs.csv", row.names = FALSE)
+    
+    ofvList[length(ofvList)+1] <- list(compParaRetriesOfvs)
   }
-
   
-  # I need to put together an OFV comparison DF.
+  # I put together an OFV comparison DF and write it out for future reference.
   
-  paraRetriesOFVsGroups <- cbind(retry = paraRetriesRawresNoNA$retry, 
-                                 paraRetriesOFV = paraRetriesRawresNoNA$ofv,
-                                 paraRetriesGroup = paraRetriesRawresNoNA$group)
+  compOfvs <- Reduce(function(x, y) merge(x, y, all=TRUE), ofvList)
   
-  precondOFVsGroups <- cbind(retry = precondRawres$retry, 
-                             precondOFV = precondRawres$ofv,
-                             precondGroup = precondRawres$group)
-  
-  dismountOFVsGroups <- cbind(retry = dismountRawres$retry, 
-                              dismountOFV = dismountRawres$ofv,
-                              dismountGroup = dismountRawres$group)
-  
-  compOFVsGroups <- merge(merge(paraRetriesOFVsGroups, precondOFVsGroups, by = "retry"), 
-                          dismountOFVsGroups, by = "retry")
-  
-  write.csv(compOFVsGroups, "OFVandGroupComparison.csv", row.names = FALSE)
+  write.csv(compOfvsGroups, "OFVandGroupComparison.csv", row.names = FALSE)
   
   setwd(userWD)
   

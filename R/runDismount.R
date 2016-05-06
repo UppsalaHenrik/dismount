@@ -8,6 +8,7 @@
 #' @param wait Wraps the wait option in system(), which specifies whether to
 #' wait for the system call to complete before continuing in R (TRUE) or not
 #' wait after submission (FALSE). Default is FALSE
+#' @param pertDir Perturbation direction. 1 for standard and 0 (or any other) for opposite
 #' @param logging Whether to log the command line outputs to a text file or not. Default is FALSE.
 #'
 #' runDismount()
@@ -22,8 +23,10 @@
 
 # I should rewrite this better... para retries run function would be the example to look at
 
-runDismount <- function(modelFileName, dismountPath = "/blue/home/USER/yasao745/PsN4_4_ver_YA/bin/isestimable", 
-                        wait = FALSE, logging = FALSE, runOnSlurm = FALSE){
+runDismount <- function(modelFileName, dismountPath = paste0("/blue/home/USER/",
+                                                             "yasao745/PsN4_4_ver_YA/",
+                                                             "bin/isestimable"), 
+                        wait = FALSE, pertDir = 1, logging = FALSE, runOnSlurm = FALSE){
 
   # Wait for the SLURM queue to have less than 100 runs in it
   waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
@@ -47,7 +50,7 @@ runDismount <- function(modelFileName, dismountPath = "/blue/home/USER/yasao745/
 
   cmd <- paste0("perl ", dismountPath, " ",
                 basename(as.character(modelFileName)), " -dir=", dir, runOnSlurmOpt, 
-                logOpt)
+                " -pertDir=", pertDir, logOpt)
 
   # Print the command to command line
   print(cmd)
