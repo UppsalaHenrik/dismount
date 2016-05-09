@@ -14,7 +14,7 @@
 #' @param rerunDirName If doParaRetries is FALSE, then this directory will be 
 #' assumed to contain a parallel retries run with model files and outputs to 
 #' use for dismount and/or precond. No default.  
-#' @param dismountPertDirection Perturbation direction.
+#' @param dismountPertDirections Perturbation direction.
 #'
 #' @export
 #'
@@ -24,7 +24,7 @@
 dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE, 
                              doPrecond = FALSE, doDismount = TRUE,
                              doCompParaRetries = TRUE, rerunDirName,
-                             degree = 0.99, seed = 20160504, dismountPertDirection = 1){
+                             degree = 0.99, seed = 20160504, dismountPertDirections = 1){
   
   # Save the current working directory for later
   userWD <- getwd()
@@ -136,15 +136,17 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   
   if(doDismount){  
     
+    # Copy the retries files into the precond runs directory
+    file.copy(paste0(paraRetriesDirName, "/", retryFilePaths), dismountRunsDir)
+    
     # Set the dismount runs directory as WD
     setwd(dismountRunsDir)
     
-    dismountOfvsList <- lapply(dismountPertDirection, function(x){
+    # Run dismount on all the retries
+    dismountOfvsList <- lapply(dismountPertDirections, function(x){
       
-      
-      dismountOfvs <- workflowDismountRuns(paraRetriesDirName, 
-                                           retryFilePaths, retryModFilePaths, 
-                                           x)  
+      dismountOfvs <- workflowDismountRuns(retryModFilePaths, 
+                                           dismountPertDirection = x)  
       
     })
     

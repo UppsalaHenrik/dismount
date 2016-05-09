@@ -1,8 +1,7 @@
 
 
 
-workflowDismountRuns <- function(paraRetriesDirName, 
-                                 retryFilePaths, retryModFilePaths, 
+workflowDismountRuns <- function(retryModFilePaths, 
                                  dismountPertDirection){
 
   # Save current working directory, create a subdirectory, copy the model files 
@@ -20,6 +19,8 @@ workflowDismountRuns <- function(paraRetriesDirName,
   dismountDirList <- sapply(retryModFilePaths, function(x){
     
     runDismount(x, pertDir = dismountPertDirection)
+    
+    Sys.sleep(0.5)
     
   })
 
