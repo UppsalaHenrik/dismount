@@ -29,7 +29,7 @@ workflowDismountRuns <- function(retryModFilePaths,
   Sys.sleep(10)
   
   # Wait for the queue to have only the master job left
-  waitForSlurmQ(targetLength = 1)
+  waitForSlurmQ(targetLength = 0)
   
   # Expected rawres file path
   dismountRawresPath <- "pert_init_est_modelfit/raw_results.csv"

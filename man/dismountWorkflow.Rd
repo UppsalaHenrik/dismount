@@ -6,7 +6,8 @@
 \usage{
 dismountWorkflow(modFileName, retries = 9, doParaRetries = TRUE,
   doPrecond = FALSE, doDismount = TRUE, doCompParaRetries = TRUE,
-  rerunDirName, degree = 0.99, seed = 20160504, dismountPertDirection = 1)
+  rerunDirName, degree = 0.99, seed = 20160504,
+  dismountPertDirections = 1)
 }
 \arguments{
 \item{modFileName}{The model file to use. Default is "run83.mod".}
@@ -27,7 +28,7 @@ Default is TRUE.}
 assumed to contain a parallel retries run with model files and outputs to 
 use for dismount and/or precond. No default.}
 
-\item{dismountPertDirection}{Perturbation direction.}
+\item{dismountPertDirections}{Perturbation direction.}
 }
 \description{
 Full workflow with parallel retries, result categorization and dismount/precond run
