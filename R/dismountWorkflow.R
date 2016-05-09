@@ -156,8 +156,8 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                                dismountOfvsList)
     
     dismountOfvs <- data.frame(dismountOfvPairs$retry,
-                               pmin(dismountOfvPairs$ofv.x, 
-                                    dismountOfvPairs$ofv.y, 
+                               pmin(dismountOfvPairs$dismountOFV.x, 
+                                    dismountOfvPairs$dismountOFV.y, 
                                     na.rm = TRUE))
     
     names(dismountOfvs) <- c("retry", "ofv")
