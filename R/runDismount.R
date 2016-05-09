@@ -50,7 +50,7 @@ runDismount <- function(modelFileName, dismountPath = paste0("/blue/home/USER/",
 
   cmd <- paste0("srun perl ", dismountPath, " ",
                 basename(as.character(modelFileName)), " -dir=", dir, runOnSlurmOpt, 
-                "-run_on_slurm -pertDir=", pertDir, logOpt)
+                " -pertDir=", pertDir, logOpt)
 
   # Print the command to command line
   print(cmd)

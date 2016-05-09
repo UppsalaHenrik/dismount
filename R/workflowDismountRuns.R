@@ -18,7 +18,7 @@ workflowDismountRuns <- function(retryModFilePaths,
   # Run dismount on the models
   dismountDirList <- sapply(retryModFilePaths, function(x){
     
-    runDismount(x, pertDir = dismountPertDirection)
+    runDismount(x, pertDir = dismountPertDirection, runOnSlurm = TRUE)
     
     Sys.sleep(0.5)
     
@@ -38,7 +38,12 @@ workflowDismountRuns <- function(retryModFilePaths,
   dismountRawresFiles <- list.files(recursive = TRUE)[grep(dismountRawresPath, 
                                                            list.files(recursive = TRUE))]
   
-  dismountRawresList <- lapply(dismountRawresFiles, parseRawres(x))
+  dismountRawresList <- lapply(dismountRawresFiles, function(x){
+    
+    parseRawres(rawresPath = x, addPath = TRUE)
+    
+  })
+  
   dismountRawres <- do.call("rbind", dismountRawresList)
   
   # Parse the retry number from the path
