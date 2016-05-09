@@ -38,7 +38,7 @@ workflowDismountRuns <- function(retryModFilePaths,
   dismountRawresFiles <- list.files(recursive = TRUE)[grep(dismountRawresPath, 
                                                            list.files(recursive = TRUE))]
   
-  dismountRawresList <- lapply(dismountRawresFiles, parseRawres)
+  dismountRawresList <- lapply(dismountRawresFiles, parseRawres(x))
   dismountRawres <- do.call("rbind", dismountRawresList)
   
   # Parse the retry number from the path
