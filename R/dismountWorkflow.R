@@ -160,6 +160,10 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                                     dismountOfvPairs$dismountOFV.y, 
                                     na.rm = TRUE))
     
+    
+    ### TODO Set retry to 0 for the original, not NA.
+    
+    
     names(dismountOfvs) <- c("retry", "ofv")
     
     # Add the dismount OFVs to the list of ofvs to compare
@@ -227,7 +231,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   
   compOfvs <- Reduce(function(x, y) merge(x, y, all=TRUE), ofvList)
   
-  write.csv(compOfvsGroups, "OFVandGroupComparison.csv", row.names = FALSE)
+  write.csv(compOfvs, "OFVComparison.csv", row.names = FALSE)
   
   setwd(userWD)
   

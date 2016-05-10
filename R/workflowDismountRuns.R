@@ -50,6 +50,13 @@ workflowDismountRuns <- function(retryModFilePaths,
   dismountRetry <- as.numeric(gsub("/.+$", "", 
                                    gsub(".+retry", "", 
                                         dismountRawres$rawresPath)))
+
+  # I am correcting an NA to 0 for the original run. 
+  # This is potentially dangerous code... 
+  ### TODO Do this in a better way
+  if(is.na(dismountRetry)){
+    dismountRetry <- 0
+  }
   
   # Combine into a data frame
   dismountRawres <- cbind(dismountRawres, retry = dismountRetry)
