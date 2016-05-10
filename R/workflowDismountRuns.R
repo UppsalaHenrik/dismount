@@ -3,7 +3,7 @@
 
 workflowDismountRuns <- function(retryModFilePaths, 
                                  dismountPertDirection){
-
+  
   # Save current working directory, create a subdirectory, copy the model files 
   # to it and set it as wd
   cwd <- getwd()
@@ -23,7 +23,7 @@ workflowDismountRuns <- function(retryModFilePaths,
     Sys.sleep(0.5)
     
   })
-
+  
   # I've had issues with the runs not starting before I start the waitForSlurmQ 
   # below, so here is a little initial wait
   Sys.sleep(10)

@@ -239,5 +239,5 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   
   setwd(userWD)
   
-  return(list(workflowWD, compOfvs)
+  return(list(workflowWD, compOfvs))
 }
