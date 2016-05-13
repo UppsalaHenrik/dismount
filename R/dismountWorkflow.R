@@ -50,8 +50,11 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                                          slurm_partition = "standard", nm_output = c("rmt", "ext"), 
                                          seed = seed)
     
+    #An initial wait for it to reach the queue. One thenth of a second per job is assumed as minimum
+    Sys.sleep(retries)
+    
     # Wait for the queue to have only the master job left
-    waitForSlurmQ(targetLength = 1)
+    waitForSlurmQ(targetLength = 0)
   }else{
     
     paraRetriesDirName <- rerunDirName
