@@ -51,7 +51,7 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                                          seed = seed)
     
     #An initial wait for it to reach the queue. One thenth of a second per job is assumed as minimum
-    Sys.sleep(retries)
+    Sys.sleep(retries/10)
     
     # Wait for the queue to have only the master job left
     waitForSlurmQ(targetLength = 0)
@@ -175,6 +175,11 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     
     #Set back the wd
     setwd(workflowWD)
+    
+    # Write out a file
+    write.csv(dismountOfvs, "dismountOfvs.csv", row.names = FALSE)
+    
+    
   }
   
   if(doCompParaRetries){
@@ -187,13 +192,21 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     setwd(compParaRetriesDir)
     
     # Run para retries
-    compParaRetriesDirList <- sapply(retryModFilePaths, runParaRetries)
+    compParaRetriesDirList <- sapply(retryModFilePaths, function(x){
+      
+      # Wait for the SLURM queue to have less than 100 jobs in it
+      waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
+      
+      runParaRetries(x, wait = FALSE)
+      
+    })
+    
     # I've had issues with the runs not strting before I start the wait below, 
     # so here is a little initial wait
     Sys.sleep(10)
     
     # Wait for the queue to have only the master job left
-    waitForSlurmQ(targetLength = 1)
+    waitForSlurmQ(targetLength = 0)
     Sys.sleep(5)
     
     # Here I use the ext files rather than the rawres files
@@ -239,6 +252,8 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   compOfvs <- Reduce(function(x, y) merge(x, y, all=TRUE), ofvList)
   
   write.csv(compOfvs, "OFVComparison.csv", row.names = FALSE)
+  
+  ### TODO Code the cleanup, either all here or in each subsection
   
   setwd(userWD)
   
