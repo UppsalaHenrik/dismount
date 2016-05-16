@@ -199,6 +199,8 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
       
       runParaRetries(x, wait = FALSE)
       
+      Sys.sleep(5)
+      
     })
     
     # I've had issues with the runs not strting before I start the wait below, 
