@@ -92,6 +92,9 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   paraRetriesOfvs <- cbind(retry = paraRetriesRawresNoNA$retry, 
                            paraRetriesOfv = paraRetriesRawresNoNA$ofv)
   
+  write.csv(paraRetriesOfvs, "paraRetriesOfvs.csv", row.names = FALSE)
+  
+  
   ofvList[length(ofvList)+1] <- list(paraRetriesOfvs)
   
   if(doPrecond){
