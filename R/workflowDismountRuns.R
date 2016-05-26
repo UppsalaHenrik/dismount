@@ -18,7 +18,8 @@ workflowDismountRuns <- function(retryModFilePaths,
   # Run dismount on the models
   dismountDirList <- sapply(retryModFilePaths, function(x){
     
-    runDismount(x, pertDir = dismountPertDirection, runOnSlurm = TRUE)
+    runDismount(x, pertDir = dismountPertDirection, 
+                runOnSlurm = TRUE)
     
     Sys.sleep(0.5)
     

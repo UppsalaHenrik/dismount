@@ -198,7 +198,9 @@ dismountWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     compParaRetriesDirList <- sapply(retryModFilePaths, function(x){
       
       # Wait for the SLURM queue to have less than 100 jobs in it
-      waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
+      waitForSlurmQ(targetLength=100)
+      
+      system(paste0("update_inits ", x))
       
       runParaRetries(x, wait = FALSE)
       
