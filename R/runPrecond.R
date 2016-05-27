@@ -18,7 +18,7 @@ runPrecond <- function(modelFileName, precondScriptPath = "precond",
   modelFileNameNoExt <- sub("\\.[[:alnum:]]+$", "", basename(as.character(modelFileName)))
 
   # Wait for the SLURM queue to have less than 100 runs in it
-  waitForSlurmQ(targetLength=100, secsToWait=5, maxWaits=12)
+  waitForSlurmQ(targetLength=40)
 
   # Create a dir name to use
   dirName <- paste0(modelFileNameNoExt, 
