@@ -15,7 +15,7 @@
 #'
 #' @author Henrik Bjugård Nyberg - henrik.b.nyberg@@farmbio.uu.se
 
-waitForSlurmQ <- function(targetLength = 0, secsToWait = 30, maxWaits = 20){
+waitForSlurmQ <- function(targetLength = 0, secsToWait = 30, maxWaits = 60){
 
   # Set initial state
   keepWaiting <- TRUE
