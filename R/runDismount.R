@@ -59,7 +59,7 @@ runDismount <- function(modelFileName, dismountPath = paste0("/blue/home/USER/",
   system(cmd, intern = FALSE, wait = wait)
 
   # Sleep a tenth of a second to not overload the system.
-  Sys.sleep(0.1)
+  Sys.sleep(2)
   
   return(dir)
 }
