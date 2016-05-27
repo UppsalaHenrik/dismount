@@ -28,8 +28,8 @@ runDismount <- function(modelFileName, dismountPath = paste0("/blue/home/USER/",
                                                              "bin/isestimable"), 
                         wait = FALSE, pertDir = 1, logging = FALSE, runOnSlurm = FALSE){
 
-  # Wait for the SLURM queue to have less than 100 runs in it
-  waitForSlurmQ(targetLength=40)
+  # Wait for the SLURM queue to have less than a certain number of runs in it
+  waitForSlurmQ(targetLength=30)
 
 
   if(logging){
