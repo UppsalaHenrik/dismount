@@ -1,4 +1,4 @@
-
+#' @export
 
 
 workflowDismountRuns <- function(retryModFilePaths, 
