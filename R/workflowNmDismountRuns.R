@@ -30,7 +30,7 @@ workflowNmDismountRuns <- function(retryModFilePaths, saddleReset, saddleHess,
   waitForSlurmQ(targetLength = 0)
   
   # Expected rawres file path
-  nmDismountRawresPath <- "/raw_results.csv"
+  nmDismountRawresPath <- "raw_results_.+csv$"
   
   # Find and parse the rawres files, and then put them together
   nmDismountRawresFiles <- list.files(recursive = TRUE)[grep(nmDismountRawresPath, 
