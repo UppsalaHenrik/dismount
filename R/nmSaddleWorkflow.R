@@ -106,7 +106,7 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     # Spin over all the combinations of saddleReset and saddleHess
     saddleOptionDf <- expand.grid(saddleReset, saddleHess)
     
-    apply(saddleOptionDf, 1, function(x){
+    nmDismountOfvsList <-apply(saddleOptionDf, 1, function(x){
       
       # Create the directrory and set wd to it
       dirName <- paste0("reset", x[1], "_hess", x[2])
@@ -120,13 +120,9 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
       
       # set wd back to the nmDismount
       setwd(wd)
+      
+      return(ofvs)
     })
-    
-    nmDismountOfvsList <- 
-      
-      
-      workflowNmDismountRuns
-    
   }
   
   
