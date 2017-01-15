@@ -1,16 +1,17 @@
 
 
-setSaddleReset <- function(modFilePath, saddleReset = 1){
+setSaddleReset <- function(modFilePath, saddleReset = 1, printMessage = TRUE){
   
   # Check that the file exists
   if(!file.exists(modFilePath)){
     stop("File ", modFilePath, " not found.")
   }
   
+  if(printMessage){
   # Print a message
   print(paste0("Preparing model file ", modFilePath, " by ",
                "setting SADDLE_RESET=", saddleReset))
-  
+  }
   modFileOrig <- readLines(modFilePath)
   
   # Get the $ statement rows. 
@@ -26,7 +27,10 @@ setSaddleReset <- function(modFilePath, saddleReset = 1){
   estRows <- modFileOrig[estRowsList]
   
   # Check for existing instances of SADDLE_RESET and remove them
-  gsub("\\s+SADDLE_RESET=[0-9]+\\s", " ", estRows)
+  estRows <- gsub("SADDLE_RESET=[0-9]+\\s", " ", estRows)
+  
+  # Clean up whitespace
+  estRows <- gsub("\\s+", " ", estRows)
   
   # Add the new SADDLE_RESET option last on the first row.
   newEstRows <- estRows
@@ -42,17 +46,18 @@ setSaddleReset <- function(modFilePath, saddleReset = 1){
 }
 
 
-setSaddleHess <- function(modFilePath, saddleHess = 1){
+setSaddleHess <- function(modFilePath, saddleHess = 1, printMessage = TRUE){
   
   # Check that the file exists
   if(!file.exists(modFilePath)){
     stop("File ", modFilePath, " not found.")
   }
   
-  # Print a message
-  print(paste0("Preparing model file ", modFilePath, " by ",
-               "setting SADDLE_HESS=", saddleHess))
-  
+  if(printMessage){
+    # Print a message
+    print(paste0("Preparing model file ", modFilePath, " by ",
+                 "setting SADDLE_HESS=", saddleHess))
+  }
   modFileOrig <- readLines(modFilePath)
   
   # Get the $ statement rows. 
@@ -68,7 +73,10 @@ setSaddleHess <- function(modFilePath, saddleHess = 1){
   estRows <- modFileOrig[estRowsList]
   
   # Check for existing instances of SADDLE_HESS and remove them
-  gsub("\\s+SADDLE_HESS=[0-9]+\\s", " ", estRows)
+  estRows <- gsub("SADDLE_HESS=[0-9]+\\s", " ", estRows)
+
+  # Clean up whitespace
+  estRows <- gsub("\\s+", " ", estRows)
   
   # Add the new SADDLE_HESS option last on the first row.
   newEstRows <- estRows
