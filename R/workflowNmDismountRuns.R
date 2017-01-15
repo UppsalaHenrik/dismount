@@ -16,7 +16,7 @@ workflowNmDismountRuns <- function(retryModFilePaths, saddleReset, saddleHess,
   dismountDirList <- sapply(modFiles, function(x){
     dirName <- gsub("\\..+", "", x)
     
-    system(paste0("execute ", x, " -dir=", dirName))
+    system(paste0("execute ", x, " -dir=", dirName, " -nm_version=", nm_version))
     
     Sys.sleep(0.5)
     
