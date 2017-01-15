@@ -4,6 +4,10 @@
 workflowNmDismountRuns <- function(retryModFilePaths, saddleReset, saddleHess, 
                                    nm_version = "7_40_g51_alpha14"){
   
+  # Save current working directory, create a subdirectory, copy the model files 
+  # to it and set it as wd
+  cwd <- getwd()
+  
   # Set the right saddle options
   setModList <- sapply(retryModFilePaths, function(x){
     setSaddleReset(x, saddleReset, printMessage = FALSE)
