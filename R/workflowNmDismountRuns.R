@@ -28,7 +28,7 @@ workflowNmDismountRuns <- function(retryModFilePaths, saddleReset, saddleHess,
   
   # I've had issues with the runs not starting before I start the waitForSlurmQ 
   # below, so here is a little initial wait
-  Sys.sleep(10)
+  Sys.sleep(2)
   
   # Wait for the queue to have only the master job left
   waitForSlurmQ(targetLength = 0)
@@ -38,7 +38,7 @@ workflowNmDismountRuns <- function(retryModFilePaths, saddleReset, saddleHess,
   
   # Find and parse the rawres files, and then put them together
   nmDismountRawresFiles <- list.files(recursive = TRUE)[grep(nmDismountRawresPath, 
-                                                           list.files(recursive = TRUE))]
+                                                               list.files(recursive = TRUE))]
   
   nmDismountRawresList <- lapply(nmDismountRawresFiles, function(x){
     
@@ -50,8 +50,8 @@ workflowNmDismountRuns <- function(retryModFilePaths, saddleReset, saddleHess,
   
   # Parse the retry number from the path
   nmDismountRetry <- as.numeric(gsub("/.+$", "", 
-                                   gsub(".+retry", "", 
-                                        nmDismountRawres$rawresPath)))
+                                       gsub(".+retry", "", 
+                                            nmDismountRawres$rawresPath)))
   
   # I am correcting an NA to 0 for the original run. 
   # This is potentially dangerous code... 
@@ -75,11 +75,11 @@ workflowNmDismountRuns <- function(retryModFilePaths, saddleReset, saddleHess,
   # Move WD back to the parent dir and write out the rawres file
   setwd(cwd)
   
-  write.csv(nmDismountRawres, paste0(pertDirectionDirName, ".csv"), 
+  write.csv(nmDismountRawres, paste0("rawres_reset", saddleReset, "_hess", saddleHess, ".csv"), 
             row.names = FALSE)
   
-  nmDismountOFVs <- cbind(retry = nmDismountRawres$retry, 
-                        nmDismountOFV = nmDismountRawres$ofv)
+  nmDismountOFVs <- cbind(saddleReset = saddleReset, saddleHess = saddleHess,
+                          retry = nmDismountRawres$retry, nmDismountOFV = nmDismountRawres$ofv)
   
   return(nmDismountOFVs)
 }
