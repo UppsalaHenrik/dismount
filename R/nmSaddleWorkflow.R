@@ -110,17 +110,11 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
       
       # Create the directrory and set wd to it
       dirName <- paste0("reset", x[1], "_hess", x[2])
-      dir.create(dirName)
-      file.copy(list.files(), dirName)
-      wd <- getwd()
-      setwd(dirName)
-      
+
       # Run the Nonmem runs
-      ofvs <- workflowNmDismountRuns(list.files(pattern = ".mod$"), x[1], x[2])
-      
-      # set wd back to the nmDismount
-      setwd(wd)
-      
+      ofvs <- workflowNmDismountRuns(list.files(pattern = ".mod$"), dirName x[1], x[2])
+
+      # Return the OFVs
       return(ofvs)
     })
     
