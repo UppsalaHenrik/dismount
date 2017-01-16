@@ -7,6 +7,11 @@ setSaddleReset <- function(modFilePath, saddleReset = 1, printMessage = TRUE){
     stop("File ", modFilePath, " not found.")
   }
   
+  # Check that the saddleReset is an integer
+  if(!is.integer(saddleReset)){
+    stop("saddleReset value ", saddleReset, " is not an integer")
+  }
+  
   if(printMessage){
   # Print a message
   print(paste0("Preparing model file ", modFilePath, " by ",
@@ -51,6 +56,11 @@ setSaddleHess <- function(modFilePath, saddleHess = 1, printMessage = TRUE){
   # Check that the file exists
   if(!file.exists(modFilePath)){
     stop("File ", modFilePath, " not found.")
+  }
+  
+  # Check that saddleHess is an integer
+  if(!is.integer(saddleReset)){
+    stop("saddleHess value ", saddleHess, " is not an integer")
   }
   
   if(printMessage){
