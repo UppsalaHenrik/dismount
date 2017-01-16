@@ -112,7 +112,9 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
       dirName <- paste0("reset", x[1], "_hess", x[2])
 
       # Run the Nonmem runs
-      ofvs <- workflowNmDismountRuns(list.files(pattern = ".mod$"), dirName, x[1], x[2])
+      ofvs <- workflowNmDismountRuns(retryModFilePaths = list.files(pattern = ".mod$"), 
+                                     dirName = dirName, saddleReset = x[1], 
+                                     saddleHess = x[2])
 
       # Return the OFVs
       return(ofvs)
