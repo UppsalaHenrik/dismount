@@ -1,8 +1,8 @@
 #' @export
 
 
-workflowNmDismountRuns <- function(retryModFilePaths, dirName, saddleReset, saddleHess, 
-                                   dirName, nm_version = "7_40_g51_alpha14"){
+workflowNmDismountRuns <- function(retryModFilePaths, dirName, saddleReset, 
+                                   saddleHess, nm_version = "7_40_g51_alpha14"){
   
   # Save current working directory, create a subdirectory, copy the model files 
   # to it and set it as wd
