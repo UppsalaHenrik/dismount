@@ -18,8 +18,11 @@ workflowNmDismountRuns <- function(retryModFilePaths, saddleReset, saddleHess,
   modFileString <- paste(modFiles, collapse = " ")
   
   # Run dismount on the models
-  system(paste0("srun execute ", modFileString, " -dir=", dirName, 
-                " -nm_version=", nm_version))
+  cmd <- paste0("srun execute ", modFileString, " -dir=", dirName, 
+                " -nm_version=", nm_version)
+  print(paste("running command ", cmd))
+  
+  system(cmd)
 
   # I've had issues with the runs not starting before I start the waitForSlurmQ 
   # below, so here is a little initial wait
