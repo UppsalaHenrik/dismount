@@ -1,4 +1,5 @@
-
+#' @export
+#' 
 
 setSaddleReset <- function(modFilePath, saddleReset = 1, printMessage = TRUE){
   
