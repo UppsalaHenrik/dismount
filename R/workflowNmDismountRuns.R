@@ -40,8 +40,7 @@ workflowNmDismountRuns <- function(retryModFilePaths, dirName, saddleReset,
   nmDismountRawres <- cbind(modFileName = modFiles, nmDismountRawres)
   
   
-  nmDismountOFVs <- cbind(dirName = dirName, retry = nmDismountRawres$retry, 
-                          nmDismountOFV = nmDismountRawres$ofv)
+  nmDismountOFVs <- cbind(dirName = dirName, nmDismountOFV = nmDismountRawres$ofv)
   
   return(nmDismountOFVs)
 }
