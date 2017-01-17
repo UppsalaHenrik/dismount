@@ -19,7 +19,7 @@ workflowNmDismountRuns <- function(retryModFilePaths, dirName, saddleReset,
   
   # Run dismount on the models
   cmd <- paste0("srun execute ", modFileString, " -dir=", dirName, 
-                " -nm_version=", nm_version)
+                " -nm_version=", nm_version, " -threads=100")
   print(paste("running command ", cmd))
   
   system(cmd)
