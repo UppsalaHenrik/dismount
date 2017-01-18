@@ -187,13 +187,13 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     compParaRetriesDirList <- sapply(retryModFilePaths, function(x){
       
       # Wait for the SLURM queue to have less than a certain number of jobs in it
-      waitForSlurmQ(targetLength = 30)
+      waitForSlurmQ(targetLength = 20)
       
       system(paste0("update_inits ", x))
       
-      runParaRetries(x, wait = FALSE)
+      runParaRetries(x, wait = FALSE, extraOptions = "-nm_version=7_40_g51_alpha14")
       
-      Sys.sleep(5)
+      Sys.sleep(30)
       
     })
     
