@@ -183,6 +183,10 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     # Set the comp para retries directory as WD
     setwd(compParaRetriesDir)
     
+    # Run update on all of them to get the right initial values
+    # Not super clean since theoretically there could be other model files in this directory
+    system("update *.mod")
+    
     # Run para retries
     compParaRetriesDirList <- sapply(retryModFilePaths, function(x){
       
