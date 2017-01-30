@@ -1,3 +1,5 @@
+#' @export
+
 requeueJobs <- function(userName = "current", jobType = "SUSPENDED"){
   
   # Get the relevant job ids. This isn't perfect... unlist should go
