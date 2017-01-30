@@ -4,7 +4,7 @@
 \alias{waitForSlurmQ}
 \title{Wait for the SLURM queue to empty}
 \usage{
-waitForSlurmQ(targetLength = 0, secsToWait = 30, maxWaits = 20)
+waitForSlurmQ(targetLength = 0, secsToWait = 30, maxWaits = 60)
 }
 \arguments{
 \item{targetLength}{How many runs to leave in the queue.Default is 0.}

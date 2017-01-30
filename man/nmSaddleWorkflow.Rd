@@ -7,7 +7,8 @@
 nmSaddleWorkflow(modFileName, retries = 9, doParaRetries = TRUE,
   doDismount = FALSE, doNmDismount = TRUE, doCompParaRetries = TRUE,
   rerunDirName, degree = 0.99, seed = 20170115,
-  dismountPertDirections = 1, saddleReset = 0, saddleHess = 0)
+  dismountPertDirections = 1, saddleReset = 0, saddleHess = 0,
+  slurm_partition = "standard")
 }
 \arguments{
 \item{modFileName}{The model file to use. Default is "run83.mod".}

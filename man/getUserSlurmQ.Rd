@@ -4,14 +4,20 @@
 \alias{getUserSlurmQ}
 \title{Get SLURM queue for active user}
 \usage{
-getUserSlurmQ()
+getUserSlurmQ(userName = "current", extraSqueueOptions = "")
+}
+\arguments{
+\item{userName}{The user to get the queue for. Default is 
+the current user}
+
+\item{extraSqueueOptions}{Additional options to add to the 
+       squeue command. Default is empty string.
+
+getUserSlurmQ()}
 }
 \description{
 Gets the slurm queue for the user that is currently logged in.
 No options available. Returns a character string with the rows
 of the queue, including the header.
-}
-\details{
-getUserSlurmQ()
 }
 
