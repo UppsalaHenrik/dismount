@@ -18,7 +18,7 @@ requeueJobs <- function(userName = "current", jobType = "SUSPENDED"){
     print(paste("Requeing job number", x))
     
     # Build requeue command
-    cmd <- paste("scontrol requeue", jobIds)
+    cmd <- paste("scontrol requeue", x)
     
     # Execute command
     system(cmd , wait = FALSE, intern = FALSE)
