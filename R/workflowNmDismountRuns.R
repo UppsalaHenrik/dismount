@@ -2,7 +2,8 @@
 
 
 workflowNmDismountRuns <- function(retryModFilePaths, dirName, saddleReset, 
-                                   saddleHess, nm_version = "7_40_g51_alpha14"){
+                                   saddleHess, nm_version = "7_40_g51_alpha14",
+                                   slurm_partition = "standard"){
   
   # Save current working directory, create a subdirectory, copy the model files 
   # to it and set it as wd
@@ -19,7 +20,8 @@ workflowNmDismountRuns <- function(retryModFilePaths, dirName, saddleReset,
   
   # Run dismount on the models
   cmd <- paste0("srun execute ", modFileString, " -dir=", dirName, 
-                " -nm_version=", nm_version, " -threads=100")
+                " -nm_version=", nm_version, " -threads=100", 
+                " -slurm_partition=", slurm_partition)
   print(paste("running command ", cmd))
   
   system(cmd)

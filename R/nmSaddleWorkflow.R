@@ -23,7 +23,7 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                              doDismount = FALSE, doNmDismount = TRUE,
                              doCompParaRetries = TRUE, rerunDirName,
                              degree = 0.99, seed = 20170115, dismountPertDirections = 1,
-                             saddleReset = 0, saddleHess = 0){
+                             saddleReset = 0, saddleHess = 0, slurm_partition = "standard"){
   
   # Save the current working directory for later
   userWD <- getwd()
@@ -46,7 +46,7 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
                                          paraRetriesCmd = paste0("perl /blue/home/USER/bjuny231/",
                                                                  "PrecondProject/_HackedPsN7/",
                                                                  "PsN4_4_ver_YA/bin/parallel_retries"),
-                                         slurm_partition = "standard", nm_output = c("rmt", "ext"), 
+                                         slurm_partition = slurm_partition, nm_output = c("rmt", "ext"), 
                                          seed = seed)
     
     #An initial wait for it to reach the queue. One thenth of a second per job is assumed as minimum
@@ -114,7 +114,7 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
       # Run the Nonmem runs
       ofvs <- workflowNmDismountRuns(retryModFilePaths = list.files(pattern = ".mod$"), 
                                      dirName = dirName, saddleReset = x[1], 
-                                     saddleHess = x[2])
+                                     saddleHess = x[2], slurm_partition = slurm_partition)
 
       # Return the OFVs
       return(ofvs)
