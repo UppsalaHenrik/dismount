@@ -26,12 +26,14 @@ waitForSlurmQ <- function(targetLength = 0, secsToWait = 30, maxWaits = 60){
 
     # Get the slurm queue and check its length
     slurmQ <- getUserSlurmQ()
-    qLength <- length(slurmQ)
+    qLength <- nrow(slurmQ)
 
     # if it has no jobs in it end the while loop
     if(qLength - 1 <= targetLength){
       keepWaiting <- FALSE
-      qTargetMessage <- paste0("Queue has ", qLength - 1, " jobs (<=", targetLength, ") - ending wait.")
+      qTargetMessage <- paste0("Queue has ", qLength - 1, 
+                               " jobs (<=", targetLength, 
+                               ") - ending wait.")
       print(qTargetMessage)
       break
     }

@@ -5,7 +5,7 @@ requeueJobs <- function(userName = "current", jobType = "SUSPENDED"){
   # Get the relevant job ids. This isn't perfect... unlist should go
   extraOptionsString <- paste0('-t ', jobType, ' -o "%.10i"')
   jobIdsList <- getUserSlurmQ(userName, extraSqueueOptions = extraOptionsString)
-  jobIds <- unlist(jobIdsList)
+  jobIds <- unlist(jobIdsList, use.names = FALSE)
   
   # If there were no job ids, stop
   if(length(jobIds) == 0){
@@ -21,7 +21,7 @@ requeueJobs <- function(userName = "current", jobType = "SUSPENDED"){
     cmd <- paste("scontrol requeue", x)
     
     # Execute command
-    system(cmd , wait = FALSE, intern = FALSE)
+    system(cmd , wait = TRUE, intern = FALSE)
     
   })
   
