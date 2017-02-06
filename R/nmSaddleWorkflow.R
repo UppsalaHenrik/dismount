@@ -195,10 +195,11 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
       
       system(paste0("update_inits ", x))
       
-      runParaRetries(x, wait = FALSE, slurm_partition = slurm_partition, 
+      runParaRetries(x, wait = FALSE, min_retries = 2, 
+                     slurm_partition = slurm_partition, 
                      extraOptions = "-nm_version=7_40_g51_alpha14")
       
-      Sys.sleep(30)
+      Sys.sleep(10)
       
     })
     

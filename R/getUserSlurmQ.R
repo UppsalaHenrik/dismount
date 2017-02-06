@@ -31,8 +31,8 @@ getUserSlurmQ <- function(userName = "current", extraSqueueOptions = ""){
   # If there are no jobs in the queue, stop
   if(length(slurmQStringsAndHeader) <= 1){
     
-    stop("No jobs found in queue for user ", userName)
-    
+    print("No jobs found in queue for user ", userName)
+    return(NULL)
   }
   
   # Separate the non-header rows
