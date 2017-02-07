@@ -14,13 +14,19 @@ createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE){
   paraRetriesOfvs <- paraRetriesCsv$paraRetriesOfv
   paraRetriesRetry <- paraRetriesCsv$retry
   
+  # Check for compParaRetriesOfvs.csv and force compParaRetries to FALSE if not found
+  compParaRetriesCsvFileName <- "compParaRetriesOfvs.csv"
+  if(!file.exists(compParaRetriesCsvFileName)){
+    print(paste0("Could not find ", compParaRetriesCsvFileName, 
+                 ". Proceeding without compParaRetries."))
+  }
+  
   # Hardcoding a max length for now. Could parse command or count
   maxLength <- 1000
   length(paraRetriesOfvs) <- maxLength
   length(paraRetriesRetry) <- maxLength
   
   if(compParaRetries){
-    compParaRetriesCsvFileName <- "compParaRetriesOfvs.csv"
     compParaRetriesCsv <- read.csv(compParaRetriesCsvFileName, header = TRUE)
     compParaRetriesOfvs <- compParaRetriesCsv$paraRetriesCompOfv
     length(compParaRetriesOfvs) <- maxLength
@@ -83,7 +89,7 @@ createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE){
   
   row.names(percentageTable) <- c("Lowest OFV", "Higher OFV", "Failed")
   
-  write.csv(percentageTable, "percentageTable.csv", row.names = FALSE)
+  write.csv(percentageTable, "percentageTable.csv")
   
   setwd(userWd)
   
