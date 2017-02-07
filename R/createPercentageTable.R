@@ -1,6 +1,6 @@
 #' @export
 
-createPercentageTable <- function(wd = getwd()){
+createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE){
   
   userWd <- getwd()
   
@@ -10,22 +10,23 @@ createPercentageTable <- function(wd = getwd()){
   
   # First the initial parallel retries
   paraRetriesCsvFileName <- "paraRetriesOfvs.csv"
-  paraRetriesCsv <- read.csv(paraRetriesOfvsFileName, header = TRUE)
+  paraRetriesCsv <- read.csv(paraRetriesCsvFileName, header = TRUE)
   paraRetriesOfvs <- paraRetriesCsv$paraRetriesOfv
   paraRetriesRetry <- paraRetriesCsv$retry
-  
-  compParaRetriesCsvFileName <- "compParaRetriesOfvs.csv"
-  compParaRetriesCsv <- read.csv(compParaRetriesOfvsFileName, header = TRUE)
-  compParaRetriesOfvs <- compParaRetriesCsv$paraRetriesCompOfv
-  compParaRetriesRetry <- compParaRetriesCsv$retry
-  
   
   # Hardcoding a max length for now. Could parse command or count
   maxLength <- 1000
   length(paraRetriesOfvs) <- maxLength
   length(paraRetriesRetry) <- maxLength
-  length(compParaRetriesOfvs) <- maxLength
-  length(compParaRetriesRetry) <- maxLength
+  
+  if(compParaRetries){
+    compParaRetriesCsvFileName <- "compParaRetriesOfvs.csv"
+    compParaRetriesCsv <- read.csv(compParaRetriesCsvFileName, header = TRUE)
+    compParaRetriesOfvs <- compParaRetriesCsv$paraRetriesCompOfv
+    length(compParaRetriesOfvs) <- maxLength
+  }else{
+    compParaRetriesOfvs <- rep(NA, maxLength)
+  }
   
   # Inefficient rawres file finding...
   nmDismountRawresPaths <-  list.files(path = "nmDismountRuns", 
@@ -35,9 +36,14 @@ createPercentageTable <- function(wd = getwd()){
   # Parsing out the OFVs from the each rawres file 
   nmDismountOfvsList <- lapply(nmDismountRawresPaths, function(x){
     
-    # Get the relevant OFVs
-    ofvs <- parseRawres(x, cols = "ofv")
+    # Get the relevant OFVs and minimization statuses
+    rawresSubset <- parseRawres(x, cols = c("minimization_successful", "ofv"))
+    ofvVec <- rawresSubset["ofv"][[1]]
+    minSuccess <- rawresSubset["minimization_successful"][[1]]
     
+    # Set OFV to NA for unsuccessful estimations
+    ofvVec[!as.logical(minSuccess)] <- NA
+    ofvs <- data.frame(ofvVec)
     # Name the vector after the settings (splitting folder name should work but 
     # assumes known file structure)
     settingsUsed <- unlist(strsplit(x, "/"))[2]
@@ -47,7 +53,8 @@ createPercentageTable <- function(wd = getwd()){
   })
   
   nmDismountOfvs <- do.call("cbind", nmDismountOfvsList)
-  allOfvs <- cbind(paraRetriesRetries, paraRetriesOfvs, nmDismountOfvs, compParaRetriesOfvs)
+  allOfvs <- cbind(paraRetriesRetry, paraRetriesOfvs, nmDismountOfvs, compParaRetriesOfvs)
+  write.csv(allOfvs, "allOfvs.csv", row.names = FALSE)
   
   minOfv <- min(allOfvs[2:length(allOfvs)], na.rm = TRUE)
   limOfv <- minOfv + 1
@@ -74,44 +81,11 @@ createPercentageTable <- function(wd = getwd()){
     return(c(acceptPercentage, unacceptPercentage, failedPercentage))
   })
   
+  row.names(percentageTable) <- c("Lowest OFV", "Higher OFV", "Failed")
+  
   write.csv(percentageTable, "percentageTable.csv", row.names = FALSE)
   
   setwd(userWd)
   
   return(percentageTable)
 }
-# mod <- "Jönsson"
-# 
-# plotDf <- data.frame()
-# 
-# for(i in 3:ncol(acceptOfvs)){
-#   
-#   plotDf <- rbind(plotDf, cbind(rep(mod, nrow(acceptOfvs)), 
-#                                 rep(names(acceptOfvs)[[i]], 
-#                                     nrow(acceptOfvs)),
-#                                 acceptOfvs[[i]]))
-# }
-
-# plotDf$acceptOfv <- factor(plotDf$acceptOfv, levels = c(1, 0))
-
-# names(plotDf) <- c("model", "run", "acceptOfv")
-
-# qplot(run, data = plotDf, geom = 'bar', 
-#       fill = acceptOfv, facets = .~ model, xlab = "Setting", ylab = NULL) +
-#   scale_fill_manual(values = c("darkgreen", "darkred")) +
-#   scale_y_continuous(labels = scales::percent) +
-#   #scale_x_discrete(limits = c('2 Comp', 'Pheno', 'Jönsson', 'Bergmann', 'Wahlby')) +
-#   geom_text(stat='count',aes(label=..count..),vjust=+1) +
-#   guides(fill=FALSE)
-
-
-
-### Make a nice table
-
-# One row per model. Data workup same as above
-# Headers: Model saddle1 saddle2 saddle3 saddle1_hess1 ....
-# skriv ut till en fil också...
-
-
-
-
