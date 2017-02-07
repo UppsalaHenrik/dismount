@@ -19,6 +19,7 @@ createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE){
   if(!file.exists(compParaRetriesCsvFileName)){
     print(paste0("Could not find ", compParaRetriesCsvFileName, 
                  ". Proceeding without compParaRetries."))
+    compParaRetries <- FALSE
   }
   
   # Hardcoding a max length for now. Could parse command or count
