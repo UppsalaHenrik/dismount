@@ -1,6 +1,7 @@
 #' @export
 
-createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE){
+createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE, 
+                                  checkMinSuccess = FALSE){
   
   userWd <- getwd()
   
@@ -48,8 +49,10 @@ createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE){
     ofvVec <- rawresSubset["ofv"][[1]]
     minSuccess <- rawresSubset["minimization_successful"][[1]]
     
-    # Set OFV to NA for unsuccessful estimations
-    ofvVec[!as.logical(minSuccess)] <- NA
+    # Set OFV to NA for unsuccessful estimations if asked for
+    if(checkMinSuccess){
+      ofvVec[!as.logical(minSuccess)] <- NA
+    }
     ofvs <- data.frame(ofvVec)
     # Name the vector after the settings (splitting folder name should work but 
     # assumes known file structure)
