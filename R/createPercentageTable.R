@@ -47,10 +47,10 @@ createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE,
     # Get the relevant OFVs and minimization statuses
     rawresSubset <- parseRawres(x, cols = c("minimization_successful", "ofv"))
     ofvVec <- rawresSubset["ofv"][[1]]
-    minSuccess <- rawresSubset["minimization_successful"][[1]]
     
     # Set OFV to NA for unsuccessful estimations if asked for
     if(checkMinSuccess){
+      minSuccess <- rawresSubset["minimization_successful"][[1]]
       ofvVec[!as.logical(minSuccess)] <- NA
     }
     ofvs <- data.frame(ofvVec)
@@ -93,7 +93,7 @@ createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE,
   
   row.names(percentageTable) <- c("Lowest OFV", "Higher OFV", "Failed")
   
-  write.csv(percentageTable, "percentageTable.csv")
+  write.csv(percentageTable, paste0("percentageTable", basename(wd), ".csv"))
   
   setwd(userWd)
   
