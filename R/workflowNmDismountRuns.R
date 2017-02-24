@@ -31,7 +31,7 @@ workflowNmDismountRuns <- function(retryModFilePaths, dirName, saddleReset,
   Sys.sleep(10)
   
   # Wait for the queue 
-  waitForSlurmQ(targetLength = 0, maxWaits = 20)
+  waitForSlurmQ(targetLength = 1, maxWaits = 20)
 
   # Find and parse the rawres file
   nmDismountRawresPath <- findRawres(dirName)

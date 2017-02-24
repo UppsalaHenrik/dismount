@@ -1,7 +1,7 @@
 #' @export
 
 createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE, 
-                                  checkMinSuccess = FALSE){
+                                  checkMinSuccess = FALSE, paramCheck = FALSE){
   
   userWd <- getwd()
   
