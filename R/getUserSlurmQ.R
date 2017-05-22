@@ -31,7 +31,7 @@ getUserSlurmQ <- function(userName = "current", extraSqueueOptions = ""){
   # If there are no jobs in the queue, stop
   if(length(slurmQStringsAndHeader) <= 1){
     
-    print("No jobs found in queue for user ", userName)
+    print(paste("No jobs found in queue for user", userName))
     return(NULL)
   }
   
