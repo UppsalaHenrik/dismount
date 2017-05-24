@@ -29,7 +29,7 @@ waitForSlurmQ <- function(targetLength = 0, secsToWait = 30, maxWaits = 20){
     qLength <- nrow(slurmQ)
 
     # if it has no jobs in it end the while loop
-    if(qLength - 1 <= targetLength){
+    if(is.null(qLength) || qLength - 1 <= targetLength){
       keepWaiting <- FALSE
       qTargetMessage <- paste0("Queue has ", qLength, 
                                " jobs (<=", targetLength, 
