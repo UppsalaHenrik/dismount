@@ -1,5 +1,7 @@
 #' @export
 
+require(scales)
+
 createPercentageTable <- function(wd = getwd(), compParaRetries = FALSE, 
                                   checkMinSuccess = FALSE, paramCheck = FALSE){
   

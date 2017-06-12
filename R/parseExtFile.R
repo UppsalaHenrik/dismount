@@ -20,6 +20,31 @@ parseExtFile <- function(extFilePath){
   
   # Pick out the separate tables. I include the last row in the vector to know where to stop.
   tableRows <- grep("TABLE", rawExtFile)
+  
+  # Check if ext file is messed up
+  if(length(tableRows) < 1 || is.null(tableRows)){
+    
+    # Read in the table
+    table <- rawExtFile
+    
+    # Remove leading whitespace
+    table <- gsub("^\\s+", "", table)
+    
+    # Separate the values (still as char strings)
+    tableCharDF <- data.frame(do.call("rbind", strsplit(table, "\\s+")),
+                              stringsAsFactors = FALSE)
+
+    # Convert to numerics
+    tableDF <- as.data.frame(sapply(tableCharDF, as.numeric))
+    
+    # Name iteration and OFV columns
+    names(tableDF)[1] <- "ITERATION"
+    names(tableDF)[ncol(tableDF)] <- "OFV"
+    
+    return(list(tableDF))
+    
+  }
+  
   tableAndLastRows <- c(tableRows, length(rawExtFile))
   noTables <- length(tableRows)
   

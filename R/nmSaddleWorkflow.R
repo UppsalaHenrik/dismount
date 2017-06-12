@@ -177,6 +177,8 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
   if(doCompParaRetries){
     
     # Copy those files into the compParaRetries runs directory
+    # TODO: Should put the bolean vector from file.copy into something and 
+    # check for failures
     file.copy(paste0(paraRetriesDirName, "/", retryFilePaths), 
               compParaRetriesDir)
     
@@ -185,19 +187,23 @@ nmSaddleWorkflow <- function(modFileName, retries = 9, doParaRetries = TRUE,
     
     # Run update on all of them to get the right initial values
     # Not super clean since theoretically there could be other model files in this directory
-    system("update *.mod")
+    sapply(list.files(pattern = ".mod"), function(x){
+      
+      system(paste("update", x))
+      
+    })
     
     # Run para retries
     compParaRetriesDirList <- sapply(retryModFilePaths, function(x){
       
       # Wait for the SLURM queue to have less than a certain number of jobs in it
-      waitForSlurmQ(targetLength = 20)
+      waitForSlurmQ(targetLength = 100)
       
-      system(paste0("update_inits ", x))
+      #system(paste0("update_inits ", x))
       
-      runParaRetries(x, wait = FALSE, min_retries = 2, 
+      runParaRetries(x, wait = FALSE, min_retries = 1, 
                      slurm_partition = slurm_partition, 
-                     extraOptions = "-nm_version=7_40_g51_alpha14")
+                     extraOptions = "-nm_version=7_40_g51")
       
       Sys.sleep(10)
       
